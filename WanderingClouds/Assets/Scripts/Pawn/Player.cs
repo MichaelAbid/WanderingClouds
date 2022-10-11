@@ -21,6 +21,9 @@ public class Player : Pawn
     private Vector2 pawnCurMovement;
     public float pawnSpeed = 2;
 
+    //Prisme
+    public bool prismed = false;
+
     private void Update()
     {
         CameraUpdate();
@@ -67,7 +70,25 @@ public class Player : Pawn
 
     public override void NorthButtonInput()
     {
-        throw new System.NotImplementedException();
+        if (tag == "Giro")
+        {
+            Prisme();
+        }
+    }
+
+    private void Prisme()
+    {
+        prismed = !prismed;
+        Color color = visual.GetComponent<MeshRenderer>().material.color;
+        if (prismed)
+        {
+            color.a = 0.3f;
+        }
+        else
+        {
+            color.a = 1f;
+        }
+        visual.GetComponent<MeshRenderer>().material.color = color;
     }
 
     public override void SouthButtonInput()
