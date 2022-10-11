@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
         listOfAllPawn = FindObjectsOfType<Pawn>().ToList();
         pawnIndex = -1;
         ChangePawn();
+        
     }
 
     public void ChangePawn()
@@ -35,10 +36,12 @@ public class PlayerController : MonoBehaviour
                 }
                 pawn.controlled = true;
                 this.cPawn = pawn;
+                GetComponent<PlayerInput>().camera = cPawn.Camera;
                 break;
             }
             i++;
         }
+        
     }
 
     public void ControllerJoin()
