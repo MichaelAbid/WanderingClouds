@@ -163,6 +163,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 7016cc04-c6f8-4cb4-b027-7ac5782431ea
     m_ActionName: GamePad/RightJoyStick[/XInputControllerWindows/rightStick]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4570782806165880005}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: ButtonSelect
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 405edc3c-c0b6-40cb-a067-96f2352b0ce6
+    m_ActionName: GamePad/SelectButton[/XInputControllerWindows/select]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Controller
   m_DefaultActionMap: GamePad
@@ -181,3 +197,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pawn: {fileID: 0}
+  listOfAllPawn: []

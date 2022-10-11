@@ -24,6 +24,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "SelectButton",
+                    "type": "Button",
+                    "id": "405edc3c-c0b6-40cb-a067-96f2352b0ce6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "ButtonEst",
                     "type": "Button",
                     "id": "82299ee0-af21-4be3-9895-e981fbdcf358",
@@ -164,6 +173,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "StartButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ae3462f4-e5c2-476c-9104-7ac62f66db74",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectButton",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

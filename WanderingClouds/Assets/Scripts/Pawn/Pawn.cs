@@ -6,7 +6,9 @@ using UnityEngine;
 // Class that derived from this one will be able to be controlled as well
 public abstract class Pawn : MonoBehaviour
 {
-    
+
+    public bool controlled;
+
     public abstract void MovementInput(Vector2 input);
 
     public abstract void CameraMovementInput(Vector2 input);
