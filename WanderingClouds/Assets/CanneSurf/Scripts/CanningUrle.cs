@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 
 public class CanningUrle : Pawn
@@ -12,7 +13,7 @@ public class CanningUrle : Pawn
     public override void CameraMovementInput(Vector2 input) {}
     public override void MovementInput(Vector2 input)
     {
-        movement = new Vector3(input.x,  0, input.y) *  speed;
+        movement = new Vector3(input.x,  0, input.y);
     }
 
     public override void NorthButtonInput() { }
@@ -21,8 +22,9 @@ public class CanningUrle : Pawn
     public override void WestButtonInput() { }
     #endregion
 
-    public void Update()
+    public void FixedUpdate()
     {
-        body.velocity = movement;
+        body.AddForce(movement * speed * Time.deltaTime, ForceMode.VelocityChange);
+        body.velocity = body.velocity.magnitude > speed ? body.velocity.normalized * speed : body.velocity;
     }
 }

@@ -13,12 +13,13 @@ public class SurfingGiro : Pawn
     public CanningUrle urle;
     public float linkDistance;
     public bool isLink;
+    public bool isOut;
 
     #region Input
     public override void CameraMovementInput(Vector2 input) { }
     public override void MovementInput(Vector2 input)
     {
-        movement = new Vector3(input.x, 0, input.y) * speed;
+        movement = new Vector3(input.x, 0, input.y);
     }
 
     public override void NorthButtonInput() { }
@@ -33,23 +34,26 @@ public class SurfingGiro : Pawn
 
     public void FixedUpdate()
     {
-        if (!isLink)
-        {
-            body.velocity = movement;
-            return;
-        }
-
         Vector3 UrleToGiro = transform.position - urle.transform.position;
-        bool isOut = UrleToGiro.magnitude > linkDistance;
-        if (isOut)
+        if (isLink)
         {
-            Vector3 aimPos = urle.transform.position + (UrleToGiro.normalized * linkDistance);
-            body.AddForce((aimPos-transform.position) * 1000 * Time.deltaTime, ForceMode.VelocityChange);
+            isOut = UrleToGiro.magnitude > linkDistance;
+            if (isOut)
+            {
+                body.position = urle.transform.position + (transform.position - urle.transform.position).normalized * linkDistance;
+                body.AddForce(movement * speed * Time.deltaTime, ForceMode.VelocityChange);
+                body.velocity = body.velocity.magnitude > speed ? body.velocity.normalized * speed : body.velocity;
+            }
+            else
+            {
+                body.AddForce(movement * speed * Time.deltaTime, ForceMode.VelocityChange);
+                body.velocity = body.velocity.magnitude > speed ? body.velocity.normalized * speed : body.velocity;
+            }
         }
         else
         {
-            body.AddForce(movement * 10 * Time.deltaTime, ForceMode.VelocityChange);
-
+            body.AddForce(movement * speed * Time.deltaTime, ForceMode.VelocityChange);
+            body.velocity = body.velocity.magnitude > speed ? body.velocity.normalized * speed : body.velocity;
         }
     }
 
