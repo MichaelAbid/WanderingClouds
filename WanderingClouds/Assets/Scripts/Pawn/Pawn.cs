@@ -8,7 +8,7 @@ public abstract class Pawn : MonoBehaviour
 {
 
     public bool controlled;
-
+    public Camera Camera;
     public abstract void MovementInput(Vector2 input);
 
     public abstract void CameraMovementInput(Vector2 input);
