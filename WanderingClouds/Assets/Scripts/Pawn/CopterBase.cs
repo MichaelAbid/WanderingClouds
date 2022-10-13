@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 
-public class DesTroyNuageController : Pawn
+public class CopterBase : Pawn
 {
     public GameObject pivotX;
     public GameObject pivotY;
@@ -21,18 +21,14 @@ public class DesTroyNuageController : Pawn
     private Vector2 pawnCurMovement;
     public float pawnSpeed = 2;
 
-    // Shoot
-    public Transform spawnPoint;
-    public UnityEngine.Object bulletPrefab;
 
-
-    private void Update()
+    protected virtual void Update()
     {
         CameraUpdate();
         MovementUpdate();
     }
 
-    private void CameraUpdate()
+    protected virtual void CameraUpdate()
     {
         if(camCurMovement != Vector2.zero)
         {
@@ -42,7 +38,7 @@ public class DesTroyNuageController : Pawn
         }
     }
 
-    private void MovementUpdate()
+    protected virtual void MovementUpdate()
     {
         if (pawnCurMovement != Vector2.zero)
         {
@@ -58,56 +54,12 @@ public class DesTroyNuageController : Pawn
         if ( Mathf.Abs(camCurMovement.y) <= 0.2f ) camCurMovement.y = 0 ;
     }
 
-    public override void EstButtonInput()
-    {
-        throw new System.NotImplementedException();
-    }
+
 
     public override void MovementInput(Vector2 input)
     {
         pawnCurMovement = input;
         if (Mathf.Abs(pawnCurMovement.x) <= 0.2f) pawnCurMovement.x = 0;
         if (Mathf.Abs(pawnCurMovement.y) <= 0.2f) pawnCurMovement.y = 0;
-    }
-
-    public override void NorthButtonInput()
-    {
-
-    }
-
-    public override void SouthButtonInput()
-    {
-        ShootBullet();
-    }
-
-    private void ShootBullet()
-    {
-       GameObject bullet = (GameObject) Instantiate(bulletPrefab,spawnPoint.position,pivotX.transform.rotation);
-
-    }
-
-    public override void WestButtonInput()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void SouthButtonInputReleased()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void NorthButtonInputReleased()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void EstButtonInputReleased()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void WestButtonInputReleased()
-    {
-        throw new NotImplementedException();
     }
 }

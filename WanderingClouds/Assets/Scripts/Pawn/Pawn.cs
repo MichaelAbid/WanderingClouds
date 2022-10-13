@@ -9,18 +9,24 @@ public abstract class Pawn : MonoBehaviour
 
     public bool controlled;
     public Camera Camera;
-    public abstract void MovementInput(Vector2 input);
+    public virtual void MovementInput(Vector2 input) { }
 
-    public abstract void CameraMovementInput(Vector2 input);
+    public virtual void CameraMovementInput(Vector2 input) { }
 
-    public abstract void SouthButtonInput();
+    public virtual void SouthButtonInput() { }
 
-    public abstract void NorthButtonInput();
+    public virtual void NorthButtonInput() { }
 
-    public abstract void EstButtonInput();
+    public virtual void EstButtonInput() { }
 
-    public abstract void WestButtonInput();
+    public virtual void WestButtonInput() { }
 
 
+    public virtual void SouthButtonInputReleased() { }
 
+    public virtual void NorthButtonInputReleased() { }
+
+    public virtual void EstButtonInputReleased() { }
+
+    public virtual void WestButtonInputReleased() { }
 }

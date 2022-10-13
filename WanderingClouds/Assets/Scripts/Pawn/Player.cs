@@ -24,13 +24,13 @@ public class Player : Pawn
     //Prisme
     public bool prismed = false;
 
-    private void Update()
+    protected void Update()
     {
         CameraUpdate();
         MovementUpdate();
     }
 
-    private void CameraUpdate()
+    protected void CameraUpdate()
     {
         if(camCurMovement != Vector2.zero)
         {
@@ -40,7 +40,7 @@ public class Player : Pawn
         }
     }
 
-    private void MovementUpdate()
+    protected void MovementUpdate()
     {
         if (pawnCurMovement != Vector2.zero)
         {
@@ -101,5 +101,23 @@ public class Player : Pawn
         throw new System.NotImplementedException();
     }
 
+    public override void SouthButtonInputReleased()
+    {
+        throw new NotImplementedException();
+    }
 
+    public override void NorthButtonInputReleased()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void EstButtonInputReleased()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void WestButtonInputReleased()
+    {
+        throw new NotImplementedException();
+    }
 }
