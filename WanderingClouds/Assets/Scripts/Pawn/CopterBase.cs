@@ -14,11 +14,11 @@ public class CopterBase : Pawn
 
 
     // Camera Movement
-    private Vector2 camCurMovement;
+    protected Vector2 camCurMovement;
     public float camSensibility;
 
     // Pawn Movement
-    private Vector2 pawnCurMovement;
+    protected Vector2 pawnCurMovement;
     public float pawnSpeed = 2;
 
 
@@ -42,7 +42,7 @@ public class CopterBase : Pawn
     {
         if (pawnCurMovement != Vector2.zero)
         {
-            transform.position += (pivotX.transform.forward * pawnCurMovement.y * pawnSpeed) + (pivotX.transform.right * pawnCurMovement.x * pawnSpeed);
+            transform.position += (pivotX.transform.forward * pawnCurMovement.y * pawnSpeed * Time.deltaTime) + (pivotX.transform.right * pawnCurMovement.x * pawnSpeed * Time.deltaTime);
             visual.transform.rotation = Quaternion.Euler(0, pivotX.transform.rotation.eulerAngles.y, 0);
         }
     }

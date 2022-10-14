@@ -14,11 +14,18 @@ public class UrleCopter : CopterBase
     public float maxHeight = 10;
     public float minHeight = 2;
 
-    public GiroCopter go;
+    public GiroCopter giro;
+
+
+    private void Start()
+    {
+        giro = GameObject.FindGameObjectWithTag("Giro").GetComponent<GiroCopter>();
+    }
+
     public override void NorthButtonInput()
     {
-        go = GameObject.FindGameObjectWithTag("Giro").GetComponent<GiroCopter>();
-        go.grabed = !go.grabed;
+        
+        giro.grabed = !giro.grabed;
 
     }
 
@@ -32,7 +39,7 @@ public class UrleCopter : CopterBase
 
     private void RopeUpdate()
     {
-        if (go!=null && go.grabed)
+        if (giro!=null && giro.grabed)
         {
             if (shouldScaleUpRope)
             {
@@ -43,8 +50,12 @@ public class UrleCopter : CopterBase
                 ropeHeight -= Time.deltaTime * 5;
             }
             ropeHeight = Mathf.Clamp(ropeHeight, minHeight, maxHeight);
-            go.ropeHeight = ropeHeight;
+            giro.ropeHeight = ropeHeight;
+
+            Debug.DrawLine(transform.position, giro.transform.position,Color.red);
+
         }
+        
     }
 
     public override void EstButtonInput()
