@@ -9,6 +9,8 @@ public abstract class Pawn : MonoBehaviour
 
     public bool controlled;
     public Camera Camera;
+
+    public bool atStartControlledPawn = false;
     public virtual void MovementInput(Vector2 input) { }
 
     public virtual void CameraMovementInput(Vector2 input) { }
