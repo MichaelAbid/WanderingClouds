@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 
-public class Player : Pawn
+public class DesTroyNuageController : Pawn
 {
     public GameObject pivotX;
     public GameObject pivotY;
@@ -21,16 +21,18 @@ public class Player : Pawn
     private Vector2 pawnCurMovement;
     public float pawnSpeed = 2;
 
-    //Prisme
-    public bool prismed = false;
+    // Shoot
+    public Transform spawnPoint;
+    public UnityEngine.Object bulletPrefab;
 
-    protected void Update()
+
+    private void Update()
     {
         CameraUpdate();
         MovementUpdate();
     }
 
-    protected void CameraUpdate()
+    private void CameraUpdate()
     {
         if(camCurMovement != Vector2.zero)
         {
@@ -40,7 +42,7 @@ public class Player : Pawn
         }
     }
 
-    protected void MovementUpdate()
+    private void MovementUpdate()
     {
         if (pawnCurMovement != Vector2.zero)
         {
@@ -70,30 +72,18 @@ public class Player : Pawn
 
     public override void NorthButtonInput()
     {
-        if (tag == "Giro")
-        {
-            Prisme();
-        }
-    }
 
-    private void Prisme()
-    {
-        prismed = !prismed;
-        Color color = visual.GetComponent<MeshRenderer>().material.color;
-        if (prismed)
-        {
-            color.a = 0.3f;
-        }
-        else
-        {
-            color.a = 1f;
-        }
-        visual.GetComponent<MeshRenderer>().material.color = color;
     }
 
     public override void SouthButtonInput()
     {
-        throw new System.NotImplementedException();
+        ShootBullet();
+    }
+
+    private void ShootBullet()
+    {
+       GameObject bullet = (GameObject) Instantiate(bulletPrefab,spawnPoint.position,pivotX.transform.rotation);
+
     }
 
     public override void WestButtonInput()

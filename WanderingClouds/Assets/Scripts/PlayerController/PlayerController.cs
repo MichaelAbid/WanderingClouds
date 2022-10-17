@@ -69,33 +69,63 @@ public class PlayerController : MonoBehaviour
 
     public void ButtonEst(InputAction.CallbackContext callback)
     {
-        if (cPawn != null && callback.performed)
+
+        if (cPawn != null)
         {
-            cPawn.EstButtonInput();
+            if (callback.performed)
+            {
+                cPawn.EstButtonInput();
+            }
+            if (callback.canceled)
+            {
+                cPawn.EstButtonInputReleased();
+            }
         }
     }
 
     public void ButtonWest(InputAction.CallbackContext callback)
     {
-        if (cPawn != null && callback.performed)
+        if (cPawn != null)
         {
-            cPawn.WestButtonInput();
+            if (callback.performed)
+            {
+                cPawn.WestButtonInput();
+            }
+            if (callback.canceled)
+            {
+                cPawn.WestButtonInputReleased();
+            }
         }
     }
 
     public void ButtonSouth(InputAction.CallbackContext callback)
     {
-        if (cPawn != null && callback.performed)
+
+        if (cPawn != null)
         {
-            cPawn.SouthButtonInput();
+            if (callback.performed)
+            {
+                cPawn.SouthButtonInput();
+            }
+            if (callback.canceled)
+            {
+                cPawn.SouthButtonInputReleased();
+            }
         }
     }
 
     public void ButtonNorth(InputAction.CallbackContext callback)
     {
-        if (cPawn != null && callback.performed)
+        if (cPawn != null)
         {
-            cPawn.NorthButtonInput();
+            if (callback.performed)
+            {
+                cPawn.NorthButtonInput();
+            }
+            if (callback.canceled)
+            {
+                cPawn.NorthButtonInputReleased();
+            }
         }
     }
 
