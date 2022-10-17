@@ -194,15 +194,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controlled: 0
   Camera: {fileID: 3606587799940408997}
+  atStartControlledPawn: 0
+  allowMovement: 1
+  allowCameraMovement: 1
   pivotX: {fileID: 7599995821527601160}
   pivotY: {fileID: 593698934764886120}
   visual: {fileID: 6800489847226605733}
   camSensibility: 1
-  pawnSpeed: 0.15
+  pawnSpeed: 10
   ropeHeight: 5
   maxHeight: 10
   minHeight: 2
-  go: {fileID: 0}
+  giro: {fileID: 0}
 --- !u!1 &5773920676714939744
 GameObject:
   m_ObjectHideFlags: 0

@@ -529,10 +529,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2008289349901047428, guid: c565a5019f2927a43b5844398e41b6d3,
+    - target: {fileID: 3460684722199492343, guid: c565a5019f2927a43b5844398e41b6d3,
         type: 3}
-      propertyPath: pawnSpeed
-      value: 10
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460684722199492343, guid: c565a5019f2927a43b5844398e41b6d3,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460684722199492343, guid: c565a5019f2927a43b5844398e41b6d3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3606587799940408997, guid: c565a5019f2927a43b5844398e41b6d3,
+        type: 3}
+      propertyPath: m_Depth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3606587799940408997, guid: c565a5019f2927a43b5844398e41b6d3,
+        type: 3}
+      propertyPath: m_NormalizedViewPortRect.width
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5080855433627393736, guid: c565a5019f2927a43b5844398e41b6d3,
         type: 3}
@@ -603,6 +623,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7694193363327550752, guid: 5bc33721f4f8f674fb68c2fb7a49dd67,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7694193363327550752, guid: 5bc33721f4f8f674fb68c2fb7a49dd67,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7694193363327550752, guid: 5bc33721f4f8f674fb68c2fb7a49dd67,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7694193363610135433, guid: 5bc33721f4f8f674fb68c2fb7a49dd67,
         type: 3}
       propertyPath: m_Name
@@ -616,7 +651,7 @@ PrefabInstance:
     - target: {fileID: 7694193363610135437, guid: 5bc33721f4f8f674fb68c2fb7a49dd67,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.01
+      value: 9.92
       objectReference: {fileID: 0}
     - target: {fileID: 7694193363610135437, guid: 5bc33721f4f8f674fb68c2fb7a49dd67,
         type: 3}
@@ -665,8 +700,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7694193363610135438, guid: 5bc33721f4f8f674fb68c2fb7a49dd67,
         type: 3}
-      propertyPath: pawnSpeed
-      value: 10
+      propertyPath: atStartControlledPawn
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7694193363837352045, guid: 5bc33721f4f8f674fb68c2fb7a49dd67,
+        type: 3}
+      propertyPath: m_Depth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7694193363837352045, guid: 5bc33721f4f8f674fb68c2fb7a49dd67,
+        type: 3}
+      propertyPath: m_NormalizedViewPortRect.x
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5bc33721f4f8f674fb68c2fb7a49dd67, type: 3}
