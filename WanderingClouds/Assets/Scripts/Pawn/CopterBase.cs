@@ -24,6 +24,7 @@ public class CopterBase : Pawn
 
     protected virtual void Update()
     {
+        base.Update();
         if (allowCameraMovement)CameraUpdate();
         if (allowMovement) MovementUpdate();
     }

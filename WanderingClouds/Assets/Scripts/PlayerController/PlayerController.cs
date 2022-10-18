@@ -137,4 +137,36 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+
+    public void RightTrigger(InputAction.CallbackContext callback)
+    {
+        if (cPawn != null)
+        {
+            if (callback.performed)
+            {
+                cPawn.RightTriggerInput();  
+            }
+            if (callback.canceled)
+            {
+                cPawn.RightTriggerInputReleased();
+            }
+        }
+    }
+
+    public void LeftTrigger(InputAction.CallbackContext callback)
+    {
+        if (cPawn != null)
+        {
+            if (callback.performed)
+            {
+                cPawn.LeftTriggerInput();
+            }
+            if (callback.canceled)
+            {
+                cPawn.LeftTriggerInputReleased();
+            }
+        }
+    }
+
 }

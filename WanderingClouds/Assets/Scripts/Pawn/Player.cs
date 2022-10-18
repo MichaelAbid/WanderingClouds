@@ -4,62 +4,72 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.Rendering.LookDev;
 using UnityEngine;
-
+using NaughtyAttributes;
 public class Player : Pawn
 {
+    [Foldout("Ref")]
     public GameObject pivotX;
+    [Foldout("Ref")]
     public GameObject pivotY;
+    [Foldout("Ref")]
     public GameObject visual;
-
+    [Foldout("Ref")]
+    public GameObject pivotArm;
 
 
     // Camera Movement
-    private Vector2 camCurMovement;
+    [Foldout("Camera")]
+    protected Vector2 camCurMovement;
+    [Foldout("Camera")]
     public float camSensibility;
 
     // Pawn Movement
-    private Vector2 pawnCurMovement;
+    [Foldout("Movement")]
+    protected Vector2 pawnCurMovement;
+    [Foldout("Movement")]
     public float pawnSpeed = 2;
 
-    //Prisme
-    public bool prismed = false;
 
-    protected void Update()
+    [Foldout("Jump")]
+    [CurveRange(EColor.Blue)]
+    public AnimationCurve jumpCurve;
+    [Foldout("Jump")]
+    public bool jumping = false;
+
+    protected virtual void Update()
     {
-        CameraUpdate();
-        MovementUpdate();
+        base.Update();
+        if (allowCameraMovement) CameraUpdate();
+        if (allowMovement) MovementUpdate();
     }
 
-    protected void CameraUpdate()
+    protected virtual void CameraUpdate()
     {
-        if(camCurMovement != Vector2.zero)
+        if (camCurMovement != Vector2.zero)
         {
-            if (Mathf.Abs(pivotY.transform.eulerAngles.x + camCurMovement.y) <= 45 || Mathf.Abs(pivotY.transform.eulerAngles.x + camCurMovement.y) >= 360-45) { pivotY.transform.Rotate(Vector3.right, camCurMovement.y * camSensibility); }
-            pivotX.transform.Rotate(Vector3.up, camCurMovement.x * camSensibility);
+            if (Mathf.Abs(pivotY.transform.eulerAngles.x + camCurMovement.y) <= 45 || Mathf.Abs(pivotY.transform.eulerAngles.x + camCurMovement.y) >= 360 - 45) { pivotY.transform.Rotate(Vector3.right, camCurMovement.y * camSensibility); }
+            pivotX.transform.Rotate(Vector3.down, camCurMovement.x * camSensibility);
 
         }
     }
 
-    protected void MovementUpdate()
+    protected virtual void MovementUpdate()
     {
         if (pawnCurMovement != Vector2.zero)
         {
-            transform.position += (pivotX.transform.forward * pawnCurMovement.y * pawnSpeed) + (pivotX.transform.right * pawnCurMovement.x * pawnSpeed);
-            visual.transform.rotation = Quaternion.Euler(0, pivotX.transform.rotation.eulerAngles.y, 0);
+            transform.position += (pivotX.transform.forward * pawnCurMovement.y * pawnSpeed * Time.deltaTime) + (pivotX.transform.right * pawnCurMovement.x * pawnSpeed * Time.deltaTime);
+            visual.transform.rotation = Quaternion.LookRotation(new Vector3(pawnCurMovement.x,0,pawnCurMovement.y),Vector3.up);
         }
     }
 
     public override void CameraMovementInput(Vector2 input)
     {
         camCurMovement = input;
-        if ( Mathf.Abs(camCurMovement.x) <= 0.2f )  camCurMovement.x = 0 ;
-        if ( Mathf.Abs(camCurMovement.y) <= 0.2f ) camCurMovement.y = 0 ;
+        if (Mathf.Abs(camCurMovement.x) <= 0.2f) camCurMovement.x = 0;
+        if (Mathf.Abs(camCurMovement.y) <= 0.2f) camCurMovement.y = 0;
     }
 
-    public override void EstButtonInput()
-    {
-        throw new System.NotImplementedException();
-    }
+
 
     public override void MovementInput(Vector2 input)
     {
@@ -68,56 +78,22 @@ public class Player : Pawn
         if (Mathf.Abs(pawnCurMovement.y) <= 0.2f) pawnCurMovement.y = 0;
     }
 
-    public override void NorthButtonInput()
+
+    public void Jump()
     {
-        if (tag == "Giro")
+        if (isGrounded && !jumping)
         {
-            Prisme();
+            StartCoroutine(JumpCoroutine());
         }
     }
 
-    private void Prisme()
-    {
-        prismed = !prismed;
-        Color color = visual.GetComponent<MeshRenderer>().material.color;
-        if (prismed)
-        {
-            color.a = 0.3f;
-        }
-        else
-        {
-            color.a = 1f;
-        }
-        visual.GetComponent<MeshRenderer>().material.color = color;
-    }
 
-    public override void SouthButtonInput()
+    IEnumerator JumpCoroutine()
     {
-        throw new System.NotImplementedException();
-    }
+        jumping = true;
 
-    public override void WestButtonInput()
-    {
-        throw new System.NotImplementedException();
+        yield return null;
+        jumping = false;
     }
-
-    public override void SouthButtonInputReleased()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void NorthButtonInputReleased()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void EstButtonInputReleased()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void WestButtonInputReleased()
-    {
-        throw new NotImplementedException();
-    }
+    
 }
