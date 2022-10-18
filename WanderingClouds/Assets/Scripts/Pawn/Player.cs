@@ -92,6 +92,10 @@ public class Player : Pawn
     {
         jumping = true;
 
+        float time = 0;
+
+
+
         yield return null;
         jumping = false;
     }

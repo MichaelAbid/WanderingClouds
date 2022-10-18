@@ -43,6 +43,8 @@ public abstract class Pawn : MonoBehaviour
     public virtual void RightTriggerInput() { }
     public virtual void LeftTriggerInput() { }
 
+    public virtual void RightBumperInput() { }
+    public virtual void LeftBumperInput() { }
 
     public virtual void SouthButtonInputReleased() { }
 
@@ -55,6 +57,8 @@ public abstract class Pawn : MonoBehaviour
     public virtual void RightTriggerInputReleased() { }
     public virtual void LeftTriggerInputReleased() { }
 
+    public virtual void RightBumperInputReleased() { }
+    public virtual void LeftBumperInputReleased() { }
 
 
     public void CalcGrounded()

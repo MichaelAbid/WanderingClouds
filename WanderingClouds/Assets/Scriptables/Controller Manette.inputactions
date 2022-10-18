@@ -96,9 +96,27 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "RightBumper",
+                    "type": "Button",
+                    "id": "4be82947-3215-4918-8796-6435c09b7a7e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "LeftTrigger",
                     "type": "Button",
                     "id": "5d1ef6ba-5573-44ae-b4ce-c939f1eed8d6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "LeftBumper",
+                    "type": "Button",
+                    "id": "d4262e62-db85-4f45-8005-f274151d5e82",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -224,6 +242,28 @@
                     "processors": "",
                     "groups": "Controller",
                     "action": "LeftTrigger",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7ad66483-27c5-40d8-8090-eb28b378cec0",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
+                    "action": "LeftBumper",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2dbb6f53-4069-45ac-895b-67c00e5ccdaa",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
+                    "action": "RightBumper",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
