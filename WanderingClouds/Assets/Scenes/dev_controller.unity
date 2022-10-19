@@ -24,7 +24,7 @@ RenderSettings:
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 0
+  m_AmbientMode: 4
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
@@ -133,7 +133,7 @@ PrefabInstance:
     - target: {fileID: 3501616950050832199, guid: ceb37bb7b80d9934cadc2e20134c0334,
         type: 3}
       propertyPath: m_Name
-      value: Urle (1)
+      value: Urle
       objectReference: {fileID: 0}
     - target: {fileID: 4550154592148404597, guid: ceb37bb7b80d9934cadc2e20134c0334,
         type: 3}
@@ -148,7 +148,7 @@ PrefabInstance:
     - target: {fileID: 4550154592148404597, guid: ceb37bb7b80d9934cadc2e20134c0334,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.1
       objectReference: {fileID: 0}
     - target: {fileID: 4550154592148404597, guid: ceb37bb7b80d9934cadc2e20134c0334,
         type: 3}
@@ -189,6 +189,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6038659982940773352, guid: ceb37bb7b80d9934cadc2e20134c0334,
+        type: 3}
+      propertyPath: m_NormalizedViewPortRect.width
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ceb37bb7b80d9934cadc2e20134c0334, type: 3}
