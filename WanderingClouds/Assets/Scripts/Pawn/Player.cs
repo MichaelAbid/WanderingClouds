@@ -36,6 +36,13 @@ public class Player : Pawn
     [ReadOnly]
     public Vector2 momentumDirection;
 
+    [Foldout("Camera")]
+    public Vector3 CamNormalPosition;
+    [Foldout("Camera")]
+    public Vector3 CamShoulderPosition;
+    [Foldout("Camera")]
+    public bool isAiming;
+
 
 
     [Foldout("Jump")]
@@ -70,6 +77,7 @@ public class Player : Pawn
     {
         if (pawnCurMovement != Vector2.zero)
         {
+            float previousY = transform.position.y;
             transform.position += (pivotX.transform.forward * pawnCurMovement.y * pawnSpeed * Time.deltaTime) + (pivotX.transform.right * pawnCurMovement.x * pawnSpeed * Time.deltaTime);
 
             if (!jumping)
@@ -88,7 +96,10 @@ public class Player : Pawn
 
             visual.transform.rotation = Quaternion.LookRotation(new Vector3(pawnCurMovement.x,0,pawnCurMovement.y),Vector3.up);
             visual.transform.Rotate(pivotX.transform.rotation.eulerAngles);
-
+            if (transform.position.y - previousY < -0.05f)
+            {
+                momentum += Time.deltaTime * 10; ;
+            }
         }
     }
 
