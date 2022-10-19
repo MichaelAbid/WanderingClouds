@@ -35,16 +35,7 @@ public class PrismaticObject : MonoBehaviour
     private void CheckIfShouldBeVisible()
     {
         bool visible = false;
-        if (giro.GetComponent<Player>().prismed)
-        {
-            float dot1 = Vector3.Dot((urle.GetComponent<Pawn>().Camera.transform.forward).normalized, (giro.transform.position - urle.GetComponent<Pawn>().Camera.transform.position).normalized);
-            float dot2 = Vector3.Dot((giro.transform.position - urle.GetComponent<Pawn>().Camera.transform.position).normalized, (transform.position - giro.transform.position).normalized);
-            debug = $"dot 1 : {dot1} | dot 2 : {dot2} ";
-            if (dot1 > 0.85f && dot2 > 0.97f)
-            {
-                visible = true;
-            }
-        }
+
         GetComponent<MeshRenderer>().enabled = visible;
 
     }
