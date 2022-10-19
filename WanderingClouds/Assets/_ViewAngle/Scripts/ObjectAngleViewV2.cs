@@ -2,13 +2,12 @@ using NaughtyAttributes;
 using UnityEngine.Events;
 using UnityEngine;
 using UnityEditor;
-using UnityEngine.Serialization;
 
 public class ObjectAngleViewV2 : MonoBehaviour
 {
     public Pawn[] players;
 
-    [Range(0f, 1f)] public float threshold = 0.25f;
+    [Range(0f, 1f)] public float threshold = 0.05f;
 
     [Header("Info")] public Vector3 pointOfView;
     [MinMaxSlider(-50, 50)] public Vector2 minMaxDist = new Vector2(1, 10);
@@ -96,7 +95,7 @@ public class ObjectAngleViewV2 : MonoBehaviour
         done = false;
         ToShufle();
     }
-
+    
     public bool PawnInAlignement(Pawn player)
     {
         Vector2[] actualScreenPos = new Vector2[screenPos.Length];
@@ -106,28 +105,30 @@ public class ObjectAngleViewV2 : MonoBehaviour
         }
 
         float distance = 0f;
+        var refPos = player.Camera.transform.position + player.Camera.transform.forward * 3f;
         for (int i = 0; i < actualScreenPos.Length - 1; i++)
         {
             distance += Vector2.Distance(screenPos[i] - screenPos[i + 1], actualScreenPos[i] - actualScreenPos[i + 1]);
-                
-            Debug.DrawLine(transform.position + (Vector3)screenPos[i], transform.position + (Vector3)screenPos[i+1], Color.green, 0.2f);
-            Debug.DrawLine(transform.position + (Vector3)actualScreenPos[i], transform.position + (Vector3)actualScreenPos[i+1], Color.red, 0.2f);
+
+            Debug.DrawLine(refPos + (Vector3)actualScreenPos[i], refPos + (Vector3)actualScreenPos[i+1], Color.red);
+            Debug.DrawLine(refPos + (Vector3)screenPos[i], refPos + (Vector3)screenPos[i + 1], Color.green);
+
         }
 
         return distance < threshold;
     }
     void Update()
     {
-        if (done) return;
-
         foreach (var player in players)
         {
             if (PawnInAlignement(player))
             {
+                if (done) return;
                 done = true;
                 for (int i = 0; i < composite.Length; i++)
                 {
-                    composite[i].transform.DoTransform(clearData[i], 2f);
+                    composite[i].transform.DoTransform(clearData[i], 0.05f);
+
                 }            
             }
         }
@@ -135,6 +136,11 @@ public class ObjectAngleViewV2 : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Debug.DrawLine(transform.position, transform.position + alignDir * viewPointDist, Color.blue, 0.2f);
+        for (int i = 0; i < screenPos.Length - 1; i++)
+        {
+            Debug.DrawLine(transform.position + (Vector3)screenPos[i], transform.position + (Vector3)screenPos[i + 1], Color.green);
+        }
+
+        Debug.DrawLine(transform.position, transform.position + alignDir * viewPointDist, Color.blue);
     }
 }

@@ -40,7 +40,7 @@ public class ViewAnglePlayer : Pawn
     }
     public override void SouthButtonInput()
     {
-        body.AddForce(Vector3.up * speed / 3, ForceMode.VelocityChange);
+        body.AddForce(Vector3.up * speed, ForceMode.VelocityChange);
     }
     public override void WestButtonInput()
     {
