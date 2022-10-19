@@ -4,62 +4,102 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.Rendering.LookDev;
 using UnityEngine;
-
+using NaughtyAttributes;
 public class Player : Pawn
 {
+    [Foldout("Ref")]
     public GameObject pivotX;
+    [Foldout("Ref")]
     public GameObject pivotY;
+    [Foldout("Ref")]
     public GameObject visual;
-
+    [Foldout("Ref")]
+    public GameObject pivotArm;
 
 
     // Camera Movement
-    private Vector2 camCurMovement;
+    [Foldout("Camera")]
+    protected Vector2 camCurMovement;
+    [Foldout("Camera")]
     public float camSensibility;
 
     // Pawn Movement
-    private Vector2 pawnCurMovement;
+    [Foldout("Movement")]
+    protected Vector2 pawnCurMovement;
+    [Foldout("Movement")]
     public float pawnSpeed = 2;
 
-    //Prisme
-    public bool prismed = false;
+    [Foldout("Movement")]
+    [ReadOnly]
+    public float momentum;
+    [Foldout("Movement")]
+    [ReadOnly]
+    public Vector2 momentumDirection;
 
-    protected void Update()
+
+
+    [Foldout("Jump")]
+    [CurveRange(EColor.Blue)]
+    public AnimationCurve jumpCurve;
+    [Foldout("Jump")]
+    public bool jumping = false;
+    [Foldout("Jump")]
+    public float jumpTime = 2;
+    [Foldout("Jump")]
+    public float jumpHeight = 2;
+
+    protected virtual void Update()
     {
-        CameraUpdate();
-        MovementUpdate();
+        base.Update();
+        DrawDebug();
+        if (allowCameraMovement) CameraUpdate();
+        if (allowMovement) MovementUpdate();
     }
 
-    protected void CameraUpdate()
+    protected virtual void CameraUpdate()
     {
-        if(camCurMovement != Vector2.zero)
+        if (camCurMovement != Vector2.zero)
         {
-            if (Mathf.Abs(pivotY.transform.eulerAngles.x + camCurMovement.y) <= 45 || Mathf.Abs(pivotY.transform.eulerAngles.x + camCurMovement.y) >= 360-45) { pivotY.transform.Rotate(Vector3.right, camCurMovement.y * camSensibility); }
-            pivotX.transform.Rotate(Vector3.up, camCurMovement.x * camSensibility);
+            if (Mathf.Abs(pivotY.transform.eulerAngles.x + camCurMovement.y) <= 45 || Mathf.Abs(pivotY.transform.eulerAngles.x + camCurMovement.y) >= 360 - 45) { pivotY.transform.Rotate(Vector3.right, camCurMovement.y * camSensibility); }
+            pivotX.transform.Rotate(Vector3.down, camCurMovement.x * camSensibility);
 
         }
     }
 
-    protected void MovementUpdate()
+    protected virtual void MovementUpdate()
     {
         if (pawnCurMovement != Vector2.zero)
         {
-            transform.position += (pivotX.transform.forward * pawnCurMovement.y * pawnSpeed) + (pivotX.transform.right * pawnCurMovement.x * pawnSpeed);
-            visual.transform.rotation = Quaternion.Euler(0, pivotX.transform.rotation.eulerAngles.y, 0);
+            transform.position += (pivotX.transform.forward * pawnCurMovement.y * pawnSpeed * Time.deltaTime) + (pivotX.transform.right * pawnCurMovement.x * pawnSpeed * Time.deltaTime);
+
+            if (!jumping)
+            {
+                RaycastHit hit;
+                Ray ray = new Ray(transform.position, Vector3.down);
+                if (Physics.Raycast(ray, out hit))
+                {
+                    if (hit.distance <= (visual.GetComponent<CapsuleCollider>().height / 2) + 0.2f)
+                    {
+                        transform.position = hit.point + (Vector3.up * (visual.GetComponent<CapsuleCollider>().height / 2));
+                    }
+                }
+            }
+
+
+            visual.transform.rotation = Quaternion.LookRotation(new Vector3(pawnCurMovement.x,0,pawnCurMovement.y),Vector3.up);
+            visual.transform.Rotate(pivotX.transform.rotation.eulerAngles);
+
         }
     }
 
     public override void CameraMovementInput(Vector2 input)
     {
         camCurMovement = input;
-        if ( Mathf.Abs(camCurMovement.x) <= 0.2f )  camCurMovement.x = 0 ;
-        if ( Mathf.Abs(camCurMovement.y) <= 0.2f ) camCurMovement.y = 0 ;
+        if (Mathf.Abs(camCurMovement.x) <= 0.2f) camCurMovement.x = 0;
+        if (Mathf.Abs(camCurMovement.y) <= 0.2f) camCurMovement.y = 0;
     }
 
-    public override void EstButtonInput()
-    {
-        throw new System.NotImplementedException();
-    }
+
 
     public override void MovementInput(Vector2 input)
     {
@@ -68,56 +108,68 @@ public class Player : Pawn
         if (Mathf.Abs(pawnCurMovement.y) <= 0.2f) pawnCurMovement.y = 0;
     }
 
-    public override void NorthButtonInput()
-    {
-        if (tag == "Giro")
-        {
-            Prisme();
-        }
-    }
 
-    private void Prisme()
-    {
-        prismed = !prismed;
-        Color color = visual.GetComponent<MeshRenderer>().material.color;
-        if (prismed)
-        {
-            color.a = 0.3f;
-        }
-        else
-        {
-            color.a = 1f;
-        }
-        visual.GetComponent<MeshRenderer>().material.color = color;
-    }
 
     public override void SouthButtonInput()
     {
-        throw new System.NotImplementedException();
+        Jump();
     }
 
-    public override void WestButtonInput()
+
+    public void Jump()
     {
-        throw new System.NotImplementedException();
+        if (isGrounded && !jumping)
+        {
+            StartCoroutine(JumpCoroutine());
+        }
     }
 
-    public override void SouthButtonInputReleased()
+
+    IEnumerator JumpCoroutine()
     {
-        throw new NotImplementedException();
+        jumping = true;
+        GetComponent<Rigidbody>().useGravity = false;
+        float time = 0;
+        float previous = 0;
+        while (time <= jumpTime)
+        {
+
+            float ratio = time / jumpTime;
+
+            float upDisplacement = jumpCurve.Evaluate(ratio) - previous;
+
+            transform.position += Vector3.up * (upDisplacement * jumpHeight);
+
+
+            previous = jumpCurve.Evaluate(ratio);
+            yield return  new WaitForEndOfFrame();
+            time += Time.deltaTime;
+            
+        }
+        GetComponent<Rigidbody>().useGravity = true;
+        jumping = false;
     }
 
-    public override void NorthButtonInputReleased()
+    public override void CalcGrounded()
     {
-        throw new NotImplementedException();
+        isGrounded = Physics.Raycast(this.transform.position, Vector3.down, (visual.GetComponent<CapsuleCollider>().height / 2) + 0.1f) ;
     }
 
-    public override void EstButtonInputReleased()
+    public void DrawDebug()
     {
-        throw new NotImplementedException();
+        Color col = Color.red;
+        if (Physics.Raycast(this.transform.position, Vector3.down, (visual.GetComponent<CapsuleCollider>().height / 2) + 0.1f))
+        {
+            col = Color.green;            
+        }
+        Debug.DrawRay(transform.position, transform.up * -1 * ((visual.GetComponent<CapsuleCollider>().height / 2)), col, 0);
+
+        Color col2 = Color.red;
+        if (Physics.Raycast(this.transform.position + visual.transform.forward*0.1f, Vector3.down, (visual.GetComponent<CapsuleCollider>().height / 2) + 0.2f))
+        {
+            col2 = Color.green;
+        }
+        Debug.DrawRay(transform.position + visual.transform.forward * 0.1f, transform.up * -1 * ((visual.GetComponent<CapsuleCollider>().height / 2) + 0.2f), col2, 0);
     }
 
-    public override void WestButtonInputReleased()
-    {
-        throw new NotImplementedException();
-    }
 }

@@ -24,8 +24,9 @@ public class CopterBase : Pawn
 
     protected virtual void Update()
     {
-        CameraUpdate();
-        MovementUpdate();
+        base.Update();
+        if (allowCameraMovement)CameraUpdate();
+        if (allowMovement) MovementUpdate();
     }
 
     protected virtual void CameraUpdate()
@@ -62,4 +63,10 @@ public class CopterBase : Pawn
         if (Mathf.Abs(pawnCurMovement.x) <= 0.2f) pawnCurMovement.x = 0;
         if (Mathf.Abs(pawnCurMovement.y) <= 0.2f) pawnCurMovement.y = 0;
     }
+
+
+
+
+
+
 }
