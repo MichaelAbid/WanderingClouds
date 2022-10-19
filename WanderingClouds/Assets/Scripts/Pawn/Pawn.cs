@@ -22,10 +22,12 @@ public abstract class Pawn : MonoBehaviour
 
     [Foldout("Grounded")]
     public bool isGrounded;
-
+    [Foldout("Slope")]
+    public bool onSlope;
     protected void Update()
     {
         CalcGrounded();
+        
     }
 
     public virtual void MovementInput(Vector2 input) { }
@@ -61,9 +63,9 @@ public abstract class Pawn : MonoBehaviour
     public virtual void LeftBumperInputReleased() { }
 
 
-    public void CalcGrounded()
+    public virtual void CalcGrounded()
     {
-        isGrounded = Physics.Raycast(this.transform.position, Vector3.down, 0.1f);
+        
     }
 }
 

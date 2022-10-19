@@ -29,16 +29,29 @@ public class Player : Pawn
     [Foldout("Movement")]
     public float pawnSpeed = 2;
 
+    [Foldout("Movement")]
+    [ReadOnly]
+    public float momentum;
+    [Foldout("Movement")]
+    [ReadOnly]
+    public Vector2 momentumDirection;
+
+
 
     [Foldout("Jump")]
     [CurveRange(EColor.Blue)]
     public AnimationCurve jumpCurve;
     [Foldout("Jump")]
     public bool jumping = false;
+    [Foldout("Jump")]
+    public float jumpTime = 2;
+    [Foldout("Jump")]
+    public float jumpHeight = 2;
 
     protected virtual void Update()
     {
         base.Update();
+        DrawDebug();
         if (allowCameraMovement) CameraUpdate();
         if (allowMovement) MovementUpdate();
     }
@@ -58,7 +71,24 @@ public class Player : Pawn
         if (pawnCurMovement != Vector2.zero)
         {
             transform.position += (pivotX.transform.forward * pawnCurMovement.y * pawnSpeed * Time.deltaTime) + (pivotX.transform.right * pawnCurMovement.x * pawnSpeed * Time.deltaTime);
+
+            if (!jumping)
+            {
+                RaycastHit hit;
+                Ray ray = new Ray(transform.position, Vector3.down);
+                if (Physics.Raycast(ray, out hit))
+                {
+                    if (hit.distance <= (visual.GetComponent<CapsuleCollider>().height / 2) + 0.2f)
+                    {
+                        transform.position = hit.point + (Vector3.up * (visual.GetComponent<CapsuleCollider>().height / 2));
+                    }
+                }
+            }
+
+
             visual.transform.rotation = Quaternion.LookRotation(new Vector3(pawnCurMovement.x,0,pawnCurMovement.y),Vector3.up);
+            visual.transform.Rotate(pivotX.transform.rotation.eulerAngles);
+
         }
     }
 
@@ -79,6 +109,13 @@ public class Player : Pawn
     }
 
 
+
+    public override void SouthButtonInput()
+    {
+        Jump();
+    }
+
+
     public void Jump()
     {
         if (isGrounded && !jumping)
@@ -91,13 +128,48 @@ public class Player : Pawn
     IEnumerator JumpCoroutine()
     {
         jumping = true;
-
+        GetComponent<Rigidbody>().useGravity = false;
         float time = 0;
+        float previous = 0;
+        while (time <= jumpTime)
+        {
+
+            float ratio = time / jumpTime;
+
+            float upDisplacement = jumpCurve.Evaluate(ratio) - previous;
+
+            transform.position += Vector3.up * (upDisplacement * jumpHeight);
 
 
-
-        yield return null;
+            previous = jumpCurve.Evaluate(ratio);
+            yield return  new WaitForEndOfFrame();
+            time += Time.deltaTime;
+            
+        }
+        GetComponent<Rigidbody>().useGravity = true;
         jumping = false;
     }
-    
+
+    public override void CalcGrounded()
+    {
+        isGrounded = Physics.Raycast(this.transform.position, Vector3.down, (visual.GetComponent<CapsuleCollider>().height / 2) + 0.1f) ;
+    }
+
+    public void DrawDebug()
+    {
+        Color col = Color.red;
+        if (Physics.Raycast(this.transform.position, Vector3.down, (visual.GetComponent<CapsuleCollider>().height / 2) + 0.1f))
+        {
+            col = Color.green;            
+        }
+        Debug.DrawRay(transform.position, transform.up * -1 * ((visual.GetComponent<CapsuleCollider>().height / 2)), col, 0);
+
+        Color col2 = Color.red;
+        if (Physics.Raycast(this.transform.position + visual.transform.forward*0.1f, Vector3.down, (visual.GetComponent<CapsuleCollider>().height / 2) + 0.2f))
+        {
+            col2 = Color.green;
+        }
+        Debug.DrawRay(transform.position + visual.transform.forward * 0.1f, transform.up * -1 * ((visual.GetComponent<CapsuleCollider>().height / 2) + 0.2f), col2, 0);
+    }
+
 }
