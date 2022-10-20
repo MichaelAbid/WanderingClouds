@@ -84,16 +84,24 @@ MonoBehaviour:
   atStartControlledPawn: 1
   allowMovement: 1
   allowCameraMovement: 1
-  isGrounded: 0
+  isGrounded: 1
   onSlope: 0
   pivotX: {fileID: 8898136918173386036}
   pivotY: {fileID: 295150947030884212}
   visual: {fileID: 6294854706530518151}
   pivotArm: {fileID: 0}
   camSensibility: 1
+  pawnCurMovement: {x: 0, y: 0}
   pawnSpeed: 10
   momentum: 0
   momentumDirection: {x: 0, y: 0}
+  momentumMax: 5
+  momentumGainPerSeconds: 10
+  momentumConsumptionPerSeconds: 5
+  speedAtMaxMomentum: 20
+  CamNormalPosition: {x: 0, y: 0, z: 0}
+  CamShoulderPosition: {x: 0, y: 0, z: 0}
+  isAiming: 0
   jumpCurve:
     serializedVersion: 2
     m_Curve:
@@ -269,7 +277,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5494490759207707873}
   m_LocalRotation: {x: 0.16875768, y: -0, z: -0, w: 0.9856576}
-  m_LocalPosition: {x: 0, y: 4.29, z: -7.9}
+  m_LocalPosition: {x: 0, y: 4, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -297,7 +305,7 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1
+    width: 0.5
     height: 1
   near clip plane: 0.3
   far clip plane: 1000

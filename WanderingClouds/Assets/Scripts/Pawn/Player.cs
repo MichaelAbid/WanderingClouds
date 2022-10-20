@@ -25,16 +25,33 @@ public class Player : Pawn
 
     // Pawn Movement
     [Foldout("Movement")]
+    [ReadOnly]
+    [SerializeField]
     protected Vector2 pawnCurMovement;
     [Foldout("Movement")]
     public float pawnSpeed = 2;
 
-    [Foldout("Movement")]
+    [Foldout("Momentum")]
     [ReadOnly]
     public float momentum;
-    [Foldout("Movement")]
+    [Foldout("Momentum")]
     [ReadOnly]
     public Vector2 momentumDirection;
+    [Foldout("Momentum")]
+    public float momentumMax;
+    [Foldout("Momentum")]
+    public float momentumGainPerSeconds;
+    [Foldout("Momentum")]
+    public float momentumConsumptionPerSeconds;
+    [Foldout("Momentum")]
+    public float speedAtMaxMomentum;
+
+    [Foldout("Camera")]
+    public Vector3 CamNormalPosition;
+    [Foldout("Camera")]
+    public Vector3 CamShoulderPosition;
+    [Foldout("Camera")]
+    public bool isAiming;
 
 
 
@@ -70,7 +87,71 @@ public class Player : Pawn
     {
         if (pawnCurMovement != Vector2.zero)
         {
-            transform.position += (pivotX.transform.forward * pawnCurMovement.y * pawnSpeed * Time.deltaTime) + (pivotX.transform.right * pawnCurMovement.x * pawnSpeed * Time.deltaTime);
+            float previousY = transform.position.y;
+
+            float speed = pawnSpeed;
+            // Using Momentum
+            if (momentum > 0)
+            {
+                speed += Mathf.Clamp((momentum * (speedAtMaxMomentum - pawnSpeed)) / momentumMax, pawnSpeed, speedAtMaxMomentum);
+                momentum -= momentumConsumptionPerSeconds * Time.deltaTime;
+                momentum = Mathf.Clamp(momentum, 0, momentumMax);
+                transform.position += (pivotX.transform.forward * momentumDirection.y * speed * Time.deltaTime) + (pivotX.transform.right * momentumDirection.x * speed * Time.deltaTime);
+            }
+            else
+            { 
+                transform.position += (pivotX.transform.forward * pawnCurMovement.y * speed * Time.deltaTime) + (pivotX.transform.right * pawnCurMovement.x * speed * Time.deltaTime);
+            }
+
+
+            // Stick Player to Slope 
+            if (!jumping)
+            {
+                RaycastHit hit;
+                Ray ray = new Ray(transform.position, Vector3.down);
+                if (Physics.Raycast(ray, out hit))
+                {
+                    if (hit.distance <= (visual.GetComponent<CapsuleCollider>().height / 2) + ((0.2f/10)* speed) )
+                    {
+                        transform.position = hit.point + (Vector3.up * (visual.GetComponent<CapsuleCollider>().height / 2));
+                    }
+                }
+            }
+
+            
+            // Gain Momentum
+            if (transform.position.y - previousY < -0.05f && momentum<momentumMax)
+            {
+                momentum += Time.deltaTime * momentumGainPerSeconds;
+                momentum = Mathf.Clamp(momentum, 0, momentumMax);
+                if (momentumDirection == Vector2.zero)
+                {
+                    momentumDirection = pawnCurMovement;
+                }
+                else
+                {
+                    momentumDirection = Vector2.Lerp(momentumDirection, pawnCurMovement, 5 * Time.deltaTime);
+                }
+            }
+
+
+            // Rotation Visual
+            visual.transform.rotation = Quaternion.LookRotation(new Vector3(pawnCurMovement.x, 0, pawnCurMovement.y), Vector3.up);
+            visual.transform.Rotate(pivotX.transform.rotation.eulerAngles);
+
+        }
+        else
+        {
+            float previousY = transform.position.y;
+            Vector3 directionToGo = visual.transform.forward;
+            float speed = pawnSpeed;
+            if (momentum > 0)
+            {
+                speed += Mathf.Clamp((momentum * (speedAtMaxMomentum - pawnSpeed)) / momentumMax, pawnSpeed, speedAtMaxMomentum);
+                
+                transform.position += (visual.transform.forward * speed * Time.deltaTime);
+                
+            }
 
             if (!jumping)
             {
@@ -78,23 +159,23 @@ public class Player : Pawn
                 Ray ray = new Ray(transform.position, Vector3.down);
                 if (Physics.Raycast(ray, out hit))
                 {
-                    if (hit.distance <= (visual.GetComponent<CapsuleCollider>().height / 2) + 0.2f)
+                    if (hit.distance <= (visual.GetComponent<CapsuleCollider>().height / 2) + ((0.2f / 10) * speed))
                     {
                         transform.position = hit.point + (Vector3.up * (visual.GetComponent<CapsuleCollider>().height / 2));
                     }
                 }
             }
-
-
-            visual.transform.rotation = Quaternion.LookRotation(new Vector3(pawnCurMovement.x,0,pawnCurMovement.y),Vector3.up);
-            visual.transform.Rotate(pivotX.transform.rotation.eulerAngles);
-
+            if (!(transform.position.y - previousY < -0.05f))
+            {
+                momentum -= momentumConsumptionPerSeconds * Time.deltaTime;
+                momentum = Mathf.Clamp(momentum, 0, momentumMax);
+            }
         }
     }
 
     public override void CameraMovementInput(Vector2 input)
     {
-        camCurMovement = input;
+        camCurMovement = input*-1;
         if (Mathf.Abs(camCurMovement.x) <= 0.2f) camCurMovement.x = 0;
         if (Mathf.Abs(camCurMovement.y) <= 0.2f) camCurMovement.y = 0;
     }
