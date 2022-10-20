@@ -92,13 +92,13 @@ MonoBehaviour:
   pivotArm: {fileID: 0}
   camSensibility: 1
   pawnCurMovement: {x: 0, y: 0}
-  pawnSpeed: 10
+  pawnSpeed: 7
   momentum: 0
   momentumDirection: {x: 0, y: 0}
   momentumMax: 5
-  momentumGainPerSeconds: 10
-  momentumConsumptionPerSeconds: 5
-  speedAtMaxMomentum: 20
+  momentumGainPerSeconds: 100
+  momentumConsumptionPerSeconds: 15
+  speedAtMaxMomentum: 18
   CamNormalPosition: {x: 0, y: 0, z: 0}
   CamShoulderPosition: {x: 0, y: 0, z: 0}
   isAiming: 0
@@ -108,26 +108,35 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 5.686679
-      outSlope: 5.686679
+      inSlope: 4.1855574
+      outSlope: 4.1855574
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.17584956
-      value: 1
-      inSlope: 0.12935415
-      outSlope: 0.12935415
+      time: 0.23835263
+      value: 0.9976386
+      inSlope: 0.01138138
+      outSlope: 0.01138138
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.08300806
+      outWeight: 0.43092072
+    - serializedVersion: 3
+      time: 0.82815504
+      value: 0.21092659
+      inSlope: -1.4249947
+      outSlope: -1.4249947
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.2262272
+      outWeight: 0.23683245
     - serializedVersion: 3
       time: 1
       value: 0
-      inSlope: -1.2133707
-      outSlope: -1.2133707
+      inSlope: -1.2274238
+      outSlope: -1.2274238
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -136,8 +145,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   jumping: 0
-  jumpTime: 2
-  jumpHeight: 2
+  jumpTime: 1
+  jumpHeight: 1.75
 --- !u!54 &6026432399306388180
 Rigidbody:
   m_ObjectHideFlags: 0
