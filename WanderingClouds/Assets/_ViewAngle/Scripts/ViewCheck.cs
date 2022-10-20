@@ -4,8 +4,8 @@ using System.Linq;
 
 public class ViewCheck : MonoBehaviour
 {
-    public ObjectAngleViewV3[] viewAngles;
-    public ObjectMultipleAngleView doubleViewAngles;
+    public AngleViewObject[] viewAngles;
+    public MultipleViewObject doubleViewAngles;
 
     public bool allSynch;
     public bool AllSynch
@@ -15,16 +15,8 @@ public class ViewCheck : MonoBehaviour
         {
             if (allSynch != value)
             {
-                if (value)
-                {
-                    Debug.Log("onFullAlign");
-                    onFullAlign?.Invoke();
-                }
-                else
-                {
-                    Debug.Log("onNoneAlign");
-                    onNoneAlign?.Invoke();
-                }
+                if (value) onFullAlign?.Invoke();
+                else onNoneAlign?.Invoke();
             }
             allSynch = value;
         }
@@ -43,7 +35,7 @@ public class ViewCheck : MonoBehaviour
                 allValid = false;
             }
         }
-        if (!doubleViewAngles.isAlign)
+        if (doubleViewAngles is not null && !doubleViewAngles.isAlign)
         {
             allValid = false;
         }
