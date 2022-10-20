@@ -175,7 +175,7 @@ public class Player : Pawn
 
     public override void CameraMovementInput(Vector2 input)
     {
-        camCurMovement = input;
+        camCurMovement = input*-1;
         if (Mathf.Abs(camCurMovement.x) <= 0.2f) camCurMovement.x = 0;
         if (Mathf.Abs(camCurMovement.y) <= 0.2f) camCurMovement.y = 0;
     }
