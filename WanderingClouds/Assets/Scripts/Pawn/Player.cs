@@ -209,6 +209,14 @@ public class Player : Pawn
                 {
                     if (hit.distance <= (CapsuleCollider.height / 2) + ((0.2f / 10) * speed))
                         transform.position = hit.point + (Vector3.up * (CapsuleCollider.height / 2));
+                    Body.drag = 0;
+                }
+                else
+                {
+                    if (momentum > 0)
+                    {
+                        Body.drag = gravityWhenMomentumInAir;
+                    }
                 }
             }
 
