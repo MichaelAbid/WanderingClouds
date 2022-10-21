@@ -1,69 +1,60 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Rendering.LookDev;
-using UnityEngine;
+using DG.Tweening;
 using NaughtyAttributes;
+using UnityEngine;
+using UnityEngine.Serialization;
+
 public class Player : Pawn
 {
-    [Foldout("Ref")]
-    public GameObject pivotX;
-    [Foldout("Ref")]
-    public GameObject pivotY;
-    [Foldout("Ref")]
-    public GameObject visual;
-    [Foldout("Ref")]
-    public GameObject pivotArm;
-
+    [Foldout("Ref")] public GameObject visual;
 
     // Camera Movement
-    [Foldout("Camera")]
+    [Foldout("Camera")] public GameObject pivotX;
+    [Foldout("Camera")] public GameObject pivotY;
+    [Foldout("Camera"), MinMaxSlider(30,90)] public Vector2 fov = new  Vector2(45, 60);
+    [Foldout("Camera")] public Vector3 zoomOffset;
+    [Foldout("Camera")] public float camSensibility;
+    [Foldout("Camera")] public bool isAiming;
+    private float aimTime;
     protected Vector2 camCurMovement;
-    [Foldout("Camera")]
-    public float camSensibility;
-
+    
     // Pawn Movement
-    [Foldout("Movement")]
-    [ReadOnly]
-    [SerializeField]
-    protected Vector2 pawnCurMovement;
-    [Foldout("Movement")]
-    public float pawnSpeed = 2;
+    [ReadOnly, SerializeField] 
+    [Foldout("Movement")] protected Vector2 pawnCurMovement;
+    [Foldout("Movement")] public float pawnSpeed = 2;
+    [Foldout("Movement"), Range(0,0.1f)] public float slopeMagicValue = 0.05f;
+    
+    [Foldout("Momentum"), ReadOnly] public float momentum;
+    [Foldout("Momentum"), ReadOnly] public Vector2 momentumDirection;
+    [Foldout("Momentum")] public float momentumMax;
+    [Foldout("Momentum")] public float momentumGainPerSeconds;
+    [Foldout("Momentum")] public float momentumConsumptionPerSeconds;
+    [Foldout("Momentum")] public float speedAtMaxMomentum;
 
-    [Foldout("Momentum")]
-    [ReadOnly]
-    public float momentum;
-    [Foldout("Momentum")]
-    [ReadOnly]
-    public Vector2 momentumDirection;
-    [Foldout("Momentum")]
-    public float momentumMax;
-    [Foldout("Momentum")]
-    public float momentumGainPerSeconds;
-    [Foldout("Momentum")]
-    public float momentumConsumptionPerSeconds;
-    [Foldout("Momentum")]
-    public float speedAtMaxMomentum;
-
-    [Foldout("Camera")]
-    public Vector3 CamNormalPosition;
-    [Foldout("Camera")]
-    public Vector3 CamShoulderPosition;
-    [Foldout("Camera")]
-    public bool isAiming;
-
-
-
-    [Foldout("Jump")]
-    [CurveRange(EColor.Blue)]
-    public AnimationCurve jumpCurve;
-    [Foldout("Jump")]
-    public bool jumping = false;
-    [Foldout("Jump")]
-    public float jumpTime = 2;
-    [Foldout("Jump")]
-    public float jumpHeight = 2;
+    [CurveRange(EColor.Blue)] 
+    [Foldout("Jump")]public AnimationCurve jumpCurve;
+    [Foldout("Jump")] public bool jumping = false;
+    [Foldout("Jump")] public float jumpTime = 2;
+    [Foldout("Jump")] public float jumpHeight = 2;
+    
+    private CapsuleCollider CapsuleCollider 
+    {
+        get
+        {
+            if(capsuleCollider is null) capsuleCollider = visual.GetComponent<CapsuleCollider>();
+            return capsuleCollider;
+        }
+    }
+    private CapsuleCollider capsuleCollider;
+    private Rigidbody Body 
+    {
+        get
+        {
+            if(body is null) body = GetComponent<Rigidbody>();
+            return body;
+        }
+    }
+    private Rigidbody body;
 
     protected virtual void Update()
     {
@@ -72,17 +63,19 @@ public class Player : Pawn
         if (allowCameraMovement) CameraUpdate();
         if (allowMovement) MovementUpdate();
     }
-
     protected virtual void CameraUpdate()
     {
         if (camCurMovement != Vector2.zero)
         {
-            if (Mathf.Abs(pivotY.transform.eulerAngles.x + camCurMovement.y) <= 45 || Mathf.Abs(pivotY.transform.eulerAngles.x + camCurMovement.y) >= 360 - 45) { pivotY.transform.Rotate(Vector3.right, camCurMovement.y * camSensibility); }
-            pivotX.transform.Rotate(Vector3.down, camCurMovement.x * camSensibility);
-
+            pivotX.transform.Rotate(Vector3.up, camCurMovement.x * camSensibility);
+            float maxAngle = 45;
+            if (Mathf.Abs(pivotY.transform.eulerAngles.x + camCurMovement.y) <= maxAngle ||
+                Mathf.Abs(pivotY.transform.eulerAngles.x + camCurMovement.y) >= 360 - maxAngle)
+            {
+                pivotY.transform.Rotate(Vector3.right, camCurMovement.y * camSensibility);
+            }
         }
     }
-
     protected virtual void MovementUpdate()
     {
         if (pawnCurMovement != Vector2.zero)
@@ -90,20 +83,37 @@ public class Player : Pawn
             float previousY = transform.position.y;
 
             float speed = pawnSpeed;
+            Vector2 move;
             // Using Momentum
             if (momentum > 0)
             {
-                speed += Mathf.Clamp((momentum * (speedAtMaxMomentum - pawnSpeed)) / momentumMax, pawnSpeed, speedAtMaxMomentum);
+                speed += Mathf.Clamp((momentum * (speedAtMaxMomentum - pawnSpeed)) / momentumMax, pawnSpeed,
+                    speedAtMaxMomentum);
                 momentum -= momentumConsumptionPerSeconds * Time.deltaTime;
                 momentum = Mathf.Clamp(momentum, 0, momentumMax);
-                transform.position += (pivotX.transform.forward * momentumDirection.y * speed * Time.deltaTime) + (pivotX.transform.right * momentumDirection.x * speed * Time.deltaTime);
+                move = momentumDirection * (speed * Time.deltaTime);
             }
             else
-            { 
-                transform.position += (pivotX.transform.forward * pawnCurMovement.y * speed * Time.deltaTime) + (pivotX.transform.right * pawnCurMovement.x * speed * Time.deltaTime);
+            {
+                move = pawnCurMovement * (speed * Time.deltaTime);
             }
 
-
+            var movement = (pivotX.transform.forward * move.y + pivotX.transform.right * move.x);
+            Ray moveRay = new Ray(transform.position, movement);
+            Ray moveRayL = new Ray(transform.position - Vector3.Cross(Vector3.up,movement ).normalized * CapsuleCollider.radius, movement);
+            Ray moveRayR = new Ray(transform.position + Vector3.Cross(Vector3.up,movement ).normalized * CapsuleCollider.radius, movement);
+            if (   Physics.Raycast(moveRay,CapsuleCollider.radius + 0.2f) 
+                || Physics.Raycast(moveRayL,CapsuleCollider.radius + 0.2f) 
+                || Physics.Raycast(moveRayR,CapsuleCollider.radius + 0.2f))
+            {
+                //HitTheWall
+                momentum = 0;
+            }
+            else
+            {
+                transform.position += movement;
+            }
+            
             // Stick Player to Slope 
             if (!jumping)
             {
@@ -111,16 +121,16 @@ public class Player : Pawn
                 Ray ray = new Ray(transform.position, Vector3.down);
                 if (Physics.Raycast(ray, out hit))
                 {
-                    if (hit.distance <= (visual.GetComponent<CapsuleCollider>().height / 2) + ((0.2f/10)* speed) )
+                    if (hit.distance <= (CapsuleCollider.height / 2) + ((0.2f / 10) * speed))
                     {
-                        transform.position = hit.point + (Vector3.up * (visual.GetComponent<CapsuleCollider>().height / 2));
+                        transform.position =
+                            hit.point + (Vector3.up * (CapsuleCollider.height / 2));
                     }
                 }
             }
-
             
             // Gain Momentum
-            if (transform.position.y - previousY < -0.05f && momentum<momentumMax)
+            if (transform.position.y - previousY < -slopeMagicValue && momentum < momentumMax)
             {
                 momentum += Time.deltaTime * momentumGainPerSeconds;
                 momentum = Mathf.Clamp(momentum, 0, momentumMax);
@@ -133,24 +143,20 @@ public class Player : Pawn
                     momentumDirection = Vector2.Lerp(momentumDirection, pawnCurMovement, 5 * Time.deltaTime);
                 }
             }
-
-
+            
             // Rotation Visual
             visual.transform.rotation = Quaternion.LookRotation(new Vector3(pawnCurMovement.x, 0, pawnCurMovement.y), Vector3.up);
             visual.transform.Rotate(pivotX.transform.rotation.eulerAngles);
-
         }
         else
         {
+            float speed = pawnSpeed;
             float previousY = transform.position.y;
             Vector3 directionToGo = visual.transform.forward;
-            float speed = pawnSpeed;
             if (momentum > 0)
             {
                 speed += Mathf.Clamp((momentum * (speedAtMaxMomentum - pawnSpeed)) / momentumMax, pawnSpeed, speedAtMaxMomentum);
-                
-                transform.position += (visual.transform.forward * speed * Time.deltaTime);
-                
+                transform.position += (visual.transform.forward * (speed * Time.deltaTime));
             }
 
             if (!jumping)
@@ -159,12 +165,11 @@ public class Player : Pawn
                 Ray ray = new Ray(transform.position, Vector3.down);
                 if (Physics.Raycast(ray, out hit))
                 {
-                    if (hit.distance <= (visual.GetComponent<CapsuleCollider>().height / 2) + ((0.2f / 10) * speed))
-                    {
-                        transform.position = hit.point + (Vector3.up * (visual.GetComponent<CapsuleCollider>().height / 2));
-                    }
+                    if (hit.distance <= (CapsuleCollider.height / 2) + ((0.2f / 10) * speed))
+                        transform.position = hit.point + (Vector3.up * (CapsuleCollider.height / 2));
                 }
             }
+
             if (!(transform.position.y - previousY < -0.05f))
             {
                 momentum -= momentumConsumptionPerSeconds * Time.deltaTime;
@@ -173,29 +178,25 @@ public class Player : Pawn
         }
     }
 
-    public override void CameraMovementInput(Vector2 input)
+    #region input
+    public override void CameraMovementInput(Vector2 input)=>camCurMovement = -input;
+    public override void MovementInput(Vector2 input)=>pawnCurMovement = input;
+    public override void RightTriggerInput() { }
+    public override void LeftTriggerInput()
     {
-        camCurMovement = input*-1;
-        if (Mathf.Abs(camCurMovement.x) <= 0.2f) camCurMovement.x = 0;
-        if (Mathf.Abs(camCurMovement.y) <= 0.2f) camCurMovement.y = 0;
+        isAiming = true;
+        Camera.transform.DOLocalMove(zoomOffset,0.2f);
+        Camera.DOFieldOfView( fov.y,0.2f);
+
     }
-
-
-
-    public override void MovementInput(Vector2 input)
+    public override void LeftTriggerInputReleased()     
     {
-        pawnCurMovement = input;
-        if (Mathf.Abs(pawnCurMovement.x) <= 0.2f) pawnCurMovement.x = 0;
-        if (Mathf.Abs(pawnCurMovement.y) <= 0.2f) pawnCurMovement.y = 0;
+        isAiming = false;
+        Camera.transform.DOLocalMove(Vector3.zero,0.2f);
+        Camera.DOFieldOfView( fov.x,0.2f);
     }
-
-
-
-    public override void SouthButtonInput()
-    {
-        Jump();
-    }
-
+    public override void SouthButtonInput() => Jump();
+    #endregion
 
     public void Jump()
     {
@@ -205,52 +206,44 @@ public class Player : Pawn
         }
     }
 
-
     IEnumerator JumpCoroutine()
     {
         jumping = true;
-        GetComponent<Rigidbody>().useGravity = false;
-        float time = 0;
-        float previous = 0;
+        Body.useGravity = false;
+        float time = 0, previous = 0;
         while (time <= jumpTime)
         {
-
             float ratio = time / jumpTime;
-
-            float upDisplacement = jumpCurve.Evaluate(ratio) - previous;
-
+            float upDisplacement = jumpCurve.Evaluate(ratio) - previous; 
             transform.position += Vector3.up * (upDisplacement * jumpHeight);
-
-
             previous = jumpCurve.Evaluate(ratio);
-            yield return  new WaitForEndOfFrame();
+            yield return new WaitForEndOfFrame();
             time += Time.deltaTime;
-            
         }
-        GetComponent<Rigidbody>().useGravity = true;
+        Body.useGravity = true;
         jumping = false;
     }
 
     public override void CalcGrounded()
     {
-        isGrounded = Physics.Raycast(this.transform.position, Vector3.down, (visual.GetComponent<CapsuleCollider>().height / 2) + 0.1f) ;
+        isGrounded = Physics.Raycast(this.transform.position, Vector3.down, (CapsuleCollider.height / 2) + 0.1f);
     }
 
     public void DrawDebug()
     {
         Color col = Color.red;
-        if (Physics.Raycast(this.transform.position, Vector3.down, (visual.GetComponent<CapsuleCollider>().height / 2) + 0.1f))
+        if (Physics.Raycast(this.transform.position, Vector3.down, (CapsuleCollider.height / 2) + 0.1f))
         {
-            col = Color.green;            
+            col = Color.green;
         }
-        Debug.DrawRay(transform.position, transform.up * -1 * ((visual.GetComponent<CapsuleCollider>().height / 2)), col, 0);
+        Debug.DrawRay(transform.position, transform.up * -1 * ((CapsuleCollider.height / 2)), col);
+        
+        col = Color.red;
+        if (Physics.Raycast(this.transform.position + visual.transform.forward * 0.1f, Vector3.down, (CapsuleCollider.height / 2) + 0.2f))
+        {
+            col = Color.green;
+        }
+        Debug.DrawRay(transform.position + visual.transform.forward * 0.1f, transform.up * (-1 * ((CapsuleCollider.height / 2) + 0.2f)), col);
 
-        Color col2 = Color.red;
-        if (Physics.Raycast(this.transform.position + visual.transform.forward*0.1f, Vector3.down, (visual.GetComponent<CapsuleCollider>().height / 2) + 0.2f))
-        {
-            col2 = Color.green;
-        }
-        Debug.DrawRay(transform.position + visual.transform.forward * 0.1f, transform.up * -1 * ((visual.GetComponent<CapsuleCollider>().height / 2) + 0.2f), col2, 0);
     }
-
 }

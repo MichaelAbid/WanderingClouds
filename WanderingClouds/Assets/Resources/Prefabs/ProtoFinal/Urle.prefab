@@ -23,15 +23,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 295150947030884212}
-  m_LocalRotation: {x: 0.00034904052, y: 0, z: 0, w: 0.99999994}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 517116400679696311}
+  - {fileID: 3720633125260842360}
   m_Father: {fileID: 2234808503969518703}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0.04, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3501616950050832199
 GameObject:
   m_ObjectHideFlags: 0
@@ -58,7 +58,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3501616950050832199}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -143.18738, y: 6.78, z: 26.637264}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -86,11 +86,13 @@ MonoBehaviour:
   allowCameraMovement: 1
   isGrounded: 1
   onSlope: 0
+  visual: {fileID: 6294854706530518151}
   pivotX: {fileID: 8898136918173386036}
   pivotY: {fileID: 295150947030884212}
-  visual: {fileID: 6294854706530518151}
-  pivotArm: {fileID: 0}
+  socket: {fileID: 9065575488363307196}
+  zoomOffset: {x: 0, y: 0, z: 0}
   camSensibility: 1
+  isAiming: 0
   pawnCurMovement: {x: 0, y: 0}
   pawnSpeed: 10
   momentum: 0
@@ -99,9 +101,6 @@ MonoBehaviour:
   momentumGainPerSeconds: 10
   momentumConsumptionPerSeconds: 5
   speedAtMaxMomentum: 20
-  CamNormalPosition: {x: 0, y: 0, z: 0}
-  CamShoulderPosition: {x: 0, y: 0, z: 0}
-  isAiming: 0
   jumpCurve:
     serializedVersion: 2
     m_Curve:
@@ -276,14 +275,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5494490759207707873}
-  m_LocalRotation: {x: 0.16875768, y: -0, z: -0, w: 0.9856576}
-  m_LocalPosition: {x: 0, y: 4, z: -8}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1004076728537156118}
+  m_Father: {fileID: 3720633125260842360}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 19.431, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &6038659982940773352
 Camera:
   m_ObjectHideFlags: 0
@@ -713,3 +712,35 @@ Transform:
   m_Father: {fileID: 5810129774034604126}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!1 &9065575488363307196
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3720633125260842360}
+  m_Layer: 0
+  m_Name: Socket
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3720633125260842360
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9065575488363307196}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 517116400679696311}
+  m_Father: {fileID: 1004076728537156118}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -27,7 +27,6 @@ public abstract class Pawn : MonoBehaviour
     protected void Update()
     {
         CalcGrounded();
-        
     }
 
     public virtual void MovementInput(Vector2 input) { }
@@ -35,11 +34,8 @@ public abstract class Pawn : MonoBehaviour
     public virtual void CameraMovementInput(Vector2 input) { }
 
     public virtual void SouthButtonInput() { }
-
     public virtual void NorthButtonInput() { }
-
     public virtual void EstButtonInput() { }
-
     public virtual void WestButtonInput() { }
 
     public virtual void RightTriggerInput() { }
