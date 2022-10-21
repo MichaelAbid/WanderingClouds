@@ -73,7 +73,21 @@ public class Player : Pawn
         if (allowCameraMovement) CameraUpdate();
         if (allowMovement) MovementUpdate();
 
-        
+        if (!isGrounded)
+        {
+            if (momentum > 0)
+            {
+                Body.drag = gravityWhenMomentumInAir;
+            }
+            else
+            {
+                Body.drag = 0;
+            }
+        }
+        else
+        {
+            Body.drag = 0;
+        }
         
 
     }
@@ -152,14 +166,11 @@ public class Player : Pawn
                     {
                         transform.position =
                             hit.point + (Vector3.up * (CapsuleCollider.height / 2));
-                        Body.drag = 0;
+                        
                     }
                     else
                     {
-                        if (momentum > 0)
-                        {
-                            Body.drag = gravityWhenMomentumInAir;
-                        }
+                        
                     }
                 }
             }
