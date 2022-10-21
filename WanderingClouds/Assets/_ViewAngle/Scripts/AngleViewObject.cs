@@ -27,6 +27,7 @@ public class AngleViewObject : MonoBehaviour
 
     [Header("Editor")] [MinMaxSlider(1, 50)]
     public Vector2 minMaxDist = new Vector2(1, 10);
+    public float distance = 0f;
 
     [Button()]
     public void SetUpArraySizes()
@@ -99,19 +100,19 @@ public class AngleViewObject : MonoBehaviour
         for (int i = 0; i < composite.Length; i++)
         {
             var camToComp = composite[i].position - playerCam.position;
-            if(!Physics.Raycast(playerCam.position,camToComp.normalized, camToComp.magnitude))continue;
+            if(Physics.Raycast(playerCam.position,camToComp.normalized, camToComp.magnitude))continue;
             
             actualScreenPos[i] = player.Camera.GetScreenRatioPosOfGameObject(composite[i].position) * player.Camera.rect.size;
         }
 
-        float distance = 0f;
+        distance = 0f;
         var refPos = playerCam.position + playerCam.forward * 3f;
         for (int i = 0; i < actualScreenPos.Length - 1; i++)
         {
             distance += Vector2.Distance(screenPos[i] - screenPos[i + 1], actualScreenPos[i] - actualScreenPos[i + 1]);
 
             Debug.DrawLine(refPos + (Vector3)actualScreenPos[i], refPos + (Vector3)actualScreenPos[i + 1], Color.red);
-            Debug.DrawLine(refPos + (Vector3)screenPos[i], refPos + (Vector3)screenPos[i + 1], Color.green);
+            Debug.DrawLine(refPos + (Vector3)screenPos[i],       refPos + (Vector3)screenPos[i + 1]      , Color.green);
         }
 
         return distance < threshold;
