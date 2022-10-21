@@ -1,13 +1,14 @@
 using System.Collections;
 using DG.Tweening;
 using NaughtyAttributes;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public class Player : Pawn
 {
     [Foldout("Ref")] public GameObject visual;
-
+    [Foldout("Ref")] public MeshRenderer visualMeshRenderer;
     // Camera Movement
     [Foldout("Camera")] public GameObject pivotX;
     [Foldout("Camera")] public GameObject pivotY;
@@ -23,13 +24,22 @@ public class Player : Pawn
     [Foldout("Movement")] protected Vector2 pawnCurMovement;
     [Foldout("Movement")] public float pawnSpeed = 2;
     [Foldout("Movement"), Range(0,0.1f)] public float slopeMagicValue = 0.05f;
-    
+    [Foldout("Movement")] public float speedForColorChange;
+    [Foldout("Movement")] public Color colorNormal;
+    [Foldout("Movement")] public Color colorMaxSpeed;
+
+
     [Foldout("Momentum"), ReadOnly] public float momentum;
     [Foldout("Momentum"), ReadOnly] public Vector2 momentumDirection;
     [Foldout("Momentum")] public float momentumMax;
     [Foldout("Momentum")] public float momentumGainPerSeconds;
     [Foldout("Momentum")] public float momentumConsumptionPerSeconds;
+    [Foldout("Momentum")] public float momentumConsumptionPerSecondsInAir;
+    [Foldout("Momentum")] public float momentumConsumptionPerSecondsWhenBreak;
     [Foldout("Momentum")] public float speedAtMaxMomentum;
+    [Foldout("Momentum")] public float gravityWhenMomentumInAir;
+
+    
 
     [CurveRange(EColor.Blue)] 
     [Foldout("Jump")]public AnimationCurve jumpCurve;
@@ -62,6 +72,10 @@ public class Player : Pawn
         DrawDebug();
         if (allowCameraMovement) CameraUpdate();
         if (allowMovement) MovementUpdate();
+
+        
+        
+
     }
     protected virtual void CameraUpdate()
     {
@@ -87,14 +101,27 @@ public class Player : Pawn
             // Using Momentum
             if (momentum > 0)
             {
+                Debug.Log(Vector3.Dot(momentumDirection, pawnCurMovement));
+                if (Vector3.Dot(momentumDirection, pawnCurMovement) < 0.5f)
+                {
+                    momentum -= (momentumConsumptionPerSecondsWhenBreak) * Time.deltaTime;
+                    Debug.Log("Breaking");
+
+                }
+
                 speed += Mathf.Clamp((momentum * (speedAtMaxMomentum - pawnSpeed)) / momentumMax, pawnSpeed,
                     speedAtMaxMomentum);
-                momentum -= momentumConsumptionPerSeconds * Time.deltaTime;
+
+                momentum -= (isGrounded? momentumConsumptionPerSeconds: momentumConsumptionPerSecondsInAir) * Time.deltaTime;
                 momentum = Mathf.Clamp(momentum, 0, momentumMax);
                 move = momentumDirection * (speed * Time.deltaTime);
+
+
+
             }
             else
             {
+                momentumDirection = Vector3.zero;
                 move = pawnCurMovement * (speed * Time.deltaTime);
             }
 
@@ -125,6 +152,14 @@ public class Player : Pawn
                     {
                         transform.position =
                             hit.point + (Vector3.up * (CapsuleCollider.height / 2));
+                        Body.drag = 0;
+                    }
+                    else
+                    {
+                        if (momentum > 0)
+                        {
+                            Body.drag = gravityWhenMomentumInAir;
+                        }
                     }
                 }
             }
@@ -140,13 +175,20 @@ public class Player : Pawn
                 }
                 else
                 {
-                    momentumDirection = Vector2.Lerp(momentumDirection, pawnCurMovement, 5 * Time.deltaTime);
+                    
+                    momentumDirection = Vector2.Lerp(momentumDirection, pawnCurMovement, 0.5f * Time.deltaTime);
+
                 }
             }
-            
-            // Rotation Visual
-            visual.transform.rotation = Quaternion.LookRotation(new Vector3(pawnCurMovement.x, 0, pawnCurMovement.y), Vector3.up);
-            visual.transform.Rotate(pivotX.transform.rotation.eulerAngles);
+
+            if (momentum == 0)
+            {
+                // Rotation Visual
+                visual.transform.rotation = Quaternion.LookRotation(new Vector3(pawnCurMovement.x, 0, pawnCurMovement.y), Vector3.up);
+                visual.transform.Rotate(pivotX.transform.rotation.eulerAngles);
+            }
+
+            MaterialUpdate(speed);
         }
         else
         {
@@ -170,12 +212,14 @@ public class Player : Pawn
                 }
             }
 
-            if (!(transform.position.y - previousY < -0.05f))
+            if (!(transform.position.y - previousY < -slopeMagicValue))
             {
-                momentum -= momentumConsumptionPerSeconds * Time.deltaTime;
+                momentum -= (isGrounded ? momentumConsumptionPerSeconds : momentumConsumptionPerSecondsInAir) * Time.deltaTime;
                 momentum = Mathf.Clamp(momentum, 0, momentumMax);
             }
+            MaterialUpdate(speed);
         }
+
     }
 
     #region input
@@ -229,6 +273,20 @@ public class Player : Pawn
         isGrounded = Physics.Raycast(this.transform.position, Vector3.down, (CapsuleCollider.height / 2) + 0.1f);
     }
 
+    public void MaterialUpdate(float speed)
+    {
+        if (speed >= speedForColorChange)
+        {
+            visualMeshRenderer.material.color = colorMaxSpeed;
+        }
+        else
+        {
+            visualMeshRenderer.GetComponent<MeshRenderer>().material.color = colorNormal;
+        }
+    }
+
+
+
     public void DrawDebug()
     {
         Color col = Color.red;
@@ -244,6 +302,9 @@ public class Player : Pawn
             col = Color.green;
         }
         Debug.DrawRay(transform.position + visual.transform.forward * 0.1f, transform.up * (-1 * ((CapsuleCollider.height / 2) + 0.2f)), col);
+
+
+        Debug.DrawRay(transform.position , new Vector3(momentumDirection.x,0, momentumDirection.y) * 1 , Color.yellow);
 
     }
 }
