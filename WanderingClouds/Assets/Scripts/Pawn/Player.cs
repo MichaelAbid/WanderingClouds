@@ -179,7 +179,7 @@ public class Player : Pawn
     }
 
     #region input
-    public override void CameraMovementInput(Vector2 input)=>camCurMovement = -input;
+    public override void CameraMovementInput(Vector2 input)=>camCurMovement = new Vector2(input.x,-input.y);
     public override void MovementInput(Vector2 input)=>pawnCurMovement = input;
     public override void RightTriggerInput() { }
     public override void LeftTriggerInput()
