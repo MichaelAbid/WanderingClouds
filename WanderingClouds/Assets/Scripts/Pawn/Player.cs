@@ -2,7 +2,7 @@ using System.Collections;
 using DG.Tweening;
 using NaughtyAttributes;
 using UnityEngine;
-using UnityEngine.Serialization;
+
 
 public class Player : Pawn
 {
