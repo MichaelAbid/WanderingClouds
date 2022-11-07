@@ -52,7 +52,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8073872383521221190}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -112,13 +112,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08765ae1efa66364fbb6285a05a40497, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceBeforeBreak: 0.5
-  distanceBeforePull: 0.2
-  distanceBeforeNotLinked: 1
+  distanceBeforeBreak: 1.5
+  distanceBeforePull: 0.5
+  distanceBeforeNotLinked: 2
   velocity: {x: 0, y: 0, z: 0}
   notDriven: 0
-  speedWhenBreak: 0.05
-  speedWhenPull: 0.1
+  speedWhenBreak: 0.2
+  speedWhenPull: 0.5
 --- !u!198 &7573937046322422429
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -687,7 +687,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 120
+    maxNumParticles: 50
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -1416,7 +1416,7 @@ ParticleSystem:
         ctime5: 0
         ctime6: 0
         ctime7: 0
-        atime0: 27756
+        atime0: 50308
         atime1: 65535
         atime2: 0
         atime3: 0
