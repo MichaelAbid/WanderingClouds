@@ -186,19 +186,19 @@ MonoBehaviour:
   visual: {fileID: 5741205632794676968}
   pivotX: {fileID: 7172973591234072411}
   pivotY: {fileID: 2085055727837451547}
-  fov: {x: 0, y: 0}
-  zoomOffset: {x: 0.25, y: 0.75, z: 2}
+  fov: {x: 60, y: 72}
+  zoomOffset: {x: 1.2, y: 0.76, z: 3.15}
   camSensibility: 1
   isAiming: 0
   pawnCurMovement: {x: 0, y: 0}
-  pawnSpeed: 10
-  slopeMagicValue: 0.05
+  pawnSpeed: 6.3
+  slopeMagicValue: 0.021
   momentum: 0
   momentumDirection: {x: 0, y: 0}
-  momentumMax: 5
-  momentumGainPerSeconds: 10
-  momentumConsumptionPerSeconds: 5
-  speedAtMaxMomentum: 20
+  momentumMax: 500
+  momentumGainPerSeconds: 100
+  momentumConsumptionPerSeconds: 7.5
+  speedAtMaxMomentum: 19
   jumpCurve:
     serializedVersion: 2
     m_Curve:
@@ -233,8 +233,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   jumping: 0
-  jumpTime: 2
-  jumpHeight: 2
+  jumpTime: 1.1
+  jumpHeight: 1.85
 --- !u!54 &5428312329568630971
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -608,7 +608,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7293696127011023571}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -8}
+  m_LocalPosition: {x: 0, y: 1.43, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
