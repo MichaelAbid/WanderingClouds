@@ -8,22 +8,17 @@ using UnityEngine;
 public abstract class Pawn : MonoBehaviour
 {
 
-    [Foldout("Controller")]
-    public bool controlled;
-    [Foldout("Controller")]
-    public Camera Camera;
-    [Foldout("Controller")]
-    public bool atStartControlledPawn = false;
-    [Foldout("Movement")]
-    public bool allowMovement = true;
-    [Foldout("Movement")]
-    public bool allowCameraMovement = true;
-
-
-    [Foldout("Grounded")]
-    public bool isGrounded;
-    [Foldout("Slope")]
-    public bool onSlope;
+    [Foldout("Controller")] public bool controlled;
+    [Foldout("Controller")] public Camera Camera;
+    [Foldout("Controller")] public bool atStartControlledPawn = false;
+    
+    [Foldout("Movement")] public bool allowMovement = true;
+    [Foldout("Movement")] public bool allowCameraMovement = true;
+    
+    [Foldout("Grounded")] public bool isGrounded;
+    [Foldout("Grounded")] public bool isOnEdge;
+    [Foldout("Slope")] public bool onSlope;
+    
     protected void Update()
     {
         CalcGrounded();

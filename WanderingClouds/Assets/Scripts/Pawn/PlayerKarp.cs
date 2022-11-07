@@ -1,4 +1,3 @@
-using System.Collections;
 using NaughtyAttributes;
 using UnityEngine;
 using DG.Tweening;
@@ -16,6 +15,7 @@ public class PlayerKarp : Pawn
     [Foldout("Camera")] public Vector2 fov = new Vector2(45, 60);
     [Foldout("Camera")] protected Vector2 camCurMovement;
     [Foldout("Camera")] public Vector3 zoomOffset;
+    [Foldout("Camera")] public AnimationCurve sensibilityEvolve = AnimationCurve.Linear(0,0,1,1);
     [Foldout("Camera")] public float camSensibility = 1f;
     [Foldout("Camera")] private float aimTime;
     [Foldout("Camera")] public bool isAiming;
@@ -25,8 +25,9 @@ public class PlayerKarp : Pawn
     [Foldout("Movement")] protected Vector3 inputMovement;
     [Foldout("Movement")] public float speed = 2;
 
-    [Foldout("Slide")] public float slopeValue = 10f;
+    [Foldout("Slide")] public float slopeValue = -15f;
     [Foldout("Slide")] public float curAngle;
+    [Foldout("Slide")] public Vector3 slopeVector;
 
     [Foldout("Jump")] public float jumpForce = 5;
     [Foldout("Jump"), Range(0,1)] public float flotiness;
@@ -45,32 +46,53 @@ public class PlayerKarp : Pawn
     {
         if (camCurMovement != Vector2.zero)
         {
-            pivotX.transform.Rotate(Vector3.up, camCurMovement.x * camSensibility);
+            pivotX.transform.Rotate(Vector3.up, camCurMovement.x);
             float maxAngle = 45;
             if (Mathf.Abs(pivotY.transform.eulerAngles.x + camCurMovement.y) <= maxAngle ||
                 Mathf.Abs(pivotY.transform.eulerAngles.x + camCurMovement.y) >= 360 - maxAngle)
             {
-                pivotY.transform.Rotate(Vector3.right, camCurMovement.y * camSensibility);
+                pivotY.transform.Rotate(Vector3.right, camCurMovement.y);
             }
         }
     }
     public void MovementUpdate()
     {
-        
-        body.AddForce(inputMovement * ( speed * Time.deltaTime), ForceMode.VelocityChange);
+        CalcGrounded();
 
-        if (body.velocity.y < 0)
+        if (inputMovement.magnitude < Mathf.Epsilon) return;
+        var aimRot = Quaternion.LookRotation(inputMovement, Vector3.up);
+        chara.rotation = Quaternion.Slerp(chara.rotation, aimRot, 4 *Time.deltaTime);
+
+        if (isGrounded)
         {
-            CalcGrounded();
-            CalcSlopAngle();
-
-            body.AddForce(Vector3.up * (flotiness * Time.deltaTime), ForceMode.Force);
-                
+            body.AddForce(slopeVector.normalized * (inputMovement.magnitude * (speed * Time.deltaTime)), ForceMode.VelocityChange);
+            
+            if (!isOnEdge)
+            {
+                body.velocity = slopeVector.normalized * body.velocity.magnitude;
+            }
         }
+        else
+        {
+            body.AddForce(inputMovement * (speed * Time.deltaTime), ForceMode.VelocityChange);
+            body.AddForce(Vector3.up * (flotiness * Time.deltaTime), ForceMode.VelocityChange);
+        }
+        
+
+        if (curAngle < slopeValue)
+        {
+            body.AddForce(slopeVector.normalized * Mathf.InverseLerp(-20, -60, curAngle), ForceMode.VelocityChange);
+        }
+        
     }
     
     #region input
-    public override void CameraMovementInput(Vector2 input) => camCurMovement = new Vector2(input.x, -input.y);
+    public override void CameraMovementInput(Vector2 input)
+    {
+        camCurMovement = new Vector2( Mathf.Sign(input.x) * sensibilityEvolve.Evaluate(Mathf.Abs(input.x)), 
+                                      Mathf.Sign(input.y) *-sensibilityEvolve.Evaluate(Mathf.Abs(input.y)));
+        camCurMovement *= camSensibility;
+    }
     public override void MovementInput(Vector2 input) => inputMovement = pivotX.transform.forward * input.y + pivotX.transform.right * input.x;
 
     public override void RightTriggerInput(){}
@@ -92,18 +114,45 @@ public class PlayerKarp : Pawn
 
     public void Jump()
     {
-        if (isGrounded) body.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+        if (!isGrounded) return;
+        
+        body.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
     }
     
     public override void CalcGrounded()
     {
-        isGrounded = Physics.Raycast(this.transform.position, Vector3.down, (capsuleCollider.height / 2) + 0.1f);
-    }
-    public void CalcSlopAngle()
-    {
-        RaycastHit forwardPos;
-        Physics.Raycast(new Ray(transform.position + Vector3.down * capsuleCollider.height/2+ (Vector3)inputMovement.normalized * 0.25f, Vector3.down), out forwardPos);
+        var height = capsuleCollider.height;
+        var feetPos = transform.position + Vector3.down * ((height -0.05f) / 2);
         
-        curAngle = Mathf.Atan2(forwardPos.distance - capsuleCollider.height/2,  0.25f) * Mathf.Rad2Deg;
+        RaycastHit underHit;
+        Ray underRay =         inputMovement.magnitude < Mathf.Epsilon ?
+        new Ray(feetPos, Vector3.down) : new Ray(feetPos, Vector3.down);
+        isGrounded = Physics.Raycast(underRay,out underHit,0.5f);
+        Debug.DrawRay(underRay.origin,underRay.direction * 0.5f, isGrounded ? Color.green : Color.red );
+
+        if (!isGrounded)
+        {
+            curAngle = float.NaN;
+            return;
+        }
+
+        float predictDist = capsuleCollider.radius + 0.05f;
+        RaycastHit forwardHit;
+        Ray forwardRay = new Ray(feetPos+ Vector3.up * height + chara.forward * predictDist, Vector3.down);
+        isOnEdge = !Physics.Raycast(forwardRay, out forwardHit, height*2);
+        Debug.DrawRay(forwardRay.origin,forwardRay.direction * (capsuleCollider.height * 2), isOnEdge ? Color.green : Color.red );
+
+        if (isOnEdge)
+        {
+            curAngle = float.NaN;
+            return;
+        }
+        
+        //Calcul Slope
+        slopeVector = forwardHit.point - underHit.point; 
+        Debug.DrawLine(forwardHit.point,underHit.point, Color.yellow);
+
+        curAngle = (Mathf.Atan2(slopeVector.y, predictDist) * Mathf.Rad2Deg);
+        
     }
 }
