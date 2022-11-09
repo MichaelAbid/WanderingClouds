@@ -2,7 +2,7 @@ using NaughtyAttributes;
 using UnityEngine;
 using DG.Tweening;
 
-public class PlayerKarp : Pawn
+public class PlayerV2 : Pawn
 {
     [Foldout("Ref")] public Transform chara;
     [Foldout("Ref")] public GameObject pivotX;
