@@ -11,6 +11,13 @@ public enum CLOUD_STATE
     STATE_BRUME
     }
 
+public enum BEHAVIOR_STATE
+{
+    STATE_WANDERING,
+    STATE_LAUNCHED
+
+}
+
 public class StatesClouds : MonoBehaviour
 {
 
