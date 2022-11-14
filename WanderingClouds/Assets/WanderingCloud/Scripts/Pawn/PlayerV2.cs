@@ -104,23 +104,18 @@ namespace WanderingCloud.Controller
                 Mathf.Sign(input.y) * -sensibilityEvolve.Evaluate(Mathf.Abs(input.y)));
             camCurMovement *= camSensibility;
         }
-
         public override void MovementInput(Vector2 input) =>
             inputMovement = pivotX.transform.forward * input.y + pivotX.transform.right * input.x;
-
         public override void RightTriggerInput()
         {
         }
-
         public override void SouthButtonInput() => Jump();
-
         public override void LeftTriggerInput()
         {
             isAiming = true;
             Camera.transform.DOLocalMove(zoomOffset, 0.2f);
             Camera.DOFieldOfView(fov.y, 0.2f);
         }
-
         public override void LeftTriggerInputReleased()
         {
             isAiming = false;

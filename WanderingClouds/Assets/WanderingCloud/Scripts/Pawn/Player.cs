@@ -16,11 +16,19 @@ namespace WanderingCloud.Controller
 
     public class Player : Pawn
     {
-        #region Variables
-        public bool isGrounded;
+        #region References
+        public Rigidbody body;
+        public CapsuleCollider collider;
         public CinemachineFreeLook cinemachine;
-
         #endregion
+        
+        #region Status
+        public bool isGrounded;
+        public bool isNearEdge;
+        #endregion
+
+        public Vector3 inputMovement;
+
 
         #region UnityMethods
 
@@ -41,7 +49,14 @@ namespace WanderingCloud.Controller
         }
 
         #endregion
-        
+
+        public override void MovementInput(Vector2 input)
+        {
+            Vector3 forward = Vector3.ProjectOnPlane(Camera.transform.forward, Vector3.up);
+            Vector3 right = Vector3.ProjectOnPlane(Camera.transform.right, Vector3.up);
+            inputMovement = input.y * forward + input.x * right;
+        }
+
         public override void PlayerConnect(int playerIndex)
         {
             cinemachine.gameObject.SetActive(true);
@@ -53,5 +68,7 @@ namespace WanderingCloud.Controller
         {
             cinemachine.gameObject.SetActive(false);
         }
+        
+
     }
 }
