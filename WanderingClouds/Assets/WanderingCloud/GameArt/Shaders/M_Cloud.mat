@@ -26,16 +26,19 @@ Material:
   m_Name: M_Cloud
   m_Shader: {fileID: -6465566751694194690, guid: 40ffaded92afcc942945a5bbd6e0a7d6,
     type: 3}
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _ENABLE_FOG_ON_TRANSPARENT
+  - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords:
   - _DISABLE_SSR_TRANSPARENT
   - _NORMALMAP_TANGENT_SPACE
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
+  m_CustomRenderQueue: 3000
   stringTagMap:
     MotionVector: User
+    RenderType: Transparent
   disabledShaderPasses:
   - TransparentDepthPrepass
   - TransparentDepthPostpass
@@ -123,6 +126,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _NormalMapOS:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2DLOD_292bed9428f54e719ebafb7d63a40914_Texture_1:
+        m_Texture: {fileID: 2800000, guid: f0bd81378477feb40b3abbeca1a1ba74, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2DLOD_9d4e40654c7f448995575f6e6134d229_Texture_1:
@@ -214,14 +221,14 @@ Material:
     - _AO_intensity: 1
     - _ATDistance: 1
     - _AddPrecomputedVelocity: 0
-    - _Additional_Coloring: 0.54
+    - _Additional_Coloring: 0
     - _AlbedoAffectEmissive: 0
     - _AlphaCutoff: 0.5
     - _AlphaCutoffEnable: 0
     - _AlphaCutoffPostpass: 0.5
     - _AlphaCutoffPrepass: 0.5
     - _AlphaCutoffShadow: 0.5
-    - _AlphaDstBlend: 0
+    - _AlphaDstBlend: 10
     - _AlphaSrcBlend: 1
     - _AlphaToMask: 0
     - _AlphaToMaskInspectorValue: 0
@@ -246,7 +253,7 @@ Material:
     - _DoubleSidedEnable: 0
     - _DoubleSidedGIMode: 0
     - _DoubleSidedNormalMode: 1
-    - _DstBlend: 0
+    - _DstBlend: 10
     - _Emission_Intensity: 0
     - _EmissiveColorMode: 1
     - _EmissiveExposureWeight: 1
@@ -269,13 +276,13 @@ Material:
     - _HeightTessAmplitude: 2
     - _HeightTessCenter: 0.5
     - _Hue_Shift: 0
-    - _Hue_shift: 0
+    - _Hue_shift: 55.27
     - _InvTilingScale: 1
     - _Ior: 1.5
     - _IridescenceMask: 1
     - _IridescenceThickness: 1
     - _LinkDetailsWithBase: 1
-    - _Luminosity: 1.86
+    - _Luminosity: 1.87
     - _MaterialID: 1
     - _Metallic: 0
     - _MetallicRemapMax: 1
@@ -293,11 +300,11 @@ Material:
     - _ReceivesSSR: 1
     - _ReceivesSSRTransparent: 0
     - _RefractionModel: 0
-    - _RenderQueueType: 1
+    - _RenderQueueType: 4
     - _RequireSplitLighting: 0
     - _Roughness_Intensity: 0
     - _SMUDGE: 0
-    - _Saturation: 1
+    - _Saturation: 2.47
     - _Smoothness: 0.5
     - _SmoothnessRemapMax: 1
     - _SmoothnessRemapMin: 0
@@ -323,7 +330,7 @@ Material:
     - _Substripes_Hardness: 0.59
     - _SubsurfaceMask: 1
     - _SupportDecals: 1
-    - _SurfaceType: 0
+    - _SurfaceType: 1
     - _TexWorldScale: 1
     - _TexWorldScaleEmissive: 1
     - _Thickness: 1
@@ -335,16 +342,16 @@ Material:
     - _TransparentSortPriority: 0
     - _TransparentWritingMotionVec: 0
     - _TransparentZWrite: 0
-    - _Trasnparency: 1000
+    - _Trasnparency: 7
     - _UVBase: 0
     - _UVDetail: 0
     - _UVEmissive: 0
     - _UseEmissiveIntensity: 0
     - _UseShadowThreshold: 0
-    - _ZTestDepthEqualForOpaque: 3
+    - _ZTestDepthEqualForOpaque: 4
     - _ZTestGBuffer: 4
     - _ZTestTransparent: 4
-    - _ZWrite: 1
+    - _ZWrite: 0
     m_Colors:
     - Color_2000737E: {r: 3.150091, g: 0.9095334, b: 0.9095334, a: 0}
     - Color_5D9148CF: {r: 0, g: 0.29649496, b: 0.5, a: 0}
