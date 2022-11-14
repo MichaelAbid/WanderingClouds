@@ -10,12 +10,12 @@ namespace WanderingCloud
 	public class SplitScreen : MonoBehaviour
 	{
 
-	#region Variables
 	[SerializeField] Camera camLeft;
 	[SerializeField] Camera camRight;
 	[SerializeField, Range(0f,1f)] float splitValue = 0.5f;
 	private float lastValue = 0.5f;
-	#endregion
+
+	[Button()] private void Neutral() { splitValue = 0.5f; Update(); }
 
 	#region UnityMethods
 	private void Update()
