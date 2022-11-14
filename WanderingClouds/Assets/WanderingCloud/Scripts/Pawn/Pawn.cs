@@ -15,12 +15,8 @@ namespace WanderingCloud.Controller
         [Foldout("Controller"), Space(10)] public bool allowBodyMovement = true;
         [Foldout("Controller")] public bool allowCameraMovement = true;
 
-        public virtual void PlayerConnect(int playerIndex)
-        {
-        }
-        public virtual void PlayerDisconnect(int playerIndex)
-        {
-        }
+        public virtual void PlayerConnect(int playerIndex) { }
+        public virtual void PlayerDisconnect(int playerIndex) { }
         
         public virtual void MovementInput(Vector2 input)
         {

@@ -15,12 +15,11 @@ namespace WanderingCloud.Controller
 
         private void Start()
         {
-            ControllerNumber = FindObjectsOfType<PlayerController>().Length -1;
+            ControllerNumber = FindObjectsOfType<PlayerController>().Length - 1;
             ControllerJoin();
             listOfAllPawn = FindObjectsOfType<Pawn>().ToList();
             pawnIndex = -1;
             ChangePawn();
-
         }
 
         public void ChangePawn()
@@ -51,7 +50,6 @@ namespace WanderingCloud.Controller
         public void ControllerJoin()
         {
             Debug.Log($"Controller Joined on number {ControllerNumber}");
-
         }
 
         public void LeftJoyStick(InputAction.CallbackContext callback)
@@ -73,7 +71,6 @@ namespace WanderingCloud.Controller
 
         public void ButtonEst(InputAction.CallbackContext callback)
         {
-
             if (cPawn != null)
             {
                 if (callback.performed)
@@ -106,7 +103,6 @@ namespace WanderingCloud.Controller
 
         public void ButtonSouth(InputAction.CallbackContext callback)
         {
-
             if (cPawn != null)
             {
                 if (callback.performed)
@@ -146,7 +142,6 @@ namespace WanderingCloud.Controller
         }
 
 
-
         public void RightTrigger(InputAction.CallbackContext callback)
         {
             if (cPawn != null)
@@ -179,7 +174,6 @@ namespace WanderingCloud.Controller
             }
         }
 
-
         public void RightBumper(InputAction.CallbackContext callback)
         {
             if (cPawn != null)
@@ -211,7 +205,5 @@ namespace WanderingCloud.Controller
                 }
             }
         }
-
-
     }
 }
