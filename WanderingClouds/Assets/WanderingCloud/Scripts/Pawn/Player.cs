@@ -1,7 +1,7 @@
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-
+using WanderingCloud.Gameplay;
 using System;
 using UnityEngine;
 using Cinemachine;
@@ -37,6 +37,10 @@ namespace WanderingCloud.Controller
         #endregion
         public Vector3 inputMovement;
 
+        #region GrabObject
+        [SerializeField] private Transform grabSocket;
+        [SerializeField] private GrabableObject grabObject;
+        #endregion
 
         #region UnityMethods
         private void Awake()
@@ -122,9 +126,27 @@ namespace WanderingCloud.Controller
             //curAngle = (Mathf.Atan2(slopeVector.y, predictDist) * Mathf.Rad2Deg);
 
         }
-        
+
+
+        public override void EstButtonInput()
+        {
+            Grab();
+        }
+
+        public void Grab()
+        {
+            if (grabObject != null) UnGrab();
+        }
+
+        public void UnGrab()
+        { 
+
+        }
+
+
+
 #if UNITY_EDITOR
-        private void OnDrawGizmos()
+            private void OnDrawGizmos()
         {
             using (new Handles.DrawingScope())
             {
