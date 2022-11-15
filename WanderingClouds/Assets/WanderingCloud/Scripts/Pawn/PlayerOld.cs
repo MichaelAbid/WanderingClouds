@@ -4,7 +4,7 @@ using DG.Tweening;
 
 namespace WanderingCloud.Controller
 {
-    public class PlayerV2 : Pawn
+    public class PlayerOld : Pawn
     {
         [Foldout("Ref")] public Transform chara;
         [Foldout("Ref")] public GameObject pivotX;
