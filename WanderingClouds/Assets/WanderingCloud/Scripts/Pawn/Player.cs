@@ -1,7 +1,7 @@
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-
+using WanderingCloud.Gameplay;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -55,6 +55,11 @@ namespace WanderingCloud.Controller
         [field: SerializeField, Foldout("Info"), ReadOnly] public float slopeAngle { get; private set; }
         [field: SerializeField, Foldout("Info"), ReadOnly] public  Vector3 inputMovement{ get; private set; }
         [field: SerializeField, Foldout("Info"), ReadOnly] public  Vector3 slopeMovement{ get; private set; }
+        #endregion
+
+        #region GrabObject
+        [SerializeField] private Transform grabSocket;
+        [SerializeField] private GrabableObject grabObject;
         #endregion
 
         #region UnityMethods
@@ -245,8 +250,28 @@ namespace WanderingCloud.Controller
             slopeAngle = (Mathf.Atan2(slopeMovement.y, predictDist) * Mathf.Rad2Deg);
         }
 
+        }
+
+
+        public override void EstButtonInput()
+        {
+            Grab();
+        }
+
+        public void Grab()
+        {
+            if (grabObject != null) UnGrab();
+        }
+
+        public void UnGrab()
+        { 
+
+        }
+
+
+
 #if UNITY_EDITOR
-        private void OnDrawGizmosSelected()
+        private void OnDrawGizmos()
         {
             if (!debugMode) return;
             using (new Handles.DrawingScope())
