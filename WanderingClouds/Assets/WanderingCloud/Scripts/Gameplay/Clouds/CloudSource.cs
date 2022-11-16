@@ -55,6 +55,7 @@ namespace WanderingCloud.Gameplay
             }
         }
 
+        // Create Random Position for Pullet
         [Button("Generate Random Preview Position")]
         public void RandomizePosition()
         {
@@ -66,15 +67,16 @@ namespace WanderingCloud.Gameplay
                 float angle = slice * i;
                 float newX = (radius * Mathf.Cos(angle));
                 float newZ = (radius * Mathf.Sin(angle));
-                float max = Mathf.Abs(newX > newZ ? newX : newZ);
-                float maxHeightSpawn = Mathf.Sqrt((spraySize * spraySize) -(max*max));
-                Debug.Log($"{radius} | {max} | {maxHeightSpawn}");
-                float newY = Random.Range(0, maxHeightSpawn);
+                float maxHeightSpawn = Mathf.Sqrt((spraySize * spraySize) - (radius * radius));
+                float newY = maxHeightSpawn;
+                Debug.Log($"{spraySize} | {radius} | {maxHeightSpawn}");
                 Vector3 pos = new Vector3(newX, newY, newZ);
                 randomPositions.Add(pos);
             }
         }
 
+
+        // Create Pullet and Desactive 
         [Button]
         public void ExplodeSource()
         {
@@ -99,23 +101,30 @@ namespace WanderingCloud.Gameplay
         {
             meshRenderer.enabled = false;
             cCollider.enabled = false;
-
+            isActive = false;
             yield return new WaitForSeconds(timeBeforeRespawn);
             meshRenderer.enabled = true;
             cCollider.enabled = true;
+            isActive = true;
         }
+
+
         private void OnDrawGizmos()
         {
-            Gizmos.color = new Color(0,0,1,0.3f);
-            Gizmos.DrawSphere(transform.position,spraySize);
 
-            if (randomPositions.Count > 0)
+            if (isActive)
             {
-                Gizmos.color = new Color(0,0,1,0.5f);
-                foreach(Vector3 pos in randomPositions)
-                {
-                    Gizmos.DrawSphere(transform.position + pos, 0.5f);
+                Gizmos.color = new Color(0, 0, 1, 0.3f);
+                Gizmos.DrawSphere(transform.position, spraySize);
 
+                if (randomPositions.Count > 0)
+                {
+                    Gizmos.color = new Color(0, 0, 1, 0.5f);
+                    foreach (Vector3 pos in randomPositions)
+                    {
+                        Gizmos.DrawSphere(transform.position + pos, 0.5f);
+
+                    }
                 }
             }
 
