@@ -28,6 +28,11 @@ namespace WanderingCloud.Controller
         [field: SerializeField] public Transform Avatar { get; private set; }
         [field: SerializeField] public CapsuleCollider Collider { get; private set; }
         [field: SerializeField] public CinemachineFreeLook Cinemachine { get; private set; }
+        [field: SerializeField] public CloudGrabber cloudGrabber { get; private set; }
+        [field: SerializeField] public CloudExploder cloudExploder { get; private set; }
+
+        
+
 
         #endregion
 
@@ -255,18 +260,21 @@ namespace WanderingCloud.Controller
 
         public override void EstButtonInput()
         {
-            Grab();
+
+            bool grabsucess = Grab();
+            bool explodesucess = ExplodeSource();
         }
 
-        public void Grab()
+        public bool Grab()
         {
-            if (grabObject != null) UnGrab();
+            return cloudGrabber.GrabNearestPullet();
         }
 
-        public void UnGrab()
-        { 
-
+        public bool ExplodeSource()
+        {
+            return cloudExploder.ExplodeNearest();
         }
+
 
 
 

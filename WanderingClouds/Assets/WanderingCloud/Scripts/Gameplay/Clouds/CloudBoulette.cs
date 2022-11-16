@@ -16,6 +16,7 @@ namespace WanderingCloud.Gameplay
 
 
         private Player giro, urle;
+        public CloudGrabber cgGiro, cgUrle;
 
         // Start is called before the first frame update
         void Start()
@@ -56,10 +57,12 @@ namespace WanderingCloud.Gameplay
                 if (cg.playerComponent.isGyro)
                 {
                     giro = cg.playerComponent;
+                    cgGiro = cg;
                 }
                 else
                 {
                     urle = cg.playerComponent;
+                    cgUrle = cg;
                 }
             }
         }

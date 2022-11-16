@@ -31,8 +31,8 @@ namespace WanderingCloud.Gameplay
         
 
         [Foldout("Boulette")] public List<CloudBoulette> boulettes = new List<CloudBoulette>();
-
-
+        internal CloudExploder cgUrle;
+        internal CloudExploder cgGiro;
 
         private void UpdateScale()
         {
@@ -129,7 +129,15 @@ namespace WanderingCloud.Gameplay
 
         }
 
+        internal void UnShowGrabUI(bool isGyro)
+        {
+            throw new NotImplementedException();
+        }
 
+        internal void ShowGrabUI(bool isGyro)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

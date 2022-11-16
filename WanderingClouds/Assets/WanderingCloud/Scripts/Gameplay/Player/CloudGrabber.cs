@@ -14,6 +14,8 @@ namespace WanderingCloud.Gameplay
 
         public Player playerComponent;
 
+        public int nbOfPullet = 0;
+
         private void Start()
         {
             
@@ -23,6 +25,36 @@ namespace WanderingCloud.Gameplay
         {
             BouletteUiManager();
         }
+
+
+        public bool GrabNearestPullet()
+        {
+            
+            if (BouletteList.Count > 0)
+            {
+                CloudBoulette nearest = BouletteList[0];
+                for (int i = 1; i < BouletteList.Count; i++)
+                {
+                    if (Vector3.Distance(BouletteList[i].transform.position, transform.position) < Vector3.Distance(nearest.transform.position, transform.position))
+                    {
+                        nearest = BouletteList[i];
+                    }
+                }
+                nbOfPullet++;
+                if (nearest.cgUrle != null)
+                {
+                    nearest.cgUrle.BouletteList.Remove(nearest);
+                }
+                if (nearest.cgGiro != null)
+                {
+                    nearest.cgGiro.BouletteList.Remove(nearest);
+                }
+                Destroy(nearest.gameObject);
+                return true;
+            }
+            return false;
+        }
+
 
         private void BouletteUiManager()
         {
