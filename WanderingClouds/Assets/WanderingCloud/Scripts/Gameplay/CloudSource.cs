@@ -16,8 +16,6 @@ namespace WanderingCloud.Gameplay
         [Foldout("Boulette Spawn")] public UnityEngine.Object boulettePrefab;
         [Foldout("Boulette Spawn")] [OnValueChanged("RandomizePosition")] public float spraySize;
         [Foldout("Boulette Spawn")] [SerializeField][Min(0.1f)] private float boulettesize = 0.5f;
-        [Foldout("Boulette Spawn")] [OnValueChanged("RandomizePosition")][SerializeField][MaxValue(0.0f)] private float heightSpawnDown = -0.5f;
-        [Foldout("Boulette Spawn")] [OnValueChanged("RandomizePosition")][SerializeField][MinValue(0.0f)] private float heightSpawnUp = 0.5f;
         [Foldout("Boulette Spawn")] private List<Vector3> randomPositions = new List<Vector3>();
         [Foldout("Boulette Spawn")] [OnValueChanged("RandomizePosition")][Range(0, 1)][SerializeField] private float randomThreshold = 0.75f;
 
@@ -67,8 +65,11 @@ namespace WanderingCloud.Gameplay
                 float radius = Random.Range(Mathf.Lerp(0, spraySize,randomThreshold), spraySize);
                 float angle = slice * i;
                 float newX = (radius * Mathf.Cos(angle));
-                float newY = Random.Range(heightSpawnDown, heightSpawnUp);
                 float newZ = (radius * Mathf.Sin(angle));
+                float max = Mathf.Abs(newX > newZ ? newX : newZ);
+                float maxHeightSpawn = Mathf.Sqrt((spraySize * spraySize) -(max*max));
+                Debug.Log($"{radius} | {max} | {maxHeightSpawn}");
+                float newY = Random.Range(0, maxHeightSpawn);
                 Vector3 pos = new Vector3(newX, newY, newZ);
                 randomPositions.Add(pos);
             }
@@ -105,9 +106,8 @@ namespace WanderingCloud.Gameplay
         }
         private void OnDrawGizmos()
         {
-            Handles.color = new Color(0,0,1);
-            Handles.CircleHandleCap(0, transform.position + (Vector3.up*heightSpawnDown), Quaternion.LookRotation(Vector3.up), spraySize, EventType.Repaint);
-            Handles.CircleHandleCap(0, transform.position + (Vector3.up * heightSpawnUp), Quaternion.LookRotation(Vector3.up), spraySize, EventType.Repaint);
+            Gizmos.color = new Color(0,0,1,0.3f);
+            Gizmos.DrawSphere(transform.position,spraySize);
 
             if (randomPositions.Count > 0)
             {

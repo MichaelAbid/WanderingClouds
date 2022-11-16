@@ -250,7 +250,7 @@ namespace WanderingCloud.Controller
             slopeAngle = (Mathf.Atan2(slopeMovement.y, predictDist) * Mathf.Rad2Deg);
         }
 
-        }
+        
 
 
         public override void EstButtonInput()
