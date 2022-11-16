@@ -69,7 +69,6 @@ namespace WanderingCloud.Gameplay
                 float newZ = (radius * Mathf.Sin(angle));
                 float maxHeightSpawn = Mathf.Sqrt((spraySize * spraySize) - (radius * radius));
                 float newY = maxHeightSpawn;
-                Debug.Log($"{spraySize} | {radius} | {maxHeightSpawn}");
                 Vector3 pos = new Vector3(newX, newY, newZ);
                 randomPositions.Add(pos);
             }
