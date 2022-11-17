@@ -262,7 +262,11 @@ namespace WanderingCloud.Controller
         {
 
             bool grabsucess = Grab();
-            bool explodesucess = ExplodeSource();
+            if (!grabsucess)
+            {
+                bool explodesucess = ExplodeSource();
+
+            }
         }
 
         public bool Grab()

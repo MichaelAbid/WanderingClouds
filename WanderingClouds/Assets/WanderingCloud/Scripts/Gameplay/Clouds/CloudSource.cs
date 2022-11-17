@@ -138,6 +138,15 @@ namespace WanderingCloud.Gameplay
         {
             throw new NotImplementedException();
         }
+
+        public bool Feed(CloudType cType)
+        {
+            if (numberOfBoulletToCreate < maxBouletteToAdd) { 
+                numberOfBoulletToCreate++;
+                return true;
+            }
+            return false;
+        }
     }
 
 }

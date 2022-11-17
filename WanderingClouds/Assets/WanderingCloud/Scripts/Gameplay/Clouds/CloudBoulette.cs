@@ -8,15 +8,27 @@ using WanderingCloud.Controller;
 
 namespace WanderingCloud.Gameplay
 {
+
+    public enum CloudType
+    {
+        SOFT,
+        THUNDER
+    }
+
     public class CloudBoulette : MonoBehaviour
     {
 
         [Foldout("Ref")][SerializeField] private RawImage GiroImageRef;
         [Foldout("Ref")][SerializeField] private RawImage UrleImageRef;
 
+        [Foldout("Type")][SerializeField] public CloudType cType;
 
         private Player giro, urle;
         public CloudGrabber cgGiro, cgUrle;
+
+
+        private CloudSource csTarget;
+        private bool shouldMove = false;
 
         // Start is called before the first frame update
         void Start()
@@ -65,6 +77,24 @@ namespace WanderingCloud.Gameplay
                     cgUrle = cg;
                 }
             }
+            else
+            {
+                CloudSource cs = other.GetComponentInParent<CloudSource>();
+                if(cs != null)
+                {
+                    if (cs.Feed(cType))
+                    {
+                        Destroy(gameObject);
+                    }
+                }
+            }
+        }
+
+
+        public void SetDestination(CloudSource target, bool shouldMoveImmediate = true)
+        {
+            csTarget = target;
+            shouldMove = shouldMoveImmediate;
         }
 
         private void OnTriggerExit(Collider other)
