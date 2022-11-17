@@ -27,31 +27,45 @@ public class CloudExploder : MonoBehaviour
             }
             if (nearest.cgUrle != null)
             {
+                nearest.UnShowExplodeUI(false);
                 nearest.cgUrle.BouletteList.Remove(nearest);
             }
             if (nearest.cgGiro != null)
             {
+                nearest.UnShowExplodeUI(true);
                 nearest.cgGiro.BouletteList.Remove(nearest);
             }
+            nearest.ExplodeSource();
             return true;
         }
         return false;
     }
-    
+
+    private void Update()
+    {
+        SourceUiManager();
+    }
+
     private void SourceUiManager()
     {
         if (BouletteList.Count > 0)
         {
-            CloudSource nearest = BouletteList[0];
+            CloudSource nearest = null;
             for (int i = 1; i < BouletteList.Count; i++)
             {
-                BouletteList[i].UnShowGrabUI(playerComponent.isGyro);
-                if (Vector3.Distance(BouletteList[i].transform.position, transform.position) < Vector3.Distance(nearest.transform.position, transform.position))
-                {
-                    nearest = BouletteList[i];
+                if (BouletteList[i].isActive) { 
+                    BouletteList[i].UnShowExplodeUI(playerComponent.isGyro);
+                    if (nearest == null)
+                    {
+                        nearest = BouletteList[i];
+                    }
+                    else if (Vector3.Distance(BouletteList[i].transform.position, transform.position) < Vector3.Distance(nearest.transform.position, transform.position))
+                    {
+                        nearest = BouletteList[i];
+                    }
                 }
             }
-            nearest.ShowGrabUI(playerComponent.isGyro);
+            nearest.ShowExplodeUI(playerComponent.isGyro);
         }
     }
 

@@ -2,6 +2,7 @@ using NaughtyAttributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 using WanderingCloud.Controller;
@@ -27,8 +28,9 @@ namespace WanderingCloud.Gameplay
         public CloudGrabber cgGiro, cgUrle;
 
 
-        private CloudSource csTarget;
-        private bool shouldMove = false;
+        [Foldout("Movement")][SerializeField] private CloudSource csTarget;
+        [Foldout("Movement")][SerializeField] private bool shouldMove = false;
+        [Foldout("Movement")][SerializeField] private float movementSpeed;
 
         // Start is called before the first frame update
         void Start()
@@ -40,23 +42,48 @@ namespace WanderingCloud.Gameplay
         void Update()
         {
             UIRotation();
+            if (shouldMove)
+            {
+                MovementUpdate();
+            }
         }
 
+        private void MovementUpdate()
+        {
+            if(csTarget != null)
+            {
+                Vector3 direction = csTarget.transform.position - transform.position;
+                transform.position += direction.normalized * movementSpeed * Time.deltaTime;
+                if (Vector3.Distance(csTarget.transform.position, transform.position) <= 2)
+                {
+                    shouldMove = false;
+                    if (csTarget.Feed(cType))
+                    {
+                        Destroy(gameObject);
+                    }
+                }
+            }
+
+        }
 
         void UIRotation()
         {
-            if(giro != null)
+            if (giro != null)
             {
-                
-                Vector3 xyDirection = Vector3.Scale(new Vector3(1,0,1) , ( transform.position- giro.transform.position ).normalized);
+                Vector3 xyDirection = Vector3.Scale(new Vector3(1, 0, 1), (transform.position - giro.Camera.transform.position).normalized);
                 GiroImageRef.transform.rotation = Quaternion.LookRotation(xyDirection, Vector3.up);
             }
             if (urle != null)
             {
-
-                Vector3 xyDirection = Vector3.Scale(new Vector3(1, 0, 1), (urle.transform.position - transform.position).normalized);
+                Vector3 xyDirection = Vector3.Scale(new Vector3(1, 0, 1), (transform.position - urle.Camera.transform.position).normalized);
                 UrleImageRef.transform.rotation = Quaternion.LookRotation(xyDirection, Vector3.up);
             }
+        }
+
+        public void SetDestination(CloudSource target, bool shouldMoveImmediate = true)
+        {
+            csTarget = target;
+            shouldMove = shouldMoveImmediate;
         }
 
 
@@ -77,25 +104,8 @@ namespace WanderingCloud.Gameplay
                     cgUrle = cg;
                 }
             }
-            else
-            {
-                CloudSource cs = other.GetComponentInParent<CloudSource>();
-                if(cs != null)
-                {
-                    if (cs.Feed(cType))
-                    {
-                        Destroy(gameObject);
-                    }
-                }
-            }
         }
 
-
-        public void SetDestination(CloudSource target, bool shouldMoveImmediate = true)
-        {
-            csTarget = target;
-            shouldMove = shouldMoveImmediate;
-        }
 
         private void OnTriggerExit(Collider other)
         {
@@ -109,13 +119,16 @@ namespace WanderingCloud.Gameplay
 
         public void ShowGrabUI(bool isGiro)
         {
-            if (isGiro)
+            if (!shouldMove)
             {
-                GiroImageRef.enabled = true;
-            }
-            else 
-            {
-                UrleImageRef.enabled = true;
+                if (isGiro)
+                {
+                    if (GiroImageRef != null)GiroImageRef.enabled = true;
+                }
+                else
+                {
+                    if (UrleImageRef != null)UrleImageRef.enabled = true;
+                }
             }
         }
 
@@ -123,11 +136,11 @@ namespace WanderingCloud.Gameplay
         {
             if (isGiro)
             {
-                GiroImageRef.enabled = false;
+                if (GiroImageRef != null) GiroImageRef.enabled = false;
             }
             else
             {
-                UrleImageRef.enabled = false;
+                if (UrleImageRef != null) UrleImageRef.enabled = false;
             }
         }
     }

@@ -62,7 +62,7 @@ namespace WanderingCloud.Controller
 
         #region Aiming
         [field: SerializeField, Foldout("Aim"), ReadOnly] public bool isAiming { get; private set; }
-        [SerializeField, Foldout("Aim")] private CloudSource currentTarget = null;
+        [SerializeField, Foldout("Aim")] public CloudSource currentTarget = null;
         #endregion
         
         #region GrabObject
@@ -132,21 +132,36 @@ namespace WanderingCloud.Controller
 
         public override void LeftTriggerInput()
         {
+            Aim();
+        }
+
+
+        public override void LeftTriggerInputReleased()
+        {
+            UnAim();
+        }
+
+
+        public void Aim()
+        {
             isAiming = true;
             var nearObject = Physics.OverlapSphere(Avatar.position, 10f);
-            if(nearObject.Length == 0)return;
+            if (nearObject.Length == 0) return;
             var nearTarget = nearObject.
                 Where(x => x.GetComponent<CloudSource>()).
                 Select(x => x.GetComponent<CloudSource>()).ToArray();
-            if(nearTarget.Length == 0)return;
+            if (nearTarget.Length == 0) return;
             var target = nearTarget.OrderBy(x => Vector3.Distance(x.transform.position, Avatar.position)).First();
             Cinemachine.LookAt = target.transform;
+            currentTarget = target;
         }
-        public override void LeftTriggerInputReleased()
+
+        public void UnAim()
         {
             isAiming = false;
             Cinemachine.LookAt = Avatar;
         }
+
         public void CamUpdate()
         {
 
@@ -282,12 +297,25 @@ namespace WanderingCloud.Controller
 
         public override void EstButtonInput()
         {
-
-            bool grabsucess = Grab();
-            if (!grabsucess)
+            if (isAiming)
             {
-                bool explodesucess = ExplodeSource();
+                Launch();
+            }
+            else
+            {
+                bool grabsucess = Grab();
+                if (!grabsucess)
+                {
+                    bool explodesucess = ExplodeSource();
+                }
+            }
+        }
 
+        public void Launch()
+        {
+            if (currentTarget != null)
+            {
+                cloudGrabber.LaunchPullet();
             }
         }
 
