@@ -28,6 +28,7 @@ namespace WanderingCloud.Gameplay
         [Foldout("Ref")] public Collider cCollider;
 
         [Foldout("Source")][SerializeField][OnValueChanged("UpdateScale")] private float numberOfBulletForMaxRatio = 10;
+        [Foldout("Source")][SerializeField][OnValueChanged("UpdateScale")] private Vector3 startScaleAddition;
         [Foldout("Source")][SerializeField][OnValueChanged("UpdateScale")] private Vector3 maxScaleAddition;
         [Foldout("Source")][SerializeField] private int startingBoulette = 10;
         [Foldout("Source")][OnValueChanged("CheckForMaxValue")][SerializeField] private int maxBouletteToAdd = 10;
@@ -56,10 +57,15 @@ namespace WanderingCloud.Gameplay
 
         private void UpdateScale()
         {
+            if (numberOfBoulletToCreate == 1)
+            {
+                transform.localScale = startScaleAddition;
+            }
+            else {
+                Vector3 vec = Vector3.Lerp(startScaleAddition, maxScaleAddition, numberOfBoulletToCreate / numberOfBulletForMaxRatio);
 
-            Vector3 vec = maxScaleAddition/numberOfBulletForMaxRatio;
-
-            transform.localScale = vec * numberOfBoulletToCreate;
+                transform.localScale = vec;
+            }
         }
 
         private void CheckForMaxValue()

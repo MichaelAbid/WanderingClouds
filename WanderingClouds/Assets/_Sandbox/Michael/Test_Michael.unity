@@ -312,7 +312,7 @@ PrefabInstance:
     - target: {fileID: 1345150291906895977, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
       propertyPath: maxBouletteToAdd
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1345150291906895977, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
@@ -322,12 +322,27 @@ PrefabInstance:
     - target: {fileID: 1345150291906895977, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
       propertyPath: maxScaleAddition.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1345150291906895977, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
       propertyPath: maxScaleAddition.z
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345150291906895977, guid: 9123d8285b08512469a39fd06ab9f114,
+        type: 3}
+      propertyPath: startScaleAddition.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345150291906895977, guid: 9123d8285b08512469a39fd06ab9f114,
+        type: 3}
+      propertyPath: startScaleAddition.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345150291906895977, guid: 9123d8285b08512469a39fd06ab9f114,
+        type: 3}
+      propertyPath: startScaleAddition.z
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1345150291906895977, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
@@ -337,7 +352,7 @@ PrefabInstance:
     - target: {fileID: 1345150291906895977, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
       propertyPath: numberOfBulletForMaxRatio
-      value: 6
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1345150291906895977, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
@@ -352,22 +367,22 @@ PrefabInstance:
     - target: {fileID: 1519132229646115984, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.6666666
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1519132229646115984, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.16666667
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1519132229646115984, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 3.3333333
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1519132229646115984, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.33
+      value: 17.37
       objectReference: {fileID: 0}
     - target: {fileID: 1519132229646115984, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
@@ -377,7 +392,7 @@ PrefabInstance:
     - target: {fileID: 1519132229646115984, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 31.7
+      value: 36.21
       objectReference: {fileID: 0}
     - target: {fileID: 1519132229646115984, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
@@ -1023,27 +1038,27 @@ PrefabInstance:
     - target: {fileID: 1593328265628283762, guid: e120edccab3eebd42aacf65b5ec4f287,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.02315667
+      value: -0.023156667
       objectReference: {fileID: 0}
     - target: {fileID: 1593328265628283762, guid: e120edccab3eebd42aacf65b5ec4f287,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.048464935
+      value: -0.04846494
       objectReference: {fileID: 0}
     - target: {fileID: 1593328265755103464, guid: e120edccab3eebd42aacf65b5ec4f287,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.43098316
+      value: -0.4309832
       objectReference: {fileID: 0}
     - target: {fileID: 1593328265755103464, guid: e120edccab3eebd42aacf65b5ec4f287,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.010817302
+      value: -0.010817309
       objectReference: {fileID: 0}
     - target: {fileID: 1593328265755103464, guid: e120edccab3eebd42aacf65b5ec4f287,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.02263969
+      value: -0.022639705
       objectReference: {fileID: 0}
     - target: {fileID: 3589030219350362211, guid: e120edccab3eebd42aacf65b5ec4f287,
         type: 3}
@@ -1685,7 +1700,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1769962126}
   m_LocalRotation: {x: -0, y: -1, z: -0, w: -0.00000037252897}
-  m_LocalPosition: {x: 4.9, y: 14.51, z: 77.2}
+  m_LocalPosition: {x: 17.14, y: 14.51, z: 81.7}
   m_LocalScale: {x: 9.0968, y: 2.0059, z: 8.506}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1782,7 +1797,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1825596921}
   m_LocalRotation: {x: -0, y: -1, z: -0, w: -0.00000037252897}
-  m_LocalPosition: {x: 4.9, y: 6.3, z: 45.86}
+  m_LocalPosition: {x: 17.14, y: 6.3, z: 50.36}
   m_LocalScale: {x: 9.0968, y: 2.0059, z: 8.506}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1879,7 +1894,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1920972376}
   m_LocalRotation: {x: 0, y: 0.9848078, z: -0.17364816, w: 0}
-  m_LocalPosition: {x: 4.8999753, y: 10.43, z: 61.489998}
+  m_LocalPosition: {x: 17.139975, y: 10.43, z: 65.98999}
   m_LocalScale: {x: 9.0968, y: 2.0059, z: 25}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2036,13 +2051,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1345150291906895977, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
+      propertyPath: spraySize
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345150291906895977, guid: 9123d8285b08512469a39fd06ab9f114,
+        type: 3}
       propertyPath: randomThreshold
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1345150291906895977, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
       propertyPath: maxBouletteToAdd
-      value: 4
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345150291906895977, guid: 9123d8285b08512469a39fd06ab9f114,
+        type: 3}
+      propertyPath: startingBoulette
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1345150291906895977, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
@@ -2061,13 +2086,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1345150291906895977, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
+      propertyPath: startScaleAddition.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345150291906895977, guid: 9123d8285b08512469a39fd06ab9f114,
+        type: 3}
+      propertyPath: startScaleAddition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345150291906895977, guid: 9123d8285b08512469a39fd06ab9f114,
+        type: 3}
+      propertyPath: startScaleAddition.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345150291906895977, guid: 9123d8285b08512469a39fd06ab9f114,
+        type: 3}
       propertyPath: numberOfBoulletToCreate
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1345150291906895977, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
       propertyPath: numberOfBulletForMaxRatio
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1519132229646115984, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
@@ -2077,17 +2117,17 @@ PrefabInstance:
     - target: {fileID: 1519132229646115984, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1519132229646115984, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1519132229646115984, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1519132229646115984, guid: 9123d8285b08512469a39fd06ab9f114,
         type: 3}
