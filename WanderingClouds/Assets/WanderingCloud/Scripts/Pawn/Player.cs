@@ -3,6 +3,7 @@ using UnityEditor;
 #endif
 using WanderingCloud.Gameplay;
 using System;
+using System.Linq;
 using System.Collections;
 using UnityEngine;
 using Cinemachine;
@@ -23,12 +24,10 @@ namespace WanderingCloud.Controller
         [SerializeField] private bool debugMode;
 
         #region References
-
         [field: SerializeField] public Rigidbody Body { get; private set; }
         [field: SerializeField] public Transform Avatar { get; private set; }
         [field: SerializeField] public CapsuleCollider Collider { get; private set; }
         [field: SerializeField] public CinemachineFreeLook Cinemachine { get; private set; }
-
         #endregion
 
         #region Run Parameter
@@ -57,6 +56,11 @@ namespace WanderingCloud.Controller
         [field: SerializeField, Foldout("Info"), ReadOnly] public  Vector3 slopeMovement{ get; private set; }
         #endregion
 
+        #region Aiming
+        [field: SerializeField, Foldout("Aim"), ReadOnly] public bool isAiming { get; private set; }
+        [SerializeField, Foldout("Aim")] private CloudSource currentTarget = null;
+        #endregion
+        
         #region GrabObject
         [SerializeField] private Transform grabSocket;
         [SerializeField] private GrabableObject grabObject;
@@ -120,6 +124,28 @@ namespace WanderingCloud.Controller
         public override void WestButtonInputReleased()
         {
             isRunPressed = false;
+        }
+
+        public override void LeftTriggerInput()
+        {
+            isAiming = true;
+            var nearObject = Physics.OverlapSphere(Avatar.position, 10f);
+            if(nearObject.Length == 0)return;
+            var nearTarget = nearObject.
+                Where(x => x.GetComponent<CloudSource>()).
+                Select(x => x.GetComponent<CloudSource>()).ToArray();
+            if(nearTarget.Length == 0)return;
+            var target = nearTarget.OrderBy(x => Vector3.Distance(x.transform.position, Avatar.position)).First();
+            Cinemachine.LookAt = target.transform;
+        }
+        public override void LeftTriggerInputReleased()
+        {
+            isAiming = false;
+            Cinemachine.LookAt = Avatar;
+        }
+        public void CamUpdate()
+        {
+
         }
 
         public void MovementUpdate()
@@ -250,9 +276,6 @@ namespace WanderingCloud.Controller
             slopeAngle = (Mathf.Atan2(slopeMovement.y, predictDist) * Mathf.Rad2Deg);
         }
 
-        
-
-
         public override void EstButtonInput()
         {
             Grab();
@@ -262,13 +285,10 @@ namespace WanderingCloud.Controller
         {
             if (grabObject != null) UnGrab();
         }
-
         public void UnGrab()
         { 
 
         }
-
-
 
 #if UNITY_EDITOR
         private void OnDrawGizmos()
@@ -280,6 +300,8 @@ namespace WanderingCloud.Controller
 
                 Handles.color = Color.yellow;
                 Handles.DrawLine(transform.position, transform.position + inputMovement);
+                
+                Handles.DrawWireDisc(Avatar.position, Avatar.up, 10f);
             }
         }
 #endif
