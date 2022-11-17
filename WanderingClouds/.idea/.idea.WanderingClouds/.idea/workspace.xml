@@ -6,26 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="70bb9ebd-a2ef-4b3e-89c1-662739b0ed46" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.WanderingClouds/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WanderingClouds/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Engine/Plugins/Borodar/RainbowFolders/Editor/Data/RainbowFoldersRuleset.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Engine/Plugins/Borodar/RainbowFolders/Editor/Data/RainbowFoldersRuleset.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Engine/Plugins/ezy-slice-master.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Engine/Plugins/ezy-slice-master/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Engine/Plugins/ezy-slice-master/EzySlice.asmdef" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Engine/Plugins/ezy-slice-master/EzySlice/Framework/IntersectionResult.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Engine/Plugins/ezy-slice-master/EzySlice/Framework/Intersector.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Engine/Plugins/ezy-slice-master/EzySlice/Framework/Line.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Engine/Plugins/ezy-slice-master/EzySlice/Framework/Plane.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Engine/Plugins/ezy-slice-master/EzySlice/Framework/TextureRegion.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Engine/Plugins/ezy-slice-master/EzySlice/Framework/Triangle.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Engine/Plugins/ezy-slice-master/EzySlice/Framework/Triangulator.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Engine/Plugins/ezy-slice-master/EzySlice/SlicedHull.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Engine/Plugins/ezy-slice-master/EzySlice/Slicer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Engine/Plugins/ezy-slice-master/EzySlice/SlicerExtensions.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Engine/Plugins/ezy-slice-master/Graphics/icon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Engine/Plugins/ezy-slice-master/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Engine/Plugins/ezy-slice-master/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/WanderingCloud/Scripts/WanderingCloud.asmdef" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/WanderingCloud/Scripts/WanderingCloud.asmdef" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/HDRPProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/HDRPProjectSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/HDRPUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/HDRPUserSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/WanderingCloud/Prefabs/Chara/Giro.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/WanderingCloud/Prefabs/Chara/Giro.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/WanderingCloud/Prefabs/Chara/Urle.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/WanderingCloud/Prefabs/Chara/Urle.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/WanderingCloud/Scripts/Pawn/Player.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/WanderingCloud/Scripts/Pawn/Player.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-2021.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-2021.dwlt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -46,6 +29,7 @@
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.cinemachine@2.8.9/Runtime/Helpers/CinemachineInputProvider.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.4.3/InputSystem/Plugins/PlayerInput/PlayerInputManager.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.4.3/InputSystem/Plugins/Users/InputUser.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.4.3/InputSystem/Utilities/DelegateHelpers.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../WorldGame/repo-orbital_dance/OrbitalDance/Assets/Scripts/KarpProto/Level/LineDebuger.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -90,10 +74,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="30156">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="30156" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -130,6 +114,7 @@
       <workItem from="1668424171729" duration="3116000" />
       <workItem from="1668504624750" duration="13901000" />
       <workItem from="1668604659374" duration="3034000" />
+      <workItem from="1668675173765" duration="2846000" />
     </task>
     <servers />
   </component>
@@ -152,6 +137,25 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/WanderingCloud/Scripts/Pawn/Player.cs</url>
+          <line>129</line>
+          <properties documentPath="C:\Users\a.deleye\Documents\WanderingClouds\WanderingClouds\Assets\WanderingCloud\Scripts\Pawn\Player.cs" initialLine="129" containingFunctionPresentation="method 'LeftTriggerInput'">
+            <startOffsets>
+              <option value="4989" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4990" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
