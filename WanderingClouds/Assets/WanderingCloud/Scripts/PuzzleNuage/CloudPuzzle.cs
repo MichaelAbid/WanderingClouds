@@ -47,7 +47,7 @@ namespace WanderingCloud.Gameplay
         public bool showOnlyWhenSelected = true;
         public Material material;
         public List<CloudPuzzle> puzzlePart;
-
+#if UNITY_EDITOR
         private void OnDrawGizmosSelected()
         {
             if (showOnlyWhenSelected)
@@ -104,7 +104,7 @@ namespace WanderingCloud.Gameplay
             }
             Gizmos.color = Color.white;
         }
-
+#endif
         [Button]
         public void SliceItem()
         {

@@ -83,6 +83,7 @@ public class CheckPoint : MonoBehaviour
             previousCheckpoint.StopChrono();
         }
     }
+#if UNITY_EDITOR
     [Button]
     public void CreateNewcheckPoint()
     {
@@ -93,8 +94,12 @@ public class CheckPoint : MonoBehaviour
         }
         nextCheckpoint = tempnextCheckpoint;
         nextCheckpoint.previousCheckpoint = this;
+
         Selection.activeGameObject = nextCheckpoint.gameObject;
+
     }
+#endif
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         if (isStartingPoint)
@@ -135,6 +140,7 @@ public class CheckPoint : MonoBehaviour
 
 
     }
+#endif
     private void OnTriggerEnter(Collider other)
     {
         Pawn pawn = other.gameObject.GetComponentInParent<Pawn>();

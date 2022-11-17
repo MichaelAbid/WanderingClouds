@@ -149,6 +149,7 @@ namespace WanderingCloud.Gameplay
 
         }
 
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
             if (shouldMoveToAZone && bState == BEHAVIOR_STATE.STATE_WANDERING)
@@ -157,7 +158,7 @@ namespace WanderingCloud.Gameplay
                 Gizmos.DrawLine(transform.position, positionToGo);
             }
         }
-
+#endif
 
 
 

@@ -133,6 +133,7 @@ namespace WanderingCloud.Gameplay
         }
 
 
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
 
@@ -153,7 +154,7 @@ namespace WanderingCloud.Gameplay
             }
 
         }
-
+#endif
         public void ShowExplodeUI(bool isGiro)
         {
                 if (isGiro)

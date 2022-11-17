@@ -26,10 +26,15 @@ namespace WanderingCloud.Gameplay
 
         }
 
+
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
             Handles.color = Color.green;
             Handles.CircleHandleCap(0, transform.position, Quaternion.LookRotation(Vector3.up), zoneSize, EventType.Repaint);
         }
+#endif
     }
+
+
 }
