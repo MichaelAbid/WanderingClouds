@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using WanderingCloud.Controller;
 using Random = UnityEngine.Random;
@@ -31,8 +32,12 @@ namespace WanderingCloud.Gameplay
         [Foldout("Source")][SerializeField][OnValueChanged("UpdateScale")] private Vector3 startScaleAddition;
         [Foldout("Source")][SerializeField][OnValueChanged("UpdateScale")] private Vector3 maxScaleAddition;
         [Foldout("Source")][SerializeField] private int startingBoulette = 10;
-        [Foldout("Source")][OnValueChanged("CheckForMaxValue")][SerializeField] private int maxBouletteToAdd = 10;
         
+        [Foldout("Source")][OnValueChanged("CheckForMaxValue")][SerializeField] private int maxBouletteToAdd = 10;
+        [Foldout("Source")] public UnityEvent eventWhenMaxFeeds;
+        [Foldout("Source")] public bool canBePouffed = true;
+        [Foldout("Source")][SerializeField] private int minimumBouletteToPouf = 0;
+
 
         [Foldout("Boulette")] public List<CloudBoulette> boulettes = new List<CloudBoulette>();
         internal CloudExploder cgUrle;
@@ -103,7 +108,7 @@ namespace WanderingCloud.Gameplay
         public void ExplodeSource()
         {
            
-            if (isActive)
+            if (isActive && canBePouffed && (numberOfBoulletToCreate>= minimumBouletteToPouf))
             {
                 RandomizePosition();
                 if (randomPositions.Count > 0)
@@ -157,16 +162,19 @@ namespace WanderingCloud.Gameplay
 #endif
         public void ShowExplodeUI(bool isGiro)
         {
+            if (canBePouffed && (numberOfBoulletToCreate >= minimumBouletteToPouf))
+            {
                 if (isGiro)
                 {
                     if (GiroImageRef != null)
-                    GiroImageRef.enabled = true;
+                        GiroImageRef.enabled = true;
                 }
                 else
                 {
                     if (UrleImageRef != null)
-                    UrleImageRef.enabled = true;
+                        UrleImageRef.enabled = true;
                 }
+            }
         }
 
         public void UnShowExplodeUI(bool isGiro)
@@ -203,6 +211,10 @@ namespace WanderingCloud.Gameplay
             if (numberOfBoulletToCreate < maxBouletteToAdd) { 
                 numberOfBoulletToCreate++;
                 UpdateScale();
+                if(numberOfBoulletToCreate == maxBouletteToAdd)
+                {
+                    eventWhenMaxFeeds.Invoke();
+                }
                 return true;
             }
             return false;

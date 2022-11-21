@@ -65,7 +65,10 @@ public class CloudExploder : MonoBehaviour
                     }
                 }
             }
-            nearest.ShowExplodeUI(playerComponent.isGyro);
+            if (nearest != null)
+            {
+                nearest.ShowExplodeUI(playerComponent.isGyro);
+            }
         }
     }
 
