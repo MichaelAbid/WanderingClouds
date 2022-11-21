@@ -27,6 +27,10 @@ namespace WanderingCloud.Controller
         [field: SerializeField] public Transform Avatar { get; private set; }
         [field: SerializeField] public CapsuleCollider Collider { get; private set; }
         [field: SerializeField] public CinemachineFreeLook Cinemachine { get; private set; }
+
+        [field: SerializeField] public CloudGrabber cloudGrabber { get; private set; }
+        [field: SerializeField] public CloudExploder cloudExploder { get; private set; }
+
         #endregion
 
         #region Run Parameter
@@ -57,7 +61,7 @@ namespace WanderingCloud.Controller
 
         #region Aiming
         [field: SerializeField, Foldout("Aim"), ReadOnly] public bool isAiming { get; private set; }
-        [SerializeField, Foldout("Aim")] private CloudSource currentTarget = null;
+        [SerializeField, Foldout("Aim")] public CloudSource currentTarget = null;
         #endregion
         
         #region GrabObject
@@ -120,21 +124,36 @@ namespace WanderingCloud.Controller
 
         public override void LeftTriggerInput()
         {
+            Aim();
+        }
+
+
+        public override void LeftTriggerInputReleased()
+        {
+            UnAim();
+        }
+
+
+        public void Aim()
+        {
             isAiming = true;
             var nearObject = Physics.OverlapSphere(Avatar.position, 10f);
-            if(nearObject.Length == 0)return;
+            if (nearObject.Length == 0) return;
             var nearTarget = nearObject.
                 Where(x => x.GetComponent<CloudSource>()).
                 Select(x => x.GetComponent<CloudSource>()).ToArray();
-            if(nearTarget.Length == 0)return;
+            if (nearTarget.Length == 0) return;
             var target = nearTarget.OrderBy(x => Vector3.Distance(x.transform.position, Avatar.position)).First();
             Cinemachine.LookAt = target.transform;
+            currentTarget = target;
         }
-        public override void LeftTriggerInputReleased()
+
+        public void UnAim()
         {
             isAiming = false;
             Cinemachine.LookAt = Avatar;
         }
+
         public void CamUpdate()
         {
 
@@ -266,17 +285,39 @@ namespace WanderingCloud.Controller
 
         public override void EstButtonInput()
         {
-            Grab();
+            if (isAiming)
+            {
+                Launch();
+            }
+            else
+            {
+                bool grabsucess = Grab();
+                if (!grabsucess)
+                {
+                    bool explodesucess = ExplodeSource();
+                }
+            }
         }
 
-        public void Grab()
+        public void Launch()
         {
-            if (grabObject != null) UnGrab();
+            if (currentTarget != null)
+            {
+                cloudGrabber.LaunchPullet();
+            }
         }
-        public void UnGrab()
-        { 
 
+        public bool Grab()
+        {
+            return cloudGrabber.GrabNearestPullet();
         }
+
+
+        public bool ExplodeSource()
+        {
+            return cloudExploder.ExplodeNearest();
+        }
+
 
 #if UNITY_EDITOR
         private void OnDrawGizmos()

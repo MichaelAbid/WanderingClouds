@@ -4,6 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
+using WanderingCloud.Controller;
 using Random = UnityEngine.Random;
 
 namespace WanderingCloud.Gameplay
@@ -19,30 +22,55 @@ namespace WanderingCloud.Gameplay
         [Foldout("Boulette Spawn")] private List<Vector3> randomPositions = new List<Vector3>();
         [Foldout("Boulette Spawn")] [OnValueChanged("RandomizePosition")][Range(0, 1)][SerializeField] private float randomThreshold = 0.75f;
 
-        [Foldout("Respawn")] [SerializeField] private bool isActive = true;
+        [Foldout("Respawn")] [SerializeField] public bool isActive = true;
         [Foldout("Respawn")] [SerializeField] private float timeBeforeRespawn = 60;
 
         [Foldout("Ref")] public MeshRenderer meshRenderer;
         [Foldout("Ref")] public Collider cCollider;
 
-        [Foldout("Source")][SerializeField] private float ratioForEachBoulette = 0.1f;
-        [Foldout("Source")][SerializeField] private float maxScaleAddition = 3;
-        [Foldout("Source")][OnValueChanged("CheckForMaxValue")][SerializeField] private int maxBouletteToAdd = 10;
+        [Foldout("Source")][SerializeField][OnValueChanged("UpdateScale")] private float numberOfBulletForMaxRatio = 10;
+        [Foldout("Source")][SerializeField][OnValueChanged("UpdateScale")] private Vector3 startScaleAddition;
+        [Foldout("Source")][SerializeField][OnValueChanged("UpdateScale")] private Vector3 maxScaleAddition;
+        [Foldout("Source")][SerializeField] private int startingBoulette = 10;
         
+        [Foldout("Source")][OnValueChanged("CheckForMaxValue")][SerializeField] private int maxBouletteToAdd = 10;
+        [Foldout("Source")] public UnityEvent eventWhenMaxFeeds;
+        [Foldout("Source")] public bool canBePouffed = true;
+        [Foldout("Source")][SerializeField] private int minimumBouletteToPouf = 0;
+
 
         [Foldout("Boulette")] public List<CloudBoulette> boulettes = new List<CloudBoulette>();
+        internal CloudExploder cgUrle;
+        internal CloudExploder cgGiro;
 
+
+        [Foldout("Ref")][SerializeField] private RawImage GiroImageRef;
+        [Foldout("Ref")][SerializeField] private RawImage UrleImageRef;
+        private Player giro, urle;
+
+        private void Start()
+        {
+            numberOfBoulletToCreate = startingBoulette;
+            UpdateScale();
+        }
+
+        private void Update()
+        {
+            UIRotation();
+        }
 
 
         private void UpdateScale()
         {
-            float i = 1;
-            i += (numberOfBoulletToCreate * ratioForEachBoulette);
-            if(i > maxScaleAddition)
+            if (numberOfBoulletToCreate == 1)
             {
-                i = maxScaleAddition;
+                transform.localScale = startScaleAddition;
             }
-            transform.localScale = new Vector3(i, i, i);
+            else {
+                Vector3 vec = Vector3.Lerp(startScaleAddition, maxScaleAddition, numberOfBoulletToCreate / numberOfBulletForMaxRatio);
+
+                transform.localScale = vec;
+            }
         }
 
         private void CheckForMaxValue()
@@ -80,7 +108,7 @@ namespace WanderingCloud.Gameplay
         public void ExplodeSource()
         {
            
-            if (isActive)
+            if (isActive && canBePouffed && (numberOfBoulletToCreate>= minimumBouletteToPouf))
             {
                 RandomizePosition();
                 if (randomPositions.Count > 0)
@@ -91,6 +119,8 @@ namespace WanderingCloud.Gameplay
                         boulettes.Add(obj.GetComponent<CloudBoulette>());
                     }
                 }
+                numberOfBoulletToCreate = startingBoulette;
+                UpdateScale();
                 StartCoroutine(DesactiveAfterExplode());
             }
             
@@ -108,6 +138,7 @@ namespace WanderingCloud.Gameplay
         }
 
 
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
 
@@ -127,6 +158,96 @@ namespace WanderingCloud.Gameplay
                 }
             }
 
+        }
+#endif
+        public void ShowExplodeUI(bool isGiro)
+        {
+            if (canBePouffed && (numberOfBoulletToCreate >= minimumBouletteToPouf))
+            {
+                if (isGiro)
+                {
+                    if (GiroImageRef != null)
+                        GiroImageRef.enabled = true;
+                }
+                else
+                {
+                    if (UrleImageRef != null)
+                        UrleImageRef.enabled = true;
+                }
+            }
+        }
+
+        public void UnShowExplodeUI(bool isGiro)
+        {
+            if (isGiro)
+            {
+                if (GiroImageRef != null)
+                    GiroImageRef.enabled = false;
+            }
+            else
+            {
+                if (UrleImageRef != null)
+                    UrleImageRef.enabled = false;
+            }
+        }
+
+
+        void UIRotation()
+        {
+            if (giro != null)
+            {
+                Vector3 xyDirection = Vector3.Scale(new Vector3(1, 0, 1), (transform.position - giro.Camera.transform.position).normalized);
+                GiroImageRef.transform.rotation = Quaternion.LookRotation(xyDirection, Vector3.up);
+            }
+            if (urle != null)
+            {
+                Vector3 xyDirection = Vector3.Scale(new Vector3(1, 0, 1), (transform.position - urle.Camera.transform.position).normalized);
+                UrleImageRef.transform.rotation = Quaternion.LookRotation(xyDirection, Vector3.up);
+            }
+        }
+
+        public bool Feed(CloudType cType)
+        {
+            if (numberOfBoulletToCreate < maxBouletteToAdd) { 
+                numberOfBoulletToCreate++;
+                UpdateScale();
+                if(numberOfBoulletToCreate == maxBouletteToAdd)
+                {
+                    eventWhenMaxFeeds.Invoke();
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            CloudExploder cg = other.GetComponentInParent<CloudExploder>();
+            if (cg != null)
+            {
+                cg.BouletteList.Add(this);
+                if (cg.playerComponent.isGyro)
+                {
+                    giro = cg.playerComponent;
+                    cgGiro = cg;
+                }
+                else
+                {
+                    urle = cg.playerComponent;
+                    cgUrle = cg;
+                }
+            }
+        }
+
+
+        private void OnTriggerExit(Collider other)
+        {
+            CloudExploder cg = other.GetComponentInParent<CloudExploder>();
+            if (cg != null)
+            {
+                cg.BouletteList.Remove(this);
+
+            }
         }
 
 

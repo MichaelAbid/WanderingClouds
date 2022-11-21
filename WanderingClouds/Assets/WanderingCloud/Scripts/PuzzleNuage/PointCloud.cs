@@ -87,7 +87,7 @@ public class PointCloud : MonoBehaviour
 
         transform.position+= CalculedVelocity*speed*Time.deltaTime;
     }
-
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
 
@@ -161,6 +161,7 @@ public class PointCloud : MonoBehaviour
         GUI.color = Color.cyan;
         Handles.ArrowHandleCap(0, transform.position , Quaternion.LookRotation(CalculedVelocity), speed, EventType.Repaint);
     }
+#endif
 
 
 
