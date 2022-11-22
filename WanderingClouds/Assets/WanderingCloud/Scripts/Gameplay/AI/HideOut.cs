@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using WanderingCloud.Controller;
 
-namespace WanderingCloud
+namespace WanderingCloud.Gameplay.AI
 {
     public class HideOut : MonoBehaviour
     {
+
         // Start is called before the first frame update
         void Start()
         {
@@ -17,6 +19,8 @@ namespace WanderingCloud
         {
         
         }
+
+
 
 #if UNITY_EDITOR
         private void OnDrawGizmos()
