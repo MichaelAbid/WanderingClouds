@@ -2,7 +2,6 @@
 using UnityEditor;
 #endif
 using WanderingCloud.Gameplay;
-using System;
 using System.Linq;
 using System.Collections;
 using UnityEngine;
@@ -11,13 +10,6 @@ using NaughtyAttributes;
 
 namespace WanderingCloud.Controller
 {
-    public enum MovementState
-    {
-        Walking = 0,
-        Running = 1,
-        Dashing = 2,
-    }
-
     public class Player : Pawn
     {
         [SerializeField] private bool debugMode;
@@ -72,7 +64,7 @@ namespace WanderingCloud.Controller
         #region UnityMethods
         private void Awake()
         {
-            moveState = MovementState.Walking;
+            moveState = MovementState.Idle;
             Cinemachine.gameObject.SetActive(false);
         }
 
@@ -110,8 +102,8 @@ namespace WanderingCloud.Controller
             sprintTime = sprintTimeDuration;
             switch (moveState)
             {
-                case MovementState.Walking:
-                    moveState = MovementState.Running;
+                case MovementState.Walk:
+                    moveState = MovementState.Rush;
                     break;
                 default:
                     break;
@@ -173,7 +165,7 @@ namespace WanderingCloud.Controller
             }
             else
             {
-                moveState = isRunPressed? MovementState.Running : MovementState.Walking;
+                moveState = isRunPressed? MovementState.Rush : MovementState.Walk;
             }
 
             
@@ -181,11 +173,11 @@ namespace WanderingCloud.Controller
             {
                 switch (moveState)
                 {
-                    case MovementState.Walking:
+                    case MovementState.Walk:
                         Body.AddForce(slopeMovement.normalized * (slopeMovement.magnitude * (walkSpeed * Time.deltaTime)),
                             ForceMode.VelocityChange);
                         break;
-                    case MovementState.Running:
+                    case MovementState.Rush:
                         Body.AddForce(slopeMovement.normalized * (slopeMovement.magnitude * (runSpeed * Time.deltaTime)),
                             ForceMode.VelocityChange);
                         break;
@@ -335,89 +327,4 @@ namespace WanderingCloud.Controller
         }
 #endif
     }
-
-    public class PlayerBrain : Pawn
-    {
-        #region References
-        [field: SerializeField] public Rigidbody Body { get; private set; }
-        [field: SerializeField] public Transform Avatar { get; private set; }
-        [field: SerializeField] public CapsuleCollider Collider { get; private set; }
-        [field: SerializeField] public CinemachineFreeLook Cinemachine { get; private set; }
-        #endregion
-        
-        public override void PlayerConnect(int playerIndex)
-        {
-            Cinemachine.gameObject.SetActive(true);
-            
-            var inputLink = Cinemachine.GetComponent<CinemachineInputProvider>();
-            inputLink.PlayerIndex = playerIndex;
-        }
-        public override void PlayerDisconnect(int playerIndex)
-        {
-            Cinemachine.gameObject.SetActive(false);
-        }
-
-    }
-    
-    public class PlayerState
-    {
-        [field: SerializeField] public PlayerBrain player { get; private set; }
-
-        [field: SerializeField, ReadOnly, Space(10)] public bool isGrounded { get; private set; }
-        [field: SerializeField, ReadOnly] public bool isNearEdge { get; private set; }
-        [field: SerializeField, ReadOnly] public float slopeAngle { get; private set; }
-        [field: SerializeField, ReadOnly] public Vector3 slopeVector{ get; private set; }
-
-        public void RefreshState()
-        {
-            Transform avatar = player.Avatar;
-            var height = player.Collider.height;
-            var feetPos = avatar.position + Vector3.down * ((height - 0.05f) / 2);
-
-            slopeAngle = float.NaN;
-            slopeVector = Vector3.zero;
-
-            RaycastHit underHit;
-            Ray underRay = new Ray(feetPos, Vector3.down);
-            isGrounded = Physics.Raycast(underRay, out underHit, 0.5f);
-            Debug.DrawRay(underRay.origin, underRay.direction * 0.5f, isGrounded ? Color.green : Color.red);
-
-            if (!isGrounded)return;
-            //Edge verif
-            float predictDist = player.Collider.radius;
-            RaycastHit forwardHit;
-            Ray forwardRay = new Ray(feetPos + Vector3.up + avatar.forward * predictDist, Vector3.down);
-            isNearEdge = !Physics.Raycast(forwardRay, out forwardHit, height);
-            Debug.DrawRay(forwardRay.origin, forwardRay.direction * height, isNearEdge ? Color.green : Color.red);
-
-            if (isNearEdge) return;
-            //Calcul Slope
-            predictDist = 0.5f * player.Collider.radius;
-            forwardRay = new Ray(feetPos + Vector3.up * 0.5f * height + avatar.forward * predictDist, Vector3.down);
-            isNearEdge = !Physics.Raycast(forwardRay, out forwardHit, height * 1.5f);
-            Debug.DrawRay(forwardRay.origin, forwardRay.direction * (height * 1.5f), isNearEdge ? Color.green : Color.red);
-            
-            slopeVector = forwardHit.point - underHit.point;
-            Debug.DrawLine(forwardHit.point, underHit.point, Color.yellow);
-
-            slopeAngle = (Mathf.Atan2(slopeVector.y, predictDist) * Mathf.Rad2Deg);
-        }
-
-    }
-    public class PlayerMovement
-    {
-        #region Run Parameter
-        [field: SerializeField, ReadOnly] public MovementState moveState { get; private set; }
-        [SerializeField] private float airSpeed = 10f;
-        [SerializeField] private float walkSpeed = 20f;
-        [SerializeField] private float runSpeed = 40f;
-        [SerializeField] private float sprintSpeed = 60f;
-        [SerializeField] private float sprintTimeDuration = 0.2f;
-        [SerializeField, ReadOnly] private float sprintTime = 0f;
-        [SerializeField, ReadOnly] private bool isRunPressed = false;
-        #endregion
-
-
-    }
-
 }
