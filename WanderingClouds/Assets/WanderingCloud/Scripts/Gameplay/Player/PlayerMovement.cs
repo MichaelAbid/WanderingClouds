@@ -2,6 +2,7 @@
 using NaughtyAttributes;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Events;
 
 namespace WanderingCloud.Controller
 {
@@ -33,6 +34,7 @@ namespace WanderingCloud.Controller
         [Foldout("Jump"), SerializeField, Range(0f, 4f)] private float fallFactor = 1.666f;
         [Foldout("Jump"), SerializeField] private float fallSpeedMax = 10f;
         [Foldout("Jump")] private Coroutine jump = null;
+        [Foldout("Jump")] public UnityEvent onJump;
         #endregion
 
         public PlayerState state = new PlayerState();
@@ -79,12 +81,16 @@ namespace WanderingCloud.Controller
 
             switch (moveState)
             {
+                case MovementState.Idle:
+                    player.Body.AddForce(movementDirection * (movementStrenght *walkSpeed * Time.deltaTime),
+                        ForceMode.VelocityChange);
+                    break;                
                 case MovementState.Walk:
-                    player.Body.AddForce(movementDirection * (movementStrenght * (walkSpeed * Time.deltaTime)),
+                    player.Body.AddForce(movementDirection * (movementStrenght * walkSpeed * Time.deltaTime),
                         ForceMode.VelocityChange);
                     break;
                 case MovementState.Rush:
-                    player.Body.AddForce(movementDirection * (movementStrenght * (runSpeed * Time.deltaTime)),
+                    player.Body.AddForce(movementDirection * (movementStrenght * runSpeed * Time.deltaTime),
                         ForceMode.VelocityChange);
                     break;
                 default:
@@ -96,6 +102,7 @@ namespace WanderingCloud.Controller
         {
             if (!state.isGrounded || jump is not null) return;
             jump = StartCoroutine(Jumping(jumpHeight));
+            onJump?.Invoke();
         }
 
         /// <summary>

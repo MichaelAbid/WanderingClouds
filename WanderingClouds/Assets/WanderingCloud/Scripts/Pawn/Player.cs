@@ -197,7 +197,11 @@ namespace WanderingCloud.Controller
             if (!isGrounded || jump is not null) return;
             jump = StartCoroutine(Jumping(jumpHeight));
         }
-
+        public void Jump(float height)
+        {
+            if (!isGrounded || jump is not null) return;
+            jump = StartCoroutine(Jumping(height));
+        }
         /// <summary>
         /// Inspired by this
         /// https://answers.unity.com/questions/854006/jumping-a-specific-height-using-velocity-gravity.html
