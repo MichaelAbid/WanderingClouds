@@ -170,6 +170,7 @@ namespace WanderingCloud.Gameplay.AI
                             else
                             {
                                 point = 0;
+                                break;
                             }
                         }
                         else
@@ -269,6 +270,7 @@ namespace WanderingCloud.Gameplay.AI
                             else
                             {
                                 point = 0;
+                                break;
                             }
                         }
                         else

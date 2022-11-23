@@ -4,19 +4,9 @@ using UnityEngine;
 
 namespace WanderingCloud.Gameplay
 {
-    public class Source : MonoBehaviour
+     public abstract class  Source : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
-        {
-        
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
+        public abstract bool Feed(CloudType cType);
 
 
     }

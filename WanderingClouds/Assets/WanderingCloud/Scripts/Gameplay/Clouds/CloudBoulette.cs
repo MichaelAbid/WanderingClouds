@@ -27,7 +27,7 @@ namespace WanderingCloud.Gameplay
         public CloudGrabber cgGiro, cgUrle;
 
 
-        [Foldout("Movement")][SerializeField] private CloudSource csTarget;
+        [Foldout("Movement")][SerializeField] private Source csTarget;
         [Foldout("Movement")][SerializeField] private bool shouldMove = false;
         [Foldout("Movement")][SerializeField] private float movementSpeed;
 
@@ -79,7 +79,7 @@ namespace WanderingCloud.Gameplay
             }
         }
 
-        public void SetDestination(CloudSource target, bool shouldMoveImmediate = true)
+        public void SetDestination(Source target, bool shouldMoveImmediate = true)
         {
             csTarget = target;
             shouldMove = shouldMoveImmediate;

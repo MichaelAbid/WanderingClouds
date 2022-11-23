@@ -206,7 +206,7 @@ namespace WanderingCloud.Gameplay
             }
         }
 
-        public bool Feed(CloudType cType)
+        override public bool Feed(CloudType cType)
         {
             if (numberOfBoulletToCreate < maxBouletteToAdd) { 
                 numberOfBoulletToCreate++;
