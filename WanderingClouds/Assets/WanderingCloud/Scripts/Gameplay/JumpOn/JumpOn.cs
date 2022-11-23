@@ -15,7 +15,7 @@ namespace WanderingCloud.Gameplay
             {
                 if (!player.isGrounded)
                 {
-                    player.Jump();
+                    player.Jump(5);
                 }
             }
         }
