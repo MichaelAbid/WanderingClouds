@@ -12,7 +12,7 @@ using Random = UnityEngine.Random;
 namespace WanderingCloud.Gameplay
 {
 
-    public class CloudSource : MonoBehaviour
+    public class CloudSource : Source
     {
 
         [Foldout("Boulette Spawn")] [OnValueChanged("CheckForMaxValue"), OnValueChanged("RandomizePosition"), OnValueChanged("UpdateScale")][Min(1)] public int numberOfBoulletToCreate;

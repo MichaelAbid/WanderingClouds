@@ -138,6 +138,10 @@ namespace WanderingCloud.Gameplay.AI
             {
                 int point = 0;
                 float distanceFromIA = Vector3.Distance(hideOut.transform.position, transform.position);
+                if (distanceFromIA <= 5)
+                {
+                    point -= 1;
+                }
                 if (distanceFromIA <= 30)
                 {
                     point +=2;
@@ -154,7 +158,30 @@ namespace WanderingCloud.Gameplay.AI
                 foreach (Player player in playerList)
                 {
                     float distanceFromPlayer = Vector3.Distance(hideOut.transform.position, player.transform.position);
+                    float distanceIAFromPlayer = Vector3.Distance(transform.position, player.transform.position);
                     if (distanceFromPlayer <= distancePlayerMin)
+                    {
+                        if (distanceFromPlayer <= distanceFromIA)
+                        {
+                            if (distanceFromIA <= distanceIAFromPlayer)
+                            {
+                                point += 1;
+                            }
+                            else
+                            {
+                                point = 0;
+                            }
+                        }
+                        else
+                        {
+                            point += 2;
+                        }
+                    }
+                    else
+                    {
+                        point += 2;
+                    }
+                    /*if (distanceFromPlayer <= distancePlayerMin)
                     {
                         point += 1;
                         if (Vector3.Dot((hideOut.transform.position - transform.position).normalized, (player.transform.position - transform.position).normalized) >= 0f)
@@ -177,7 +204,7 @@ namespace WanderingCloud.Gameplay.AI
                     else
                     {
                         point += 3;
-                    }
+                    }*/
 
                 }
 
@@ -209,6 +236,10 @@ namespace WanderingCloud.Gameplay.AI
             {
                 int point = 0;
                 float distanceFromIA = Vector3.Distance(hideOut.transform.position, transform.position);
+                if (distanceFromIA <= 5)
+                {
+                    point -= 1;
+                }
                 if (distanceFromIA <= 30)
                 {
                     point += 2;
@@ -226,31 +257,30 @@ namespace WanderingCloud.Gameplay.AI
                 foreach (Player player in playerList)
                 {
                     float distanceFromPlayer = Vector3.Distance(hideOut.transform.position, player.transform.position);
+                    float distanceIAFromPlayer = Vector3.Distance(transform.position, player.transform.position);
                     if (distanceFromPlayer <= distancePlayerMin)
                     {
-                        point += 1;
-                        if (Vector3.Dot((hideOut.transform.position - transform.position).normalized, (player.transform.position - transform.position).normalized) >= 0f)
+                        if (distanceFromPlayer <= distanceFromIA)
                         {
-                            point = 0;
-                            break;
+                            if (distanceFromIA <= distanceIAFromPlayer)
+                            {
+                                point += 1;
+                            }
+                            else
+                            {
+                                point = 0;
+                            }
+                        }
+                        else
+                        {
+                            point += 2;
                         }
                     }
                     else
-                    if (distanceFromPlayer <= distancePlayerMed)
                     {
                         point += 2;
-                        if (Vector3.Dot((hideOut.transform.position - transform.position).normalized, (player.transform.position - transform.position).normalized) >= 0.5f)
-                        {
-                            point = 0;
-                            break;
-                        }
+                    }
 
-                    }
-                    else
-                    {
-                        point += 3;
-                    }
-                    
 
                 }
 
@@ -261,6 +291,28 @@ namespace WanderingCloud.Gameplay.AI
 
 
             }
+
+            NavMeshPath path = agent.path;
+            Color startCol = Color.blue;
+            Color endCol = Color.red;
+            Vector3[] corners = path.corners;
+            if (corners.Length > 1)
+            {
+                Vector3 previous = corners[0];
+                float i = 0;
+                foreach (Vector3 corr in corners)
+                {
+                    if (previous != corr)
+                    {
+                        Gizmos.color = Color.LerpUnclamped(startCol,endCol,i/corners.Length);
+                        Gizmos.DrawLine(corr, previous);
+                        previous = corr;
+                    }
+                    i++;
+                }
+            }
+            
+
         }
     }
 

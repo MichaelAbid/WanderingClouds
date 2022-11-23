@@ -126,8 +126,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1930651131256216144}
-  m_LocalRotation: {x: -0.004491834, y: 0.99505866, z: -0.053524815, w: -0.08350591}
-  m_LocalPosition: {x: 1.0000048, y: 1, z: 5.916079}
+  m_LocalRotation: {x: 0.037504192, y: -0.71483636, z: 0.03845147, w: 0.6972259}
+  m_LocalPosition: {x: 5.9981346, y: 1, z: 0.14963531}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -349,6 +349,8 @@ GameObject:
   - component: {fileID: 1930651131615068979}
   - component: {fileID: 5582024005868015012}
   - component: {fileID: 1885798457088623660}
+  - component: {fileID: 835577954}
+  - component: {fileID: 835577955}
   m_Layer: 0
   m_Name: Giro
   m_TagString: Untagged
@@ -467,6 +469,70 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BouletteList: []
   playerComponent: {fileID: 1930651131615068979}
+--- !u!208 &835577954
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1930651131615068981}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 5, y: 2.5, z: 5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!114 &835577955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1930651131615068981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c7c987a410434948a12ade8c1d24923, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  obstacle: {fileID: 835577954}
+  carveSizeByDistance:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.5
+      outSlope: 0.5
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 10
+      value: 5
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 20
+      value: 0
+      inSlope: -0.5
+      outSlope: -0.5
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  aiList: []
+  debugDistance: 0
 --- !u!1 &1930651131964746097
 GameObject:
   m_ObjectHideFlags: 0
@@ -874,7 +940,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1930651132269609484}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.0000048, y: 1, z: 5.916079}
+  m_LocalPosition: {x: 5.9981346, y: 1, z: 0.14963531}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1035,7 +1101,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1930651132464415758}
-  m_LocalRotation: {x: -0.0020982958, y: 0.99618345, z: -0.025003346, w: -0.083600335}
+  m_LocalRotation: {x: 0.017519541, y: -0.7156445, z: 0.01796205, w: 0.69801396}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1120,7 +1186,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1930651132639397496}
-  m_LocalRotation: {x: -0.00689757, y: 0.9931018, z: -0.08219161, w: -0.08334172}
+  m_LocalRotation: {x: 0.057590682, y: -0.71343064, z: 0.059045315, w: 0.69585466}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1205,7 +1271,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1930651132829042626}
-  m_LocalRotation: {x: -0.004491835, y: 0.99505866, z: -0.05352481, w: -0.08350593}
+  m_LocalRotation: {x: 0.037504192, y: -0.71483636, z: 0.03845147, w: 0.69722587}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

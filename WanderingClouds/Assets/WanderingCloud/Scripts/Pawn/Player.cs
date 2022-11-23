@@ -62,7 +62,7 @@ namespace WanderingCloud.Controller
 
         #region Aiming
         [field: SerializeField, Foldout("Aim"), ReadOnly] public bool isAiming { get; private set; }
-        [SerializeField, Foldout("Aim")] public CloudSource currentTarget = null;
+        [SerializeField, Foldout("Aim")] public Source currentTarget = null;
         #endregion
         
         #region GrabObject
@@ -148,8 +148,8 @@ namespace WanderingCloud.Controller
             var nearObject = Physics.OverlapSphere(Avatar.position, 10f);
             if (nearObject.Length == 0) return;
             var nearTarget = nearObject.
-                Where(x => x.GetComponent<CloudSource>()).
-                Select(x => x.GetComponent<CloudSource>()).ToArray();
+                Where(x => x.GetComponent<Source>()).
+                Select(x => x.GetComponent<Source>()).ToArray();
             if (nearTarget.Length == 0) return;
             var target = nearTarget.OrderBy(x => Vector3.Distance(x.transform.position, Avatar.position)).First();
             Cinemachine.LookAt = target.transform;
