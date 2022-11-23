@@ -2,7 +2,6 @@
 using UnityEditor;
 #endif
 using WanderingCloud.Gameplay;
-using System;
 using System.Linq;
 using System.Collections;
 using UnityEngine;
@@ -11,14 +10,6 @@ using NaughtyAttributes;
 
 namespace WanderingCloud.Controller
 {
-    public enum MovementState
-    {
-        Walking = 0,
-        Running = 1,
-        Sprinting = 2,
-        Sliding = 3,
-    }
-
     public class Player : Pawn
     {
         [SerializeField] private bool debugMode;
@@ -73,7 +64,7 @@ namespace WanderingCloud.Controller
         #region UnityMethods
         private void Awake()
         {
-            moveState = MovementState.Walking;
+            moveState = MovementState.Idle;
             Cinemachine.gameObject.SetActive(false);
         }
 
@@ -101,11 +92,7 @@ namespace WanderingCloud.Controller
         {
             Vector3 forward = Vector3.ProjectOnPlane(Camera.transform.forward, Vector3.up);
             Vector3 right = Vector3.ProjectOnPlane(Camera.transform.right, Vector3.up);
-            Debug.DrawLine(Camera.transform.position, Camera.transform.position + forward * 5, Color.magenta);
-            Debug.DrawLine(Camera.transform.position, Camera.transform.position + right * 5, Color.cyan);
             inputMovement = input.y * forward + input.x * right;
-            Debug.DrawLine(Camera.transform.position, Camera.transform.position + inputMovement * 5, Color.green);
-
         }
         public override void SouthButtonInput() => Jump();
 
@@ -115,11 +102,8 @@ namespace WanderingCloud.Controller
             sprintTime = sprintTimeDuration;
             switch (moveState)
             {
-                case MovementState.Walking:
-                    moveState = MovementState.Running;
-                    break;
-                case MovementState.Running or MovementState.Sprinting:
-                    moveState = MovementState.Sprinting;
+                case MovementState.Walk:
+                    moveState = MovementState.Rush;
                     break;
                 default:
                     break;
@@ -181,7 +165,7 @@ namespace WanderingCloud.Controller
             }
             else
             {
-                moveState = isRunPressed? MovementState.Running : MovementState.Walking;
+                moveState = isRunPressed? MovementState.Rush : MovementState.Walk;
             }
 
             
@@ -189,16 +173,12 @@ namespace WanderingCloud.Controller
             {
                 switch (moveState)
                 {
-                    case MovementState.Walking:
+                    case MovementState.Walk:
                         Body.AddForce(slopeMovement.normalized * (slopeMovement.magnitude * (walkSpeed * Time.deltaTime)),
                             ForceMode.VelocityChange);
                         break;
-                    case MovementState.Running:
+                    case MovementState.Rush:
                         Body.AddForce(slopeMovement.normalized * (slopeMovement.magnitude * (runSpeed * Time.deltaTime)),
-                            ForceMode.VelocityChange);
-                        break;
-                    case MovementState.Sprinting:
-                        Body.AddForce(slopeMovement.normalized * (slopeMovement.magnitude * (sprintSpeed * Time.deltaTime)),
                             ForceMode.VelocityChange);
                         break;
                     default:
@@ -217,7 +197,11 @@ namespace WanderingCloud.Controller
             if (!isGrounded || jump is not null) return;
             jump = StartCoroutine(Jumping(jumpHeight));
         }
-
+        public void Jump(float height)
+        {
+            if (!isGrounded || jump is not null) return;
+            jump = StartCoroutine(Jumping(height));
+        }
         /// <summary>
         /// Inspired by this
         /// https://answers.unity.com/questions/854006/jumping-a-specific-height-using-velocity-gravity.html
