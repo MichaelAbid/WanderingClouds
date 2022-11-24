@@ -7,16 +7,16 @@ namespace WanderingCloud.Gameplay
 {
     public class JumpOn : MonoBehaviour
     {
+        public float bumpHeight = 10;
 
         private void OnTriggerEnter(Collider other)
         {
-            Player player = other.GetComponent<Player>();
-            if (player != null)
+            
+            Player player = other.GetComponentInParent<Player>();
+            if (player != null && !player.isGrounded)
             {
-                if (!player.isGrounded)
-                {
-                    player.Jump(5);
-                }
+                Debug.Log("Bumped");
+                player.Jump(bumpHeight);
             }
         }
 

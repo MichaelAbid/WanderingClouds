@@ -58,6 +58,14 @@ namespace WanderingCloud.Gameplay
                     shouldMove = false;
                     if (csTarget.Feed(cType))
                     {
+                        if(cgGiro != null)
+                        {
+                            cgGiro.BouletteList.Remove(this);
+                        }
+                        if(cgUrle != null)
+                        {
+                            cgUrle.BouletteList.Remove(this);
+                        }
                         Destroy(gameObject);
                     }
                 }

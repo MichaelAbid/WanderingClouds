@@ -39,16 +39,26 @@ namespace WanderingCloud.Gameplay.AI
             float clostest = -1;
             foreach (AI_Base ai in aiList)
             {
-                float distance = Vector3.Distance(transform.position, ai.transform.position);
-                if (clostest < 0 || distance< clostest)
+                BumperSource bs = ai.GetComponent<BumperSource>();
+
+                if (bs == null || (bs.currentPullet / bs.maxPullet) < 0.5f) 
                 {
-                    clostest = distance;
+                    float distance = Vector3.Distance(transform.position, ai.transform.position);
+                    if (clostest < 0 || distance < clostest)
+                    {
+                        clostest = distance;
+                    }
                 }
+
             }
             debugDistance = clostest;
             if (clostest>=0 && clostest <= carveSizeByDistance.keys[carveSizeByDistance.length-1].time)
             {
                 obstacle.radius = carveSizeByDistance.Evaluate(clostest);
+            }
+            else
+            {
+                obstacle.radius = 0;
             }
 
         }
