@@ -132,7 +132,7 @@ namespace WanderingCloud.Controller
             var nearObject = Physics.OverlapSphere(Avatar.position, 10f);
             if (nearObject.Length == 0) return;
             var nearTarget = nearObject.
-                Where(x => x.GetComponent<Source>()).
+                Where(x => x.GetComponent<Source>()||x.GetComponent<BumperSource>() || x.GetComponent<CloudSource>()).
                 Select(x => x.GetComponent<Source>()).ToArray();
             if (nearTarget.Length == 0) return;
             var target = nearTarget.OrderBy(x => Vector3.Distance(x.transform.position, Avatar.position)).First();
@@ -199,7 +199,10 @@ namespace WanderingCloud.Controller
         }
         public void Jump(float height)
         {
-            if (!isGrounded || jump is not null) return;
+            //if (!isGrounded || jump is not null) return;
+            if (jump != null) { 
+                StopCoroutine(jump);
+            }
             jump = StartCoroutine(Jumping(height));
         }
         /// <summary>
@@ -212,7 +215,7 @@ namespace WanderingCloud.Controller
         public IEnumerator Jumping(float height)
         {
             //body.velocity += Vector3.up  * Mathf.Sqrt(-2.0f * Physics2D.gravity.y * jumpHeight);
-            Body.AddForce(Vector3.up * Mathf.Sqrt(-2.0f * Physics2D.gravity.y * (jumpHeight)),
+            Body.AddForce(Vector3.up * Mathf.Sqrt(-2.0f * Physics2D.gravity.y * (height)),
                 ForceMode.VelocityChange);
 
             yield return new WaitForFixedUpdate();

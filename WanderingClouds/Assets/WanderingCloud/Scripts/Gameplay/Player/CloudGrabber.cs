@@ -50,9 +50,19 @@ namespace WanderingCloud.Gameplay
                 CloudBoulette nearest = BouletteList[0];
                 for (int i = 1; i < BouletteList.Count; i++)
                 {
-                    if (Vector3.Distance(BouletteList[i].transform.position, transform.position) < Vector3.Distance(nearest.transform.position, transform.position))
+                    if (BouletteList[i] != null)
                     {
-                        nearest = BouletteList[i];
+                        if (nearest != null)
+                        {
+                            if (Vector3.Distance(BouletteList[i].transform.position, transform.position) < Vector3.Distance(nearest.transform.position, transform.position))
+                            {
+                                nearest = BouletteList[i];
+                            }
+                        }
+                        else
+                        {
+                            nearest = BouletteList[i];
+                        }
                     }
                 }
                 nbOfPullet++;
@@ -78,10 +88,20 @@ namespace WanderingCloud.Gameplay
                 CloudBoulette nearest = BouletteList[0];
                 for (int i = 1; i < BouletteList.Count; i++)
                 {
-                    BouletteList[i].UnShowGrabUI(playerComponent.isGyro);
-                    if (Vector3.Distance(BouletteList[i].transform.position, transform.position) < Vector3.Distance(nearest.transform.position, transform.position))
+                    if (BouletteList[i] != null)
                     {
-                        nearest = BouletteList[i];
+                        if (nearest != null)
+                        {
+                            BouletteList[i].UnShowGrabUI(playerComponent.isGyro);
+                            if (Vector3.Distance(BouletteList[i].transform.position, transform.position) < Vector3.Distance(nearest.transform.position, transform.position))
+                            {
+                                nearest = BouletteList[i];
+                            }
+                        }
+                        else
+                        {
+                            nearest = BouletteList[i];
+                        }
                     }
                 }
                 nearest.ShowGrabUI(playerComponent.isGyro);
