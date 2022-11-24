@@ -1038,13 +1038,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b29bf8338c3645da889c91ede2ccfc4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  airSpeed: 10
-  walkSpeed: 20
-  runSpeed: 40
-  dashSpeed: 60
-  dashDuration: 0.2
-  isDashing: 0
+  state:
+    player: {fileID: 7467239624824555679}
+    <isGrounded>k__BackingField: 0
+    <isNearEdge>k__BackingField: 0
+    <slopeAngle>k__BackingField: 0
+    <slopeVector>k__BackingField: {x: 0, y: 0, z: 0}
+    <slopeNormal>k__BackingField: {x: 0, y: 0, z: 0}
   <moveState>k__BackingField: 0
+  airSpeed: 3
+  walkSpeed: 5
+  runSpeed: 10
   jumpHeight: 5
   fallFactor: 1.666
   fallSpeedMax: 10
@@ -1063,13 +1067,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  state:
-    player: {fileID: 7467239624824555679}
-    <isGrounded>k__BackingField: 0
-    <isNearEdge>k__BackingField: 0
-    <slopeAngle>k__BackingField: 0
-    <slopeVector>k__BackingField: {x: 0, y: 0, z: 0}
-    <slopeNormal>k__BackingField: {x: 0, y: 0, z: 0}
+  dashDistance: 5
+  dashDuration: 0.2
+  onDash:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &2281477849421980702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1365,7 +1367,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   self: {fileID: 5406274757919453815}
   target: {fileID: 6794265774704533832}
-  offset: {x: 0, y: 5, z: 0}
+  offset: {x: 0, y: 2, z: 0}
 --- !u!1 &6462805685186459025
 GameObject:
   m_ObjectHideFlags: 0
