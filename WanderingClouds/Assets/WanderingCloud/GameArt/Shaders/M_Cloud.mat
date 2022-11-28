@@ -77,11 +77,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Color_texture:
-        m_Texture: {fileID: 2800000, guid: cb0aca858475ada428440a2ab1f40c95, type: 3}
+        m_Texture: {fileID: 2800000, guid: 56b179cf02a222f46bf69555415adf0d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Colored_Noise:
-        m_Texture: {fileID: 2800000, guid: d35d49762f078414f8596e0d409882be, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9793124c4576c48409d2f494ae59baa0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailMap:
@@ -225,7 +225,7 @@ Material:
     - _AO_intensity: 1
     - _ATDistance: 1
     - _AddPrecomputedVelocity: 0
-    - _Additional_Coloring: 0.5
+    - _Additional_Coloring: 0.8
     - _AlbedoAffectEmissive: 0
     - _AlphaCutoff: 0.5
     - _AlphaCutoffEnable: 0
@@ -268,8 +268,8 @@ Material:
     - _EnableFogOnTransparent: 1
     - _EnableGeometricSpecularAA: 0
     - _EnergyConservingSpecularColor: 1
-    - _Fresnel_Intensity: 1
-    - _Fresnel_Sharpness: 4.6
+    - _Fresnel_Intensity: 1.37
+    - _Fresnel_Sharpness: 3
     - _HeightAmplitude: 0.02
     - _HeightCenter: 0.5
     - _HeightMapParametrization: 0
@@ -317,7 +317,7 @@ Material:
     - _SpecularAAScreenSpaceVariance: 0.1
     - _SpecularAAThreshold: 0.2
     - _SpecularOcclusionMode: 1
-    - _Speed: 0.01
+    - _Speed: 0.05
     - _SrcBlend: 1
     - _StencilRef: 0
     - _StencilRefDepth: 0
@@ -346,7 +346,7 @@ Material:
     - _TransparentSortPriority: 0
     - _TransparentWritingMotionVec: 0
     - _TransparentZWrite: 0
-    - _Trasnparency: 5.56
+    - _Trasnparency: 7.02
     - _UVBase: 0
     - _UVDetail: 0
     - _UVEmissive: 0
@@ -366,7 +366,7 @@ Material:
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
-    - _Displace_Tiling: {r: 10, g: 10, b: 0, a: 0}
+    - _Displace_Tiling: {r: 5, g: 5, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _Emission_Color: {r: 0, g: 0, b: 0, a: 0}
