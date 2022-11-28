@@ -49,7 +49,7 @@ namespace WanderingCloud.Controller
             {
                 ghostPositionY = anchor.position.y;
                 //Ptit coup de tween
-                DOTween.To(() => ghostPositionY, x => ghostPositionY = x, anchor.position.y, 0.2f);
+                //DOTween.To(() => ghostPositionY, x => ghostPositionY = x, anchor.position.y, 0.2f);
             }
 
             var desiredPosition = new Vector3(anchor.position.x, ghostPositionY, anchor.position.z);
@@ -103,6 +103,12 @@ namespace WanderingCloud.Controller
 
         public void EndAim()
         {
+            if (player.CinemachineBase.m_BindingMode == CinemachineTransposer.BindingMode.SimpleFollowWithWorldUp)
+            {
+                timeSinceInactivity = 0f;
+                SwitchToWorldBinding();
+            }
+
             player.CinemachineBase.m_YAxis = player.CinemachineAim.m_YAxis;
             player.CinemachineBase.m_XAxis = player.CinemachineAim.m_XAxis;
 
