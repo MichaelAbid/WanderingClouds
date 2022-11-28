@@ -44,6 +44,12 @@ namespace WanderingCloud.Controller
         public bool isDashing => dash is not null;
         #endregion
 
+        #region Dash Parameter
+        [Foldout("Debug"), SerializeField, ReadOnly()] private Vector3 movementXZ;
+        [Foldout("Debug"), SerializeField, ReadOnly()] private Vector3 movementSurface;
+        [Foldout("Debug"), SerializeField, ReadOnly()] private float movementStrenght = 0f;
+        #endregion
+        
         #region UnityMethods
         private void Awake()
         {
@@ -52,6 +58,13 @@ namespace WanderingCloud.Controller
 
         private void Update()
         {
+            //To Cam XZ
+            Vector3 forward = Vector3.ProjectOnPlane(player.Camera.transform.forward, Vector3.up).normalized;
+            Vector3 right = Vector3.ProjectOnPlane(player.Camera.transform.right, Vector3.up).normalized;
+            movementXZ = player.moveInput.y * forward + player.moveInput.x * right;
+            movementStrenght = movementXZ.magnitude;
+            movementSurface = Vector3.ProjectOnPlane(movementXZ, state.slopeNormal).normalized;
+            
             state.RefreshState();
             SnapToGround();
         }
@@ -67,43 +80,41 @@ namespace WanderingCloud.Controller
             if(isDashing)return;
             //if (player.moveInput.magnitude < Mathf.Epsilon) return;
 
-            //To Cam XZ
-            Vector3 forward = Vector3.ProjectOnPlane(player.Camera.transform.forward, Vector3.up).normalized;
-            Vector3 right = Vector3.ProjectOnPlane(player.Camera.transform.right, Vector3.up).normalized;
-            var movement = player.moveInput.y * forward + player.moveInput.x * right;
-            var movementStrenght = movement.magnitude;
-            var movementDirection = Vector3.ProjectOnPlane(movement, state.slopeNormal).normalized;
-            
             //Turn where you run
             if (movementStrenght > float.Epsilon)
             {
                 //if not aiming
-                var aimRot = Quaternion.LookRotation(movementDirection, state.slopeNormal);
+                var aimRot = Quaternion.LookRotation(movementSurface, Vector3.up);
                 player.Body.transform.rotation = Quaternion.Slerp(player.Body.transform.rotation, aimRot, 5 * Time.deltaTime);
             }
 
             if (!state.isGrounded)
             {
-                var temp = movementDirection * (movementStrenght * airSpeed);
+                var temp = movementXZ * (movementStrenght * airSpeed);
                 player.Body.velocity = new Vector3(temp.x, player.Body.velocity.y, temp.z) ;
 
-                player.Body.AddForce(movement.normalized * (movement.magnitude * (airSpeed * Time.deltaTime)), ForceMode.VelocityChange);
+                player.Body.AddForce(movementXZ.normalized * (movementXZ.magnitude * (airSpeed * Time.deltaTime)), ForceMode.VelocityChange);
                 return;
             }
             
-            Debug.DrawRay(player.Avatar.position,movementDirection.normalized, Color.green, Time.deltaTime, true);
-            Debug.DrawRay(player.Avatar.position + Vector3.up * 0.1f,movementDirection.normalized * movementStrenght, Color.red, Time.deltaTime, true);
-            var speed = movementDirection * (movementStrenght * runSpeed);
+            Debug.DrawRay(player.Avatar.position,movementSurface.normalized, Color.green, Time.deltaTime, true);
+            Debug.DrawRay(player.Avatar.position + Vector3.up * 0.1f,movementSurface.normalized * movementStrenght, Color.red, Time.deltaTime, true);
+            var speed = movementSurface * (movementStrenght * runSpeed);
             switch (moveState)
             {
                 case MovementState.Idle:
-                    speed = movementDirection * (movementStrenght * walkSpeed);
+                    if (movementStrenght > float.Epsilon)  moveState = MovementState.Walk;
                     break;                
                 case MovementState.Walk:
-                    speed = movementDirection * (movementStrenght * walkSpeed);
+                    if (movementStrenght < float.Epsilon)  moveState = MovementState.Idle;
+                    speed = movementSurface * (movementStrenght * walkSpeed);
                     break;
                 case MovementState.Rush:
-                    speed = movementDirection * (movementStrenght * runSpeed);
+                    if (Vector3.Dot(player.Body.velocity.normalized, movementSurface.normalized) < 0.5f || movementStrenght < 0.5f)
+                    {
+                        moveState = MovementState.Walk;
+                    }
+                    speed = movementSurface * (movementStrenght * runSpeed);
                     break;
                 default:
                     break;
@@ -124,6 +135,7 @@ namespace WanderingCloud.Controller
             jump = StartCoroutine(Jumping(jumpHeight));
             onJump?.Invoke();
         }
+        
         /// <summary>
         /// Inspired by this
         /// https://answers.unity.com/questions/854006/jumping-a-specific-height-using-velocity-gravity.html
@@ -194,29 +206,26 @@ namespace WanderingCloud.Controller
             var vel = player.Body.velocity;
             var previousState = moveState;
             moveState = MovementState.Dash;
-            var movementDirection = player.Avatar.forward;
+            var dashDirection = player.Avatar.forward;
             if (player.moveInput.magnitude > float.Epsilon)
             {
-                Vector3 forward = Vector3.ProjectOnPlane(player.Camera.transform.forward, Vector3.up).normalized;
-                Vector3 right = Vector3.ProjectOnPlane(player.Camera.transform.right, Vector3.up).normalized;
-                var movement = player.moveInput.y * forward + player.moveInput.x * right;
-                movementDirection = Vector3.ProjectOnPlane(movement, state.slopeNormal).normalized;
+                dashDirection = movementSurface.normalized;
             }
             
             Vector3 startPos = player.Avatar.position;
-            float dashSpeed = (movementDirection.magnitude * dashDistance)/ dashDuration;
+            float dashSpeed = (dashDirection.magnitude * dashDistance)/ dashDuration;
             float time = dashDuration;
-            Debug.DrawRay(startPos,movementDirection * dashDistance,Color.blue, dashDuration );
+            Debug.DrawRay(startPos,dashDirection * dashDistance,Color.blue, dashDuration );
             
             while (time > 0)
             {
-                player.Body.velocity = Vector3.ProjectOnPlane(movementDirection, state.slopeNormal).normalized * dashSpeed;
+                player.Body.velocity = Vector3.ProjectOnPlane(dashDirection, state.slopeNormal).normalized * dashSpeed;
                 
                 yield return new WaitForEndOfFrame();
                 time -= Time.deltaTime;
             }
             player.Body.velocity = vel;
-            moveState = /*dot prod?MovementState.Rush:*/ previousState;
+            moveState = Vector3.Dot(dashDirection, movementXZ.normalized) > 0?MovementState.Rush: previousState;
             dash = null;
         }
     }
