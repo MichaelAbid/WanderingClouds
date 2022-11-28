@@ -43,7 +43,6 @@ namespace WanderingCloud.Controller
         [Foldout("Dash")] public UnityEvent onDash;
         public bool isDashing => dash is not null;
         #endregion
-        
 
         #region UnityMethods
         private void Awake()
@@ -115,8 +114,9 @@ namespace WanderingCloud.Controller
         public void Jump()
         {
             if (!state.isGrounded || isJumping) return;
-            jump = StartCoroutine(Jumping(jumpHeight));
             onJump?.Invoke();
+            jump = StartCoroutine(Jumping(jumpHeight));
+            
         }
         public void ForcedJump(float height)
         {
@@ -164,7 +164,7 @@ namespace WanderingCloud.Controller
             
             if (player.Body.velocity.y < -Mathf.Abs(fallSpeedMax))
             {
-                player.Body.velocity =new Vector3(player.Body.velocity.x,  fallSpeedMax, player.Body.velocity.z);
+                player.Body.velocity =new Vector3(player.Body.velocity.x,  -fallSpeedMax, player.Body.velocity.z);
             }
         }
 
