@@ -176,7 +176,7 @@ MonoBehaviour:
     m_Value: 1000
   baseHeight:
     m_OverrideState: 1
-    m_Value: 15.88
+    m_Value: 20.2
   maximumHeight:
     m_OverrideState: 0
     m_Value: 50
@@ -288,7 +288,7 @@ MonoBehaviour:
   active: 1
   rotation:
     m_OverrideState: 1
-    m_Value: 230
+    m_Value: 6
   skyIntensityMode:
     m_OverrideState: 1
     m_Value: 0
@@ -300,10 +300,10 @@ MonoBehaviour:
     m_Value: 1
   upperHemisphereLuxValue:
     m_OverrideState: 1
-    m_Value: 4.520189
+    m_Value: 2.3571622
   upperHemisphereLuxColor:
     m_OverrideState: 1
-    m_Value: {x: 0.40458536, y: 0.4357408, z: 0.5}
+    m_Value: {x: 0.41305375, y: 0.45443007, z: 0.5}
   desiredLuxValue:
     m_OverrideState: 0
     m_Value: 20000
@@ -318,7 +318,7 @@ MonoBehaviour:
     m_Value: 0
   hdriSky:
     m_OverrideState: 1
-    m_Value: {fileID: 8900000, guid: 23747cb521c35e44c972bcab36b13cda, type: 3}
+    m_Value: {fileID: 8900000, guid: d9a0e251e89c4834e91338a813f50144, type: 3}
   distortionMode:
     m_OverrideState: 1
     m_Value: 1
@@ -332,14 +332,14 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value:
       mode: 0
-      customValue: 171
+      customValue: 0
       additiveValue: 0
       multiplyValue: 1
   scrollSpeed:
     m_OverrideState: 1
     m_Value:
       mode: 0
-      customValue: 1000
+      customValue: 0
       additiveValue: 0
       multiplyValue: 1
   enableBackplate:
@@ -406,7 +406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9008a067f4d626c4d8bc4bc48f04bb89, type: 3}
   m_Name: AmbientOcclusion
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   quality:
     m_OverrideState: 1
     m_Value: 3
@@ -415,7 +415,7 @@ MonoBehaviour:
     m_Value: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.94
   directLightingStrength:
     m_OverrideState: 1
     m_Value: 1

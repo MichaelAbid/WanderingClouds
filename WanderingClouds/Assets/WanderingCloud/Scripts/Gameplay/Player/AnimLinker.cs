@@ -26,6 +26,6 @@ namespace WanderingCloud
         }
 
         public void Anim_Jump()=>animator.SetTrigger(Jump);
-        public void Anim_Dash()=>animator.SetTrigger(Jump);
+        public void Anim_Dash()=>animator.SetTrigger(Dash);
     }
 }
