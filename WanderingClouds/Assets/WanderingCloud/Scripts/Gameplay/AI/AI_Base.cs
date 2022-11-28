@@ -19,9 +19,10 @@ namespace WanderingCloud.Gameplay.AI
     public class AI_Base : MonoBehaviour
     {
         [Foldout("Players")][SerializeField] protected List<Player> playerList = new List<Player>();
-        [Foldout("Ref")][SerializeField] protected NavMeshAgent agent;
+        [Foldout("Ref")][SerializeField] public NavMeshAgent agent;
         [Foldout("State")][SerializeField] public AI_STATE currentState;
         [Foldout("State")][SerializeField] public bool isAiActive = true;
+        [Foldout("State")][SerializeField] public bool isGrabbable = true;
         [Foldout("HideOut")][SerializeField] protected List<HideOut> hideOuts = new List<HideOut>();
 
 
