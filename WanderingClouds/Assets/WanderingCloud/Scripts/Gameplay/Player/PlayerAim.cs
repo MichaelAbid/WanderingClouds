@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using NaughtyAttributes;
 using Cinemachine;
+using DG.Tweening;
 
 namespace WanderingCloud.Controller
 {
@@ -20,6 +21,7 @@ namespace WanderingCloud.Controller
 
         private float ghostPositionY;
         private Vector3 velocity = Vector3.zero;
+        private bool canFollow = true;
 
         private void Update()
         {
@@ -37,9 +39,17 @@ namespace WanderingCloud.Controller
         /// </summary>
         private void LateUpdate()
         {
+            Vector3 characterViewPos = player.Camera.WorldToViewportPoint(anchor.position + player.Body.velocity * Time.deltaTime);
+
             if (player.Movement.state.isGrounded)
             {
                 ghostPositionY = anchor.position.y;
+            }
+            else if (characterViewPos.y > 0.85f || characterViewPos.y < 0.3f)
+            {
+                ghostPositionY = anchor.position.y;
+                //Ptit coup de tween
+                DOTween.To(() => ghostPositionY, x => ghostPositionY = x, anchor.position.y, 0.2f);
             }
 
             var desiredPosition = new Vector3(anchor.position.x, ghostPositionY, anchor.position.z);
