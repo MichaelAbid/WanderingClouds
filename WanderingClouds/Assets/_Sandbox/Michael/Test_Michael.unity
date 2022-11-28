@@ -5270,6 +5270,45 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa69963a35c05624ab340714da5fe135, type: 3}
+--- !u!1 &1301703442 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1930651131615068981, guid: fa69963a35c05624ab340714da5fe135,
+    type: 3}
+  m_PrefabInstance: {fileID: 1301703441}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1301703443 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1930651131145277874, guid: fa69963a35c05624ab340714da5fe135,
+    type: 3}
+  m_PrefabInstance: {fileID: 1301703441}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1301703444 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1930651131615068979, guid: fa69963a35c05624ab340714da5fe135,
+    type: 3}
+  m_PrefabInstance: {fileID: 1301703441}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1301703442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa8dcac5ae29fbb41911023dccc1de2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1301703445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1301703442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 460d69d5675acae4094884df3b742daa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerRef: {fileID: 1301703444}
+  aiGrabed: {fileID: 0}
+  grabSocketPosition: {fileID: 1396508977}
 --- !u!1 &1308473309
 GameObject:
   m_ObjectHideFlags: 0
@@ -5461,6 +5500,37 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a48b953db0b724048a83c90a8d19085a, type: 3}
+--- !u!1 &1396508976
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1396508977}
+  m_Layer: 0
+  m_Name: GrabSocket
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1396508977
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1396508976}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.996}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1301703443}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1448503994
 GameObject:
   m_ObjectHideFlags: 0
@@ -6466,6 +6536,7 @@ MonoBehaviour:
   agent: {fileID: 1689975074}
   currentState: 0
   isAiActive: 0
+  isGrabbable: 1
   hideOuts: []
   idleTime: 2
   idleTimer: 0
