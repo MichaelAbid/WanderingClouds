@@ -2,14 +2,18 @@
 using NaughtyAttributes;
 using Cinemachine;
 using DG.Tweening;
+using System.Collections;
 
 namespace WanderingCloud.Controller
 {
     public class PlayerAim : MonoBehaviour
     {
+        [Header("Follow Cam")]
         [field: SerializeField, Foldout("Data")] private float waitTimeFollow;
         [field: SerializeField, Foldout("Data")] private float desiredSmoothTime;
         [field: SerializeField, Foldout("Data")] private float followMaxSpeed;
+        [field: SerializeField, Foldout("Data"), MinMaxSlider(float.Epsilon, 1)] private Vector2 FollowYThreshold;
+        [field: SerializeField, Foldout("Data"), MinMaxSlider(float.Epsilon, 100)] private Vector2 FollowZThreshold;
 
         [field: SerializeField, Foldout("States")] private bool isAiming;
         [field: SerializeField, Foldout("States")] private float timeSinceInactivity;
@@ -23,13 +27,16 @@ namespace WanderingCloud.Controller
         private Vector3 velocity = Vector3.zero;
         private bool canFollow = true;
 
+        Coroutine blackMagicScript;
+
         private void Update()
         {
             CheckForActivity();
 
             if (timeSinceInactivity >= waitTimeFollow && player.CinemachineBase.m_BindingMode == CinemachineTransposer.BindingMode.WorldSpace && !isAiming)
             {
-                SwitchToSimpleFollow();
+                if(blackMagicScript is not null) StopCoroutine(blackMagicScript);
+                blackMagicScript = StartCoroutine(SwitchToSimpleFollow());
             }
 
         }
@@ -41,15 +48,21 @@ namespace WanderingCloud.Controller
         {
             Vector3 characterViewPos = player.Camera.WorldToViewportPoint(anchor.position + player.Body.velocity * Time.deltaTime);
 
-            if (player.Movement.state.isGrounded)
+            if (player.Movement.state.isGrounded && player.Movement.moveState != MovementState.Jump)
             {
-                ghostPositionY = anchor.position.y;
+                canFollow = true;
             }
-            else if (characterViewPos.y > 0.85f || characterViewPos.y < 0.3f)
+            else if (characterViewPos.y > FollowYThreshold.y || characterViewPos.y < FollowYThreshold.x || characterViewPos.z > FollowZThreshold.y)
             {
-                ghostPositionY = anchor.position.y;
+                canFollow = true;
                 //Ptit coup de tween
                 //DOTween.To(() => ghostPositionY, x => ghostPositionY = x, anchor.position.y, 0.2f);
+            }
+
+
+            if (canFollow)
+            {
+                ghostPositionY = anchor.position.y;
             }
 
             var desiredPosition = new Vector3(anchor.position.x, ghostPositionY, anchor.position.z);
@@ -59,7 +72,7 @@ namespace WanderingCloud.Controller
 
         public void OnLeaveGround()
         {
-            ghostPositionY = anchor.position.y;
+            canFollow = false;
         }
 
         private void CheckForActivity()
@@ -119,6 +132,7 @@ namespace WanderingCloud.Controller
         }
 
         #region Transposer binding switch
+        
         void SwitchToWorldBinding()
         {
             Vector3 offset = player.CinemachineBase.State.RawPosition - player.CinemachineBase.Follow.position;
@@ -130,12 +144,21 @@ namespace WanderingCloud.Controller
             player.CinemachineBase.PreviousStateIsValid = false;
         }
 
-        void SwitchToSimpleFollow()
+        IEnumerator SwitchToSimpleFollow()
         {
+            while (!player.Movement.state.isGrounded)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+            Vector3 offset = player.CinemachineBase.State.RawPosition - player.CinemachineBase.Follow.position;
+            offset.y = 0; // project onto plane
+            float value = Vector3.SignedAngle(Vector3.back, offset, Vector3.up);
+            player.CinemachineBase.m_XAxis.Value = value;
             player.CinemachineBase.m_BindingMode = CinemachineTransposer.BindingMode.SimpleFollowWithWorldUp;
             player.CinemachineBase.InternalUpdateCameraState(Vector3.up, -1);
-            player.CinemachineBase.m_XAxis.Value = 0;
             player.CinemachineBase.PreviousStateIsValid = false;
+
+            blackMagicScript = null;
         }
         #endregion
     }
