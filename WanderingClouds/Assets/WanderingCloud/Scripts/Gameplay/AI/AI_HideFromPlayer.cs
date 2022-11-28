@@ -253,8 +253,21 @@ namespace WanderingCloud.Gameplay.AI
                     }
                 }
 
+                if (point > maxPoint)
+                {
+                    hide = hideOut;
+                    maxPoint = point;
+                }
+                else if (point == maxPoint && point != 0)
+                {
+                    if (distanceHideOutFromIA <= Vector3.Distance(hide.transform.position, transform.position))
+                    {
+                        hide = hideOut;
+                    }
+                }
 
-                
+
+
             }
             if (hide != null) return hide.transform.position;
             return transform.position;
