@@ -21,7 +21,12 @@ namespace WanderingCloud.Gameplay.AI
         [Foldout("Hide")][SerializeField] private float distancePlayerMin = 10;
         [Foldout("Hide")][SerializeField] private float distancePlayerMed = 20;
         [Foldout("Stun")][SerializeField] private float stunDuration;
+        [Foldout("Hide")][SerializeField] private float hideOutMinDist = 10;
+        [Foldout("Hide")][SerializeField] private float hideOutMedDist = 40;
+        [Foldout("Hide")][SerializeField] private float hideOutMaxDist = 50;
 
+        [Foldout("Debug")] public bool debugHideOut = false;
+        [Foldout("Debug")] public bool debugHideOutPlayers = false;
         protected override AI_STATE ChangeFromIdle()
         {
             if (CheckIfPlayerNear())
@@ -129,7 +134,8 @@ namespace WanderingCloud.Gameplay.AI
             base.HideBehavior();
         }
 
-        protected Vector3 GetSafestHideOut()
+        // To Refacto
+        /*protected Vector3 GetSafestHideOut()
         {
             HideOut hide = null;
             int maxPoint = 0;
@@ -138,15 +144,15 @@ namespace WanderingCloud.Gameplay.AI
             {
                 int point = 0;
                 float distanceFromIA = Vector3.Distance(hideOut.transform.position, transform.position);
-                if (distanceFromIA <= 5)
+                if (distanceFromIA <= hideOutMinDist)
                 {
                     point -= 1;
                 }
-                if (distanceFromIA <= 30)
+                if (distanceFromIA <= hideOutMedDist)
                 {
                     point +=2;
                 }else 
-                if (distanceFromIA <= 50)
+                if (distanceFromIA <= hideOutMaxDist)
                 {
                     point += 3;
                 }
@@ -182,30 +188,6 @@ namespace WanderingCloud.Gameplay.AI
                     {
                         point += 2;
                     }
-                    /*if (distanceFromPlayer <= distancePlayerMin)
-                    {
-                        point += 1;
-                        if (Vector3.Dot((hideOut.transform.position - transform.position).normalized, (player.transform.position - transform.position).normalized) >= 0f)
-                        {
-                            point = 0;
-                            break;
-                        }
-                    }
-                    else
-                    if (distanceFromPlayer <= distancePlayerMed)
-                    {
-                        point += 2;
-                        if (Vector3.Dot((hideOut.transform.position - transform.position).normalized, (player.transform.position - transform.position).normalized) >= 0.5f)
-                        {
-                            point = 0;
-                            break;
-                        }
-
-                    }
-                    else
-                    {
-                        point += 3;
-                    }*/
 
                 }
 
@@ -226,6 +208,57 @@ namespace WanderingCloud.Gameplay.AI
             if(hide != null) return hide.transform.position;
             return transform.position;
         }
+*/
+
+        protected Vector3 GetSafestHideOut()
+        {
+            HideOut hide = null;
+            int maxPoint = 0;
+
+            foreach (HideOut hideOut in hideOuts)
+            {
+                int point = 0;
+                float distanceHideOutFromIA = Vector3.Distance(hideOut.transform.position, transform.position);
+
+                if(distanceHideOutFromIA < hideOutMinDist)
+                {
+                    point += 1;
+                }else if(distanceHideOutFromIA < hideOutMedDist)
+                {
+                    point += 3;
+                }else if(distanceHideOutFromIA < hideOutMaxDist)
+                {
+                    point += 2;
+                }
+
+                if (point != 0)
+                {
+
+                    foreach (Player player in playerList)
+                    {
+                        float distanceHideOutFromPlayer = Vector3.Distance(hideOut.transform.position, player.transform.position);
+                        float distanceIAFromPlayer = Vector3.Distance(transform.position, player.transform.position);
+                        if (distanceHideOutFromPlayer > distancePlayerMed)
+                        {
+                            point += 2;
+                        }
+                        else if (distanceHideOutFromPlayer > distancePlayerMin)
+                        {
+                            point += 1;
+                        }
+
+
+
+
+                    }
+                }
+
+
+                
+            }
+            if (hide != null) return hide.transform.position;
+            return transform.position;
+        }
 
         private void OnDrawGizmos()
         {
@@ -236,63 +269,75 @@ namespace WanderingCloud.Gameplay.AI
             foreach (HideOut hideOut in hideOuts)
             {
                 int point = 0;
-                float distanceFromIA = Vector3.Distance(hideOut.transform.position, transform.position);
-                if (distanceFromIA <= 5)
+                float distanceHideOutFromIA = Vector3.Distance(hideOut.transform.position, transform.position);
+                Gizmos.color = Color.red;
+                if (distanceHideOutFromIA < hideOutMinDist)
                 {
-                    point -= 1;
-                }
-                if (distanceFromIA <= 30)
-                {
-                    point += 2;
-                }
-                else
-                if (distanceFromIA <= 50)
-                {
-                    point += 3;
-                }
-                else
-                {
+                    Gizmos.color = Color.blue;
                     point += 1;
                 }
-
-                foreach (Player player in playerList)
+                else if (distanceHideOutFromIA < hideOutMedDist)
                 {
-                    float distanceFromPlayer = Vector3.Distance(hideOut.transform.position, player.transform.position);
-                    float distanceIAFromPlayer = Vector3.Distance(transform.position, player.transform.position);
-                    if (distanceFromPlayer <= distancePlayerMin)
+                    Gizmos.color = Color.green;
+                    point += 3;
+                }
+                else if (distanceHideOutFromIA < hideOutMaxDist)
+                {
+                    Gizmos.color = Color.yellow;
+                    point += 2;
+                }
+                if (debugHideOut) { 
+                    Gizmos.DrawLine(transform.position, hideOut.transform.position);
+                    Handles.Label(transform.position + ((hideOut.transform.position - transform.position).normalized * distanceHideOutFromIA / 2) + Vector3.up, $"Distance : {distanceHideOutFromIA}");
+                }
+
+                if (point != 0)
+                {
+
+                    foreach (Player player in playerList)
                     {
-                        if (distanceFromPlayer <= distanceFromIA)
+                        float distanceHideOutFromPlayer = Vector3.Distance(hideOut.transform.position, player.transform.position);
+                        float distanceIAFromPlayer = Vector3.Distance(transform.position, player.transform.position);
+                        Gizmos.color = Color.red;
+                        if (distanceHideOutFromPlayer > distancePlayerMed)
                         {
-                            if (distanceFromIA <= distanceIAFromPlayer)
+                            Gizmos.color = Color.green;
+                            point += 2;
+                            if (distanceHideOutFromPlayer < distanceHideOutFromIA)
                             {
-                                point += 1;
+                                point -= 1;
                             }
-                            else
+                        }
+                        else if(distanceHideOutFromPlayer > distancePlayerMin)
+                        {
+                            Gizmos.color = Color.yellow;
+                            point += 1;
+                            if (distanceHideOutFromPlayer < distanceHideOutFromIA)
                             {
-                                point = 0;
-                                break;
+                                point -= 1;
                             }
                         }
                         else
                         {
-                            point += 2;
+                            if (distanceHideOutFromPlayer > distanceHideOutFromIA)
+                            {
+                                point += 1;
+                            }
                         }
-                    }
-                    else
-                    {
-                        point += 2;
-                    }
 
+                        
 
+                        if (debugHideOutPlayers)
+                        {
+                            Gizmos.DrawLine(player.transform.position, hideOut.transform.position);
+                            Handles.Label(player.transform.position + ((hideOut.transform.position - player.transform.position).normalized * distanceHideOutFromPlayer / 2) + Vector3.up, $"Distance : {distanceHideOutFromPlayer}");
+                        }
+
+                    }
                 }
-
-                Handles.color = Color.yellow;
                 Handles.Label(hideOut.transform.position + Vector3.up, $"Point : {point}");
-                
-
-
-
             }
+
 
             NavMeshPath path = agent.path;
             Color startCol = Color.blue;
@@ -313,10 +358,10 @@ namespace WanderingCloud.Gameplay.AI
                     i++;
                 }
             }
-            
+
 
         }
     }
 
-    
+
 }
