@@ -10,23 +10,30 @@ namespace WanderingCloud
 	{
 		[field: SerializeField, ReadOnly] public bool isHoldingCloud { get; private set; }
 		[SerializeField] private float holdDuration = 0.5f;
-		public UnityEvent onEatingCloud;
-		private Coroutine eating = null;
+		public UnityEvent onConsumeCloud;
+		[SerializeField] private int pelletStock = 0;
+		[SerializeField] private int pelletPerConsum = 3;
+		[SerializeField] private int maxPelletStock = 5;
+		private Coroutine consuming = null;
 
 		[Button()]
 		public void CloudContact()
 		{
-			if(eating is null) eating = StartCoroutine(EatingCloud());
+			if(consuming is null) consuming = StartCoroutine(EatingCloud());
 		}
 
 		private IEnumerator EatingCloud()
 		{
 			isHoldingCloud = true;
 			yield return new  WaitForSeconds(holdDuration);
-			onEatingCloud?.Invoke();
+			
+			pelletStock = Mathf.Clamp(pelletStock + pelletPerConsum, 0, maxPelletStock);
+			onConsumeCloud?.Invoke();
+			
 			isHoldingCloud = false;
-			eating = null;
+			consuming = null;
 		}
+		
 
 	}
 }
