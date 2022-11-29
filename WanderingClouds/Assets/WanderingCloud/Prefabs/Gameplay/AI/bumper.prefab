@@ -498,12 +498,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f43f6015481bc6f419887bf8d2feac95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerList: []
+  playerList:
+  - {fileID: 0}
   agent: {fileID: 1689975074}
   currentState: 0
   isAiActive: 1
   isGrabbable: 1
-  hideOuts: []
+  hideOuts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   idleTime: 2
   idleTimer: 0
   WanderingTime: 10
@@ -516,7 +529,9 @@ MonoBehaviour:
   stunDuration: 5
   hideOutMinDist: 10
   hideOutMedDist: 40
-  hideOutMaxDist: 50
+  hideOutMaxDist: 60
+  debugHideOut: 1
+  debugHideOutPlayers: 0
 --- !u!195 &1689975074
 NavMeshAgent:
   m_ObjectHideFlags: 0

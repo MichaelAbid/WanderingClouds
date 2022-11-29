@@ -125,7 +125,7 @@ namespace WanderingCloud.Gameplay.AI
 
         protected override void HideBehavior()
         {
-            if (Vector3.Distance(WanderingTarget, transform.position) <= 0.5)
+            if (Vector3.Distance(WanderingTarget, transform.position) <= 2)
             {
                 WanderingTarget = GetSafestHideOut();
             }
@@ -134,81 +134,6 @@ namespace WanderingCloud.Gameplay.AI
             base.HideBehavior();
         }
 
-        // To Refacto
-        /*protected Vector3 GetSafestHideOut()
-        {
-            HideOut hide = null;
-            int maxPoint = 0;
-
-            foreach (HideOut hideOut in hideOuts)
-            {
-                int point = 0;
-                float distanceFromIA = Vector3.Distance(hideOut.transform.position, transform.position);
-                if (distanceFromIA <= hideOutMinDist)
-                {
-                    point -= 1;
-                }
-                if (distanceFromIA <= hideOutMedDist)
-                {
-                    point +=2;
-                }else 
-                if (distanceFromIA <= hideOutMaxDist)
-                {
-                    point += 3;
-                }
-                else
-                {
-                    point += 1;
-                }
-
-                foreach (Player player in playerList)
-                {
-                    float distanceFromPlayer = Vector3.Distance(hideOut.transform.position, player.transform.position);
-                    float distanceIAFromPlayer = Vector3.Distance(transform.position, player.transform.position);
-                    if (distanceFromPlayer <= distancePlayerMin)
-                    {
-                        if (distanceFromPlayer <= distanceFromIA)
-                        {
-                            if (distanceFromIA <= distanceIAFromPlayer)
-                            {
-                                point += 1;
-                            }
-                            else
-                            {
-                                point = 0;
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            point += 2;
-                        }
-                    }
-                    else
-                    {
-                        point += 2;
-                    }
-
-                }
-
-                if(point> maxPoint)
-                {
-                    hide = hideOut;
-                    maxPoint = point;
-                }
-                else if (point == maxPoint && point!=0)
-                {
-                    if(distanceFromIA <= Vector3.Distance(hide.transform.position, transform.position))
-                    {
-                        hide = hideOut;
-                    }
-                }
-
-            }
-            if(hide != null) return hide.transform.position;
-            return transform.position;
-        }
-*/
 
         protected Vector3 GetSafestHideOut()
         {
