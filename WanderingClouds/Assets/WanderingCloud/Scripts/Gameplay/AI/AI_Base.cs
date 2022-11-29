@@ -31,6 +31,7 @@ namespace WanderingCloud.Gameplay.AI
             GetAllRef();
         }
 
+        [Button]
         virtual protected void GetAllRef()
         {
             playerList = FindObjectsOfType<Player>().ToList();
