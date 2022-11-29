@@ -2,6 +2,7 @@
 using UnityEngine.Events;
 using UnityEngine;
 using NaughtyAttributes;
+using DG.Tweening;
 
 namespace WanderingCloud.Controller
 {
@@ -97,8 +98,8 @@ namespace WanderingCloud.Controller
             if (movementStrenght > float.Epsilon)
             {
                 //if not aiming
-                var aimRot = Quaternion.LookRotation(movementSurface, Vector3.up);
-                player.Body.transform.rotation = Quaternion.Slerp(player.Body.transform.rotation, aimRot, 5 * Time.deltaTime);
+                var aimRot = Quaternion.LookRotation(movementXZ, Vector3.up);
+                player.Avatar.transform.rotation = Quaternion.Slerp(player.Avatar.transform.rotation, aimRot, 5 * Time.deltaTime);
             }
 
             if (!state.isGrounded)
@@ -221,10 +222,15 @@ namespace WanderingCloud.Controller
             var previousState = moveState;
             moveState = MovementState.Dash;
             var dashDirection = player.Avatar.forward;
+            var aimRot = Quaternion.LookRotation(dashDirection, Vector3.up);
             if (player.moveInput.magnitude > float.Epsilon)
             {
                 dashDirection = movementSurface.normalized;
+                aimRot = Quaternion.LookRotation(movementXZ, Vector3.up);
             }
+
+            //DOTween.To(() => player.Avatar.transform.rotation, x => player.Avatar.transform.rotation = x, aimRot, 0.2f);
+            player.Avatar.transform.DORotateQuaternion(aimRot, .3f);
             
             Vector3 startPos = player.Avatar.position;
             float dashSpeed = (dashDirection.magnitude * dashDistance)/ dashDuration;
