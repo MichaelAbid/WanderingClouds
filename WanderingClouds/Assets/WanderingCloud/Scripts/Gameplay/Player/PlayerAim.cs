@@ -70,9 +70,44 @@ namespace WanderingCloud.Controller
             followTarget.eulerAngles = anchor.eulerAngles;
         }
 
-        public void OnLeaveGround()
+        public void BeginAim()
         {
-            canFollow = false;
+            isAiming = true;
+
+            if (player.CinemachineBase.m_BindingMode == CinemachineTransposer.BindingMode.SimpleFollowWithWorldUp)
+            {
+                SwitchToWorldBinding();
+            }
+
+            player.CinemachineAim.m_YAxis = player.CinemachineBase.m_YAxis;
+            player.CinemachineAim.m_XAxis = player.CinemachineBase.m_XAxis;
+
+            //Aim VCam takes priority
+            player.CinemachineAim.Priority = player.CinemachineBase.Priority + 1;
+        }
+        public void EndAim()
+        {
+            if (player.CinemachineBase.m_BindingMode == CinemachineTransposer.BindingMode.SimpleFollowWithWorldUp)
+            {
+                timeSinceInactivity = 0f;
+                SwitchToWorldBinding();
+            }
+
+            player.CinemachineBase.m_YAxis = player.CinemachineAim.m_YAxis;
+            player.CinemachineBase.m_XAxis = player.CinemachineAim.m_XAxis;
+
+            //Aim VCam takes priority
+            player.CinemachineAim.Priority = player.CinemachineBase.Priority - 1;
+
+            isAiming = false;
+        }
+
+        public void Throw()
+        {
+            if (isAiming)
+            {
+                Debug.Log("OUI");
+            }
         }
 
         private void CheckForActivity()
@@ -98,38 +133,14 @@ namespace WanderingCloud.Controller
             }
         }
 
-        public void BeginAim()
+        /// <summary>
+        /// Called in unityEvent
+        /// </summary>
+        public void OnLeaveGround()
         {
-            isAiming = true;
-
-            if (player.CinemachineBase.m_BindingMode == CinemachineTransposer.BindingMode.SimpleFollowWithWorldUp)
-            {
-                SwitchToWorldBinding();
-            }
-
-            player.CinemachineAim.m_YAxis = player.CinemachineBase.m_YAxis;
-            player.CinemachineAim.m_XAxis = player.CinemachineBase.m_XAxis;
-
-            //Aim VCam takes priority
-            player.CinemachineAim.Priority = player.CinemachineBase.Priority + 1;
+            canFollow = false;
         }
 
-        public void EndAim()
-        {
-            if (player.CinemachineBase.m_BindingMode == CinemachineTransposer.BindingMode.SimpleFollowWithWorldUp)
-            {
-                timeSinceInactivity = 0f;
-                SwitchToWorldBinding();
-            }
-
-            player.CinemachineBase.m_YAxis = player.CinemachineAim.m_YAxis;
-            player.CinemachineBase.m_XAxis = player.CinemachineAim.m_XAxis;
-
-            //Aim VCam takes priority
-            player.CinemachineAim.Priority = player.CinemachineBase.Priority - 1;
-
-            isAiming = false;
-        }
 
         #region Transposer binding switch
         

@@ -19,6 +19,7 @@ namespace WanderingCloud.Controller
         [field: SerializeField, Foldout("Components"), Required()] public PlayerAim Aim { get; private set; }
 
         [field: SerializeField, Foldout("Components"), ReadOnly()] public Vector3 moveInput { get; private set; }
+        [field: SerializeField, Foldout("Components"), ReadOnly()] public Vector3 throwInput{ get; private set; }
 
         public override void PlayerConnect(int playerIndex)
         {
@@ -38,6 +39,7 @@ namespace WanderingCloud.Controller
         public override void WestButtonInput() => Movement.Dash();
         public override void LeftTriggerInput() => Aim.BeginAim();
         public override void LeftTriggerInputReleased() => Aim.EndAim();
+        public override void RightTriggerInput() => Aim.Throw();
 
     }
 }
