@@ -25,6 +25,8 @@ namespace WanderingCloud.Controller
         [Foldout("Run"),SerializeField] private float airSpeed = 10f;
         [Foldout("Run"),SerializeField] private float walkSpeed = 20f;
         [Foldout("Run"),SerializeField] private float runSpeed = 40f;
+        [Foldout("Run"),SerializeField] private float maxSlopeAngle = 45f;
+        [Foldout("Run"),SerializeField] private float snapGroundDist = 0.15f;
         #endregion
 
         #region Jump Parameter
@@ -39,9 +41,11 @@ namespace WanderingCloud.Controller
         #region Dash Parameter
         [Foldout("Dash"), SerializeField, Range(0f, 5f)]  private float dashDistance = 5f;
         [Foldout("Dash"), SerializeField, Range(0f, 1f)] private float dashDuration = 0.5f;
-        [Foldout("Dash")] private Coroutine dash = null;
+        [Foldout("Dash"), SerializeField, Range(0f, 1f)] private float dashCD = 0.3f;
+        [Foldout("Dash"), SerializeField] private bool canDash = true;
         [Foldout("Dash")] public UnityEvent onDash;
-        public bool isDashing => dash is not null;
+        [Foldout("Dash")] private Coroutine dash = null;
+        public bool isDashing => moveState == MovementState.Dash;
         #endregion
 
         #region Dash Parameter
@@ -54,6 +58,7 @@ namespace WanderingCloud.Controller
         private void Awake()
         {
             player = GetComponent<PlayerBrain>();
+            state.onLanding.AddListener(() => canDash = true);
         }
 
         private void Update()
@@ -63,7 +68,15 @@ namespace WanderingCloud.Controller
             Vector3 right = Vector3.ProjectOnPlane(player.Camera.transform.right, Vector3.up).normalized;
             movementXZ = player.moveInput.y * forward + player.moveInput.x * right;
             movementStrenght = movementXZ.magnitude;
-            movementSurface = Vector3.ProjectOnPlane(movementXZ, state.slopeNormal).normalized;
+
+            if (state.slopeAngle > maxSlopeAngle ||  float.IsNaN(state.slopeAngle))
+            {
+                movementSurface = movementXZ;
+            }
+            else
+            {
+                movementSurface = Vector3.ProjectOnPlane(movementXZ, state.slopeNormal).normalized;
+            }
             
             state.RefreshState();
             SnapToGround();
@@ -187,22 +200,23 @@ namespace WanderingCloud.Controller
             var feetPos = player.Avatar.position - player.Avatar.up * ((player.Collider.height - player.Collider.radius)/ 2);
             RaycastHit hit;
             Ray groundRay = new Ray(feetPos, -player.Avatar.up);
-            if (Physics.Raycast(groundRay, out hit, player.Collider.radius + 0.25f))
+            if (Physics.Raycast(groundRay, out hit, player.Collider.radius + snapGroundDist))
             {
                 if(hit.distance > player.Collider.radius)
                 transform.position += (hit.distance-player.Collider.radius) * -player.Avatar.up;
             }
-            Debug.DrawRay(groundRay.origin,groundRay.direction.normalized * .25f,Color.cyan);
+            Debug.DrawRay(groundRay.origin,groundRay.direction.normalized * snapGroundDist,Color.cyan);
         }
         public void Dash()
         {
             //Can dash Mid Air
-            if (isDashing) return;
+            if (dash is not null  || !canDash) return;
             dash = StartCoroutine(Dashing());
             onDash?.Invoke();        
         }
         private IEnumerator Dashing()
         {
+            canDash = false;
             var vel = player.Body.velocity;
             var previousState = moveState;
             moveState = MovementState.Dash;
@@ -225,7 +239,16 @@ namespace WanderingCloud.Controller
                 time -= Time.deltaTime;
             }
             player.Body.velocity = vel;
-            moveState = Vector3.Dot(dashDirection, movementXZ.normalized) > 0?MovementState.Rush: previousState;
+            if (state.isGrounded)
+            {
+                moveState = Vector3.Dot(dashDirection, movementXZ.normalized) > 0?MovementState.Rush: previousState;
+                yield return new WaitForSecondsRealtime(dashCD);
+                canDash = true;
+            }
+            else
+            {
+                moveState = previousState;
+            }
             dash = null;
         }
     }
@@ -235,12 +258,27 @@ namespace WanderingCloud.Controller
     {
         [SerializeField] private PlayerBrain player;
 
-        [field: SerializeField, ReadOnly] public bool isGrounded { get; private set; }
+        [field: SerializeField, ReadOnly]
+        public bool isGrounded
+        {
+            get => grounded;
+            private set
+            {
+                if (grounded != value && value)
+                {
+                    onLanding?.Invoke();
+                }
+                grounded = value;
+            }
+        }
+
+        [SerializeField, ReadOnly]private bool grounded;
         [field: SerializeField, ReadOnly] public bool isNearEdge { get; private set; }
         [field: SerializeField, ReadOnly] public float slopeAngle { get; private set; }
         [field: SerializeField, ReadOnly] public Vector3 slopeVector { get; private set; }
         [field: SerializeField, ReadOnly] public Vector3 slopeNormal { get; private set; }
-        
+        public UnityEvent onLanding;
+
         public void RefreshState()
         {
             Transform avatar = player.Avatar;
