@@ -43,9 +43,13 @@ namespace WanderingCloud.Gameplay
             if (aiGrabed != null)
             {
                 aiGrabed.transform.position = grabSocketPosition.position;
+                
             }
 
         }
 
     }
+
+    
+
 }
