@@ -10,7 +10,7 @@ namespace WanderingCloud.Gameplay
     {
         public NavMeshAgent agent;
         [SerializeField] public float currentPullet = 0;
-        [SerializeField] public float maxPullet  = 5;
+        [SerializeField] public float maxPullet = 5;
         [SerializeField] private AnimationCurve speedForPulletNumber;
         [SerializeField] private AnimationCurve sizeForPulletNumber;
         public float currentSpeed {
@@ -56,6 +56,7 @@ namespace WanderingCloud.Gameplay
         void Update()
         {
             agent.speed = currentSpeed;
+            agent.acceleration = (currentSpeed * currentSpeed)/2;
             transform.localScale = new Vector3(currentSize, currentSize, currentSize);
             agent.radius = currentSize;
             agent.height = currentSize + 0.5f;
