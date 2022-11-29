@@ -8235,7 +8235,7 @@ MonoBehaviour:
   _assetName: Tissus_1_9
   _assetOpName: y.sahab::dev::Sop/Tissus::1.0
   _assetHelp: 
-  _assetID: 290
+  _assetID: -1
   _assetPath: Assets/WanderingCloud/GameArt/HDA/sop_y.sahab.dev.Tissus.1.0.hdanc
   _loadAssetFromMemory: 0
   _alwaysOverwriteOnLoad: 0
@@ -8588,6 +8588,73 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90f82c5b72c796448acbefdad06b7c34, type: 3}
+--- !u!1 &1983508020 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 901504090868423497, guid: 90f82c5b72c796448acbefdad06b7c34,
+    type: 3}
+  m_PrefabInstance: {fileID: 1983508019}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1983508021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1983508020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20f5d79b1ecca8d4c86005890dc9e373, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Xcurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  XAxisMovementMax: 0
+  Ycurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.16134773
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.28193617
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  YAxisMovementMax: 0.2
+  Zcurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  ZAxisMovementMax: 0
+  loopTime: 5
 --- !u!1001 &1991794486
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9536,26 +9603,6 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: cd6e33056e9b4c44b8590b3110ec8d1e, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 939743315ea9ae84088d665ddf082ca5, type: 3}
---- !u!1 &201593814133018576 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1012568090079286086, guid: 939743315ea9ae84088d665ddf082ca5,
-    type: 3}
-  m_PrefabInstance: {fileID: 201593814133018575}
-  m_PrefabAsset: {fileID: 0}
---- !u!64 &201593814133018577
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 201593814133018576}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4604398572266617690, guid: 7211c9985580b514abbad6043dd953fe, type: 3}
 --- !u!4 &543450652927447931 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1273519099011097236, guid: 7b692083db9078a4ea0514da5b625af6,

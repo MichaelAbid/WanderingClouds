@@ -1,9 +1,10 @@
-using NaughtyAttributes;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
+using System.Collections;
+using System;
+using NaughtyAttributes;
 using UnityEngine;
+using UnityEditor;
+using WanderingCloud.Controller;
 
 [Serializable]
 public class PawnTimer
@@ -82,6 +83,7 @@ public class CheckPoint : MonoBehaviour
             previousCheckpoint.StopChrono();
         }
     }
+#if UNITY_EDITOR
     [Button]
     public void CreateNewcheckPoint()
     {
@@ -92,8 +94,12 @@ public class CheckPoint : MonoBehaviour
         }
         nextCheckpoint = tempnextCheckpoint;
         nextCheckpoint.previousCheckpoint = this;
+
         Selection.activeGameObject = nextCheckpoint.gameObject;
+
     }
+#endif
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         if (isStartingPoint)
@@ -134,6 +140,7 @@ public class CheckPoint : MonoBehaviour
 
 
     }
+#endif
     private void OnTriggerEnter(Collider other)
     {
         Pawn pawn = other.gameObject.GetComponentInParent<Pawn>();
