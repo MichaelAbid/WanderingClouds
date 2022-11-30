@@ -23,7 +23,6 @@ namespace WanderingCloud.Gameplay.AI
         [Foldout("State")][SerializeField] public AI_STATE currentState;
         [Foldout("State")][SerializeField] public bool isAiActive = true;
         [Foldout("State")][SerializeField] public bool isGrabbable = true;
-        [Foldout("HideOut")][SerializeField] protected List<HideOut> hideOuts = new List<HideOut>();
 
 
         private void Start()
@@ -35,7 +34,6 @@ namespace WanderingCloud.Gameplay.AI
         virtual protected void GetAllRef()
         {
             playerList = FindObjectsOfType<Player>().ToList();
-            hideOuts = FindObjectsOfType<HideOut>().ToList();
         }
 
         private void Update()
@@ -131,6 +129,15 @@ namespace WanderingCloud.Gameplay.AI
 
         }
 
+
+        protected Vector3 GetRandomPositionOnNavMesh(float radius)
+        {
+            Vector3 randomDirection = Random.insideUnitSphere * radius;
+            randomDirection += transform.position;
+            NavMeshHit hit;
+            NavMesh.SamplePosition(randomDirection, out hit, radius, 1);
+            return hit.position;
+        }
 
     }
 }
