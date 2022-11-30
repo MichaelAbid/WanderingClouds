@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using WanderingCloud.Controller;
 
 public class Killzone : MonoBehaviour
 {
@@ -8,7 +9,8 @@ public class Killzone : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Player")
+        Debug.Log(collision);
+        if (collision.transform.parent.TryGetComponent<PlayerBrain>(out PlayerBrain player))
             collision.transform.parent.position = resetTransform.position;
     }
 }
