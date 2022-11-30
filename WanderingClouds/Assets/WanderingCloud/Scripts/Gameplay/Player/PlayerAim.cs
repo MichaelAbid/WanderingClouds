@@ -3,6 +3,12 @@ using NaughtyAttributes;
 using Cinemachine;
 using DG.Tweening;
 using System.Collections;
+using System.Linq;
+using WanderingCloud.Gameplay;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace WanderingCloud.Controller
 {
@@ -14,6 +20,10 @@ namespace WanderingCloud.Controller
         [field: SerializeField, Foldout("Data")] private float followMaxSpeed;
         [field: SerializeField, Foldout("Data"), MinMaxSlider(float.Epsilon, 1)] private Vector2 FollowYThreshold;
         [field: SerializeField, Foldout("Data"), MinMaxSlider(float.Epsilon, 100)] private Vector2 FollowZThreshold;
+
+        [Header("Aim Assist")]
+        [field: SerializeField, Foldout("Data")] private float maxTargetDistance;
+        [field: SerializeField, Foldout("Data")] private float aimAssistRadius;
 
         [field: SerializeField, Foldout("States")] private bool isAiming;
         [field: SerializeField, Foldout("States")] private float timeSinceInactivity;
@@ -27,6 +37,9 @@ namespace WanderingCloud.Controller
         private Vector3 velocity = Vector3.zero;
         private bool canFollow = true;
 
+        private Transform assistTarget;
+        private Vector3 defaultTargetPosition;
+
         Coroutine blackMagicScript;
 
         private void Update()
@@ -35,10 +48,25 @@ namespace WanderingCloud.Controller
 
             if (timeSinceInactivity >= waitTimeFollow && player.CinemachineBase.m_BindingMode == CinemachineTransposer.BindingMode.WorldSpace && !isAiming)
             {
-                if(blackMagicScript is not null) StopCoroutine(blackMagicScript);
+                if (blackMagicScript is not null) StopCoroutine(blackMagicScript);
                 blackMagicScript = StartCoroutine(SwitchToSimpleFollow());
             }
 
+        }
+        private void FixedUpdate()
+        {
+            if (!isAiming) return;
+            assistTarget = CheckForAssistTarget();
+            
+            if(assistTarget is null)
+            {
+                RaycastHit hit;
+
+                if (Physics.Raycast(player.Camera.transform.position, player.Camera.transform.forward, out hit, maxTargetDistance))
+                    defaultTargetPosition = hit.point;
+                else
+                    defaultTargetPosition = player.Camera.transform.position + player.Camera.transform.forward * maxTargetDistance;
+            }
         }
 
         /// <summary>
@@ -48,7 +76,11 @@ namespace WanderingCloud.Controller
         {
             Vector3 characterViewPos = player.Camera.WorldToViewportPoint(anchor.position + player.Body.velocity * Time.deltaTime);
 
-            if (player.Movement.state.isGrounded && player.Movement.moveState != MovementState.Jump)
+            if (isAiming)
+            {
+                canFollow = true;
+            }
+            else if (player.Movement.state.isGrounded && player.Movement.moveState != MovementState.Jump)
             {
                 canFollow = true;
             }
@@ -69,6 +101,7 @@ namespace WanderingCloud.Controller
             followTarget.position = Vector3.SmoothDamp(followTarget.position, desiredPosition, ref velocity, desiredSmoothTime, followMaxSpeed);
             followTarget.eulerAngles = anchor.eulerAngles;
         }
+
 
         public void BeginAim()
         {
@@ -104,11 +137,42 @@ namespace WanderingCloud.Controller
 
         public void Throw()
         {
-            if (isAiming)
-            {
-                Debug.Log("OUI");
-            }
+            if (!isAiming) return;
+            if (assistTarget is null)
+                Debug.DrawLine(player.transform.position, defaultTargetPosition, Color.blue, 3f);
+            else
+                Debug.DrawLine(player.transform.position, assistTarget.position, Color.red, 3f);
         }
+
+        private Transform CheckForAssistTarget()
+        {
+            var p1 = player.Camera.transform.position;
+            var p2 = player.Camera.transform.position + player.Camera.transform.forward * maxTargetDistance;
+
+            var hits = Physics.CapsuleCastAll(p1, p2, aimAssistRadius, player.Camera.transform.forward, maxTargetDistance);
+
+            if (hits.Length <= 0) return null;
+
+            //Keep only the targetable objects
+            var assistTargets = hits.Where(x => x.collider.GetComponent<Target>()).Select(x => x.collider).ToArray();
+            //Order them by the distance from the center of the screen
+            assistTargets = assistTargets.OrderBy(x => Vector2.Distance(player.Camera.WorldToViewportPoint(x.transform.position), Vector2.zero)).ToArray();
+
+            //For each object on the list, check occlusion
+            for (int i = 0; i < assistTargets.Length; i++)
+            {
+                Debug.DrawLine(player.transform.position, assistTargets[i].transform.position, Color.green);
+
+                RaycastHit hit;
+                if (Physics.Linecast(player.transform.position, assistTargets[i].transform.position, out hit))
+                {
+                    if (hit.collider == assistTargets[i]) return assistTargets[i].transform;
+                    
+                }
+            }
+            return null;
+        }
+
 
         private void CheckForActivity()
         {
@@ -124,12 +188,12 @@ namespace WanderingCloud.Controller
                         SwitchToWorldBinding();
                     }
                 }
-                   
+
                 else
                 {
                     isActive = false;
                     timeSinceInactivity += Time.deltaTime;
-                }     
+                }
             }
         }
 
@@ -143,7 +207,7 @@ namespace WanderingCloud.Controller
 
 
         #region Transposer binding switch
-        
+
         void SwitchToWorldBinding()
         {
             Vector3 offset = player.CinemachineBase.State.RawPosition - player.CinemachineBase.Follow.position;
@@ -171,6 +235,20 @@ namespace WanderingCloud.Controller
 
             blackMagicScript = null;
         }
+
         #endregion
+
+#if UNITY_EDITOR
+        private void OnDrawGizmosSelected()
+        {
+            using (new Handles.DrawingScope(Color.yellow))
+            {
+                var p1 = player.Camera.transform.position;
+                var p2 = player.Camera.transform.position + player.Camera.transform.forward * maxTargetDistance;
+                Extension_Handles.DrawWireCapsule(p1, p2, aimAssistRadius);
+            }
+        }
+
+#endif
     }
 }
