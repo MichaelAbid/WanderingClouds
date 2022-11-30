@@ -1,6 +1,7 @@
 using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
@@ -24,6 +25,7 @@ namespace WanderingCloud.Gameplay.AI
         [Foldout("Hide")][SerializeField] private float hideOutMinDist = 10;
         [Foldout("Hide")][SerializeField] private float hideOutMedDist = 40;
         [Foldout("Hide")][SerializeField] private float hideOutMaxDist = 50;
+        [Foldout("HideOut")][SerializeField] protected List<HideOut> hideOuts = new List<HideOut>();
 
         [Foldout("Debug")] public bool debugHideOut = false;
         [Foldout("Debug")] public bool debugHideOutPlayers = false;
@@ -39,10 +41,17 @@ namespace WanderingCloud.Gameplay.AI
             if (idleTimer >= idleTime)
             {
                 idleTimer = 0;
-                WanderingTarget = GetRandomPositionOnNavMesh();
+                WanderingTarget = GetRandomPositionOnNavMesh(WanderingRadius);
                 return AI_STATE.AI_WANDERING;
             }
             return base.ChangeFromIdle();
+        }
+
+        protected override void GetAllRef()
+        {
+            base.GetAllRef();
+            hideOuts = FindObjectsOfType<HideOut>().ToList();
+
         }
 
         protected override AI_STATE ChangeFromWandering()
@@ -107,21 +116,14 @@ namespace WanderingCloud.Gameplay.AI
             
             if (Vector3.Distance(WanderingTarget, transform.position) <= 0.5)
             {
-                WanderingTarget = GetRandomPositionOnNavMesh();
+                WanderingTarget = GetRandomPositionOnNavMesh(WanderingRadius);
             }
             agent.SetDestination(WanderingTarget);
 
             base.WanderingBehavior();
         }
 
-        protected Vector3 GetRandomPositionOnNavMesh()
-        {
-            Vector3 randomDirection = Random.insideUnitSphere * WanderingRadius;
-            randomDirection += transform.position;
-            NavMeshHit hit;
-            NavMesh.SamplePosition(randomDirection, out hit, WanderingRadius, 1);
-            return hit.position;
-        }
+        
 
         protected override void HideBehavior()
         {
