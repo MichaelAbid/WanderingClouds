@@ -10,7 +10,7 @@ namespace WanderingCloud.Gameplay
     public class AiGraber : MonoBehaviour
     {
 
-        public Player playerRef;
+        public PlayerBrain playerRef;
 
         public AI_Base aiGrabed;
         public Transform grabSocketPosition;
@@ -28,6 +28,7 @@ namespace WanderingCloud.Gameplay
             target.isAiActive = false;
             target.isGrabbable = false;
             target.agent.enabled = false;
+            target.rigidBody.useGravity = false;
             return true;
         }
         public void UnGrab()
@@ -35,6 +36,8 @@ namespace WanderingCloud.Gameplay
             aiGrabed.isAiActive = true;
             aiGrabed.isGrabbable = true;
             aiGrabed.agent.enabled = true;
+            aiGrabed.rigidBody.useGravity = true;
+            aiGrabed.agent.Warp(aiGrabed.GetRandomPositionOnNavMesh(0));
         }
 
         private void Update()

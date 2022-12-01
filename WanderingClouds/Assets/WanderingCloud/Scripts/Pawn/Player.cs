@@ -7,6 +7,7 @@ using System.Collections;
 using UnityEngine;
 using Cinemachine;
 using NaughtyAttributes;
+using WanderingCloud.Gameplay.AI;
 
 namespace WanderingCloud.Controller
 {
@@ -58,7 +59,7 @@ namespace WanderingCloud.Controller
         
         #region GrabObject
         [SerializeField] private Transform grabSocket;
-        [SerializeField] private GrabableObject grabObject;
+        [SerializeField] private AI_Base grabObject;
         #endregion
 
         #region UnityMethods
@@ -290,10 +291,14 @@ namespace WanderingCloud.Controller
             }
             else
             {
-                bool grabsucess = Grab();
-                if (!grabsucess)
+                bool grabIAsucess = GrabIA();
+                if (!grabIAsucess)
                 {
-                    bool explodesucess = ExplodeSource();
+                    bool grabPulletsucess = Grab();
+                    if (!grabPulletsucess)
+                    {
+                        bool explodesucess = ExplodeSource();
+                    }
                 }
             }
         }
@@ -311,6 +316,20 @@ namespace WanderingCloud.Controller
             return cloudGrabber.GrabNearestPullet();
         }
 
+        public bool GrabIA()
+        {
+            var nearObject = Physics.OverlapSphere(Avatar.position, 1f);
+            if (nearObject.Length == 0) return false;
+            var nearTarget = nearObject.
+                Where(x => x.GetComponent<AI_Base>() && x.GetComponent<AI_Base>().isGrabbable).
+                Select(x => x.GetComponent<AI_Base>()).ToArray();
+            if (nearTarget.Length == 0) return false;
+            var target = nearTarget.OrderBy(x => Vector3.Distance(x.transform.position, Avatar.position)).First();
+            grabObject = target;
+            target.isAiActive = false;
+            target.agent.enabled = false;
+            return true;
+        }
 
         public bool ExplodeSource()
         {

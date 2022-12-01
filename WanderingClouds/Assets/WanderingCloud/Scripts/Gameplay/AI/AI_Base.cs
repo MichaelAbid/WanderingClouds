@@ -20,6 +20,8 @@ namespace WanderingCloud.Gameplay.AI
     {
         [Foldout("Players")][SerializeField] protected List<Player> playerList = new List<Player>();
         [Foldout("Ref")][SerializeField] public NavMeshAgent agent;
+        [Foldout("Ref")][SerializeField] public Rigidbody rigidBody;
+         
         [Foldout("State")][SerializeField] public AI_STATE currentState;
         [Foldout("State")][SerializeField] public bool isAiActive = true;
         [Foldout("State")][SerializeField] public bool isGrabbable = true;
@@ -130,7 +132,7 @@ namespace WanderingCloud.Gameplay.AI
         }
 
 
-        protected Vector3 GetRandomPositionOnNavMesh(float radius)
+        public Vector3 GetRandomPositionOnNavMesh(float radius)
         {
             Vector3 randomDirection = Random.insideUnitSphere * radius;
             randomDirection += transform.position;
