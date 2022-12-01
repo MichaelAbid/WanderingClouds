@@ -13,6 +13,7 @@ namespace WanderingCloud.Controller
         Rush = 2,
         Dash = 3,
         Jump = 4,
+        Fall = 5,
     }
 
     public class PlayerMovement : MonoBehaviour
@@ -59,7 +60,9 @@ namespace WanderingCloud.Controller
         private void Awake()
         {
             player = GetComponent<PlayerBrain>();
+            state.onLanding.AddListener(() => Debug.Log("Land"));
             state.onLanding.AddListener(() => canDash = true);
+            state.onLanding.AddListener(() => { if (moveState is MovementState.Fall or MovementState.Jump) moveState = MovementState.Idle; });
         }
 
         private void Update()
@@ -70,13 +73,13 @@ namespace WanderingCloud.Controller
             movementXZ = player.moveInput.y * forward + player.moveInput.x * right;
             movementStrenght = movementXZ.magnitude;
 
+                movementSurface = movementXZ;
             if (state.slopeAngle > maxSlopeAngle ||  float.IsNaN(state.slopeAngle))
             {
-                movementSurface = movementXZ;
             }
             else
             {
-                movementSurface = Vector3.ProjectOnPlane(movementXZ, state.slopeNormal).normalized;
+                //movementSurface = Vector3.ProjectOnPlane(movementXZ, state.slopeNormal).normalized;
             }
             
             state.RefreshState();
@@ -186,6 +189,10 @@ namespace WanderingCloud.Controller
                 //Apply Gravity Scale
                 float fallValue = fallFactor - 1.0f;
                 player.Body.AddForce(Physics.gravity * fallValue, ForceMode.Acceleration);
+                if(moveState is MovementState.Jump)
+                {
+                    moveState = MovementState.Fall;
+                }
             }
             
             if (player.Body.velocity.y < -Mathf.Abs(fallSpeedMax))
@@ -206,12 +213,19 @@ namespace WanderingCloud.Controller
                 if(hit.distance > player.Collider.radius)
                 transform.position += (hit.distance-player.Collider.radius) * -player.Avatar.up;
             }
-            Debug.DrawRay(groundRay.origin,groundRay.direction.normalized * snapGroundDist,Color.cyan);
+            Debug.DrawRay(groundRay.origin, groundRay.direction * hit.distance, Color.green);
+            Debug.DrawRay(groundRay.origin + groundRay.direction * hit.distance, groundRay.direction * (player.Collider.radius + snapGroundDist - hit.distance), Color.red);
+
         }
         public void Dash()
         {
             //Can dash Mid Air
             if (dash is not null  || !canDash) return;
+            if (isJumping)
+            {
+                StopCoroutine(jump);
+                jump = null;
+            }
             dash = StartCoroutine(Dashing());
             onDash?.Invoke();        
         }
@@ -222,7 +236,8 @@ namespace WanderingCloud.Controller
             var previousState = moveState;
             moveState = MovementState.Dash;
             var dashDirection = player.Avatar.forward;
-            var aimRot = Quaternion.LookRotation(dashDirection, Vector3.up);
+            var aimRot = Quaternion.LookRotation(dashDirection, Vector3.up);
+
             if (player.moveInput.magnitude > float.Epsilon)
             {
                 dashDirection = movementSurface.normalized;
@@ -247,13 +262,19 @@ namespace WanderingCloud.Controller
             player.Body.velocity = vel;
             if (state.isGrounded)
             {
-                moveState = Vector3.Dot(dashDirection, movementXZ.normalized) > 0?MovementState.Rush: previousState;
+                //moveState = Vector3.Dot(dashDirection, movementXZ.normalized) > 0 ? MovementState.Rush : previousState;
+                moveState = MovementState.Rush;
                 yield return new WaitForSecondsRealtime(dashCD);
                 canDash = true;
             }
             else
             {
-                moveState = previousState;
+                moveState = MovementState.Idle;
+                while (!state.isGrounded)
+                {
+                    yield return new WaitForEndOfFrame();
+                }
+                canDash = true;
             }
             dash = null;
         }
@@ -283,6 +304,7 @@ namespace WanderingCloud.Controller
         [field: SerializeField, ReadOnly] public float slopeAngle { get; private set; }
         [field: SerializeField, ReadOnly] public Vector3 slopeVector { get; private set; }
         [field: SerializeField, ReadOnly] public Vector3 slopeNormal { get; private set; }
+        [SerializeField] public float groundCheckDistance = .5f;
         public UnityEvent onLanding;
 
         public void RefreshState()
@@ -297,8 +319,9 @@ namespace WanderingCloud.Controller
 
             RaycastHit underHit;
             Ray underRay = new Ray(feetPos, Vector3.down);
-            isGrounded = Physics.Raycast(underRay, out underHit, 0.5f);
-            Debug.DrawRay(underRay.origin, underRay.direction * 0.5f, isGrounded ? Color.green : Color.red);
+            isGrounded = Physics.Raycast(underRay, out underHit, groundCheckDistance);
+            //Debug.DrawRay(underRay.origin, underRay.direction * underHit.distance, Color.green);
+            //Debug.DrawRay(underRay.origin + underRay.direction * underHit.distance, underRay.direction *(groundCheckDistance - underHit.distance),Color.red);
 
             if (!isGrounded) return;
             //Calcul Slope

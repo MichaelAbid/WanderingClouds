@@ -3,17 +3,31 @@ using NaughtyAttributes;
 using Cinemachine;
 using DG.Tweening;
 using System.Collections;
+using System.Linq;
+using WanderingCloud.Gameplay;
+using UnityEngine.UI;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace WanderingCloud.Controller
 {
     public class PlayerAim : MonoBehaviour
     {
+
+        #region Variables
         [Header("Follow Cam")]
         [field: SerializeField, Foldout("Data")] private float waitTimeFollow;
         [field: SerializeField, Foldout("Data")] private float desiredSmoothTime;
         [field: SerializeField, Foldout("Data")] private float followMaxSpeed;
         [field: SerializeField, Foldout("Data"), MinMaxSlider(float.Epsilon, 1)] private Vector2 FollowYThreshold;
         [field: SerializeField, Foldout("Data"), MinMaxSlider(float.Epsilon, 100)] private Vector2 FollowZThreshold;
+
+        [Header("Aim Assist")]
+        [field: SerializeField, Foldout("Data")] private float maxTargetDistance;
+        [field: SerializeField, Foldout("Data")] private float aimAssistRadius;
+        [field: SerializeField, Foldout("Data")] private Color detectionColor;
 
         [field: SerializeField, Foldout("States")] private bool isAiming;
         [field: SerializeField, Foldout("States")] private float timeSinceInactivity;
@@ -22,12 +36,19 @@ namespace WanderingCloud.Controller
         [field: SerializeField, Foldout("References")] public PlayerBrain player;
         [field: SerializeField, Foldout("References")] private Transform followTarget;
         [field: SerializeField, Foldout("References")] private Transform anchor;
+        [field: SerializeField, Foldout("References")] private Image crosshair;
+        [field: SerializeField, Foldout("References")] private GameObject ProjectilePrefab;
+        [field: SerializeField, Foldout("References")] private Transform throwSocket;
 
         private float ghostPositionY;
         private Vector3 velocity = Vector3.zero;
         private bool canFollow = true;
 
+        private Transform assistTarget;
+        private Vector3 defaultTargetPosition;
+
         Coroutine blackMagicScript;
+        #endregion
 
         private void Update()
         {
@@ -35,10 +56,35 @@ namespace WanderingCloud.Controller
 
             if (timeSinceInactivity >= waitTimeFollow && player.CinemachineBase.m_BindingMode == CinemachineTransposer.BindingMode.WorldSpace && !isAiming)
             {
-                if(blackMagicScript is not null) StopCoroutine(blackMagicScript);
+                if (blackMagicScript is not null) StopCoroutine(blackMagicScript);
                 blackMagicScript = StartCoroutine(SwitchToSimpleFollow());
             }
 
+        }
+        private void FixedUpdate()
+        {
+            if (!isAiming) return;
+            assistTarget = CheckForAssistTarget();
+            
+            if(assistTarget is null)
+            {
+                RaycastHit hit;
+
+                if (Physics.Raycast(player.Camera.transform.position, player.Camera.transform.forward, out hit, maxTargetDistance))
+                    defaultTargetPosition = hit.point;
+                else
+                    defaultTargetPosition = player.Camera.transform.position + player.Camera.transform.forward * maxTargetDistance;
+
+                crosshair.transform.localPosition = Vector3.zero;
+                crosshair.color = Color.white;
+            }
+            else
+            {
+                Vector3 targetViewportPos = player.Camera.WorldToViewportPoint(assistTarget.position);
+
+                crosshair.transform.localPosition = new Vector3((targetViewportPos.x - 0.5f) * 960, (targetViewportPos.y - 0.5f) * 1080, 0f);
+                crosshair.color = detectionColor;
+            }
         }
 
         /// <summary>
@@ -48,7 +94,11 @@ namespace WanderingCloud.Controller
         {
             Vector3 characterViewPos = player.Camera.WorldToViewportPoint(anchor.position + player.Body.velocity * Time.deltaTime);
 
-            if (player.Movement.state.isGrounded && player.Movement.moveState != MovementState.Jump)
+            if (isAiming)
+            {
+                canFollow = true;
+            }
+            else if (player.Movement.state.isGrounded && player.Movement.moveState != MovementState.Jump)
             {
                 canFollow = true;
             }
@@ -70,9 +120,89 @@ namespace WanderingCloud.Controller
             followTarget.eulerAngles = anchor.eulerAngles;
         }
 
-        public void OnLeaveGround()
+        private void Initialize()
         {
-            canFollow = false;
+        }
+
+        public void BeginAim()
+        {
+            isAiming = true;
+
+            crosshair.enabled = true;
+
+            if (player.CinemachineBase.m_BindingMode == CinemachineTransposer.BindingMode.SimpleFollowWithWorldUp)
+            {
+                SwitchToWorldBinding();
+            }
+
+            player.CinemachineAim.m_YAxis = player.CinemachineBase.m_YAxis;
+            player.CinemachineAim.m_XAxis = player.CinemachineBase.m_XAxis;
+
+            //Aim VCam takes priority
+            player.CinemachineAim.Priority = player.CinemachineBase.Priority + 1;
+        }
+        public void EndAim()
+        {
+            if (player.CinemachineBase.m_BindingMode == CinemachineTransposer.BindingMode.SimpleFollowWithWorldUp)
+            {
+                timeSinceInactivity = 0f;
+                SwitchToWorldBinding();
+            }
+
+            player.CinemachineBase.m_YAxis = player.CinemachineAim.m_YAxis;
+            player.CinemachineBase.m_XAxis = player.CinemachineAim.m_XAxis;
+
+            //Aim VCam takes priority
+            player.CinemachineAim.Priority = player.CinemachineBase.Priority - 1;
+
+            crosshair.enabled = false;
+
+            isAiming = false;
+        }
+
+        public void Throw()
+        {
+            if (!isAiming) return;
+
+            var projectile = Instantiate(ProjectilePrefab, throwSocket.transform.position, Quaternion.identity);
+
+            if (assistTarget is null)
+                projectile.GetComponent<Projectile>().targetPosition = defaultTargetPosition;
+            else
+                projectile.GetComponent<Projectile>().targetPosition = assistTarget.position;
+
+            projectile.GetComponent<Projectile>().CanMove = true;
+        }
+
+        private Transform CheckForAssistTarget()
+        {
+            var p1 = player.Camera.transform.position;
+            var p2 = player.Camera.transform.position + player.Camera.transform.forward * maxTargetDistance;
+
+            var hits = Physics.CapsuleCastAll(p1, p2, aimAssistRadius, player.Camera.transform.forward, maxTargetDistance);
+
+            if (hits.Length <= 0) return null;
+
+            //Keep only the targetable objects
+            var assistTargets = hits.Where(x => x.collider.GetComponent<Target>()).Select(x => x.collider).ToArray();
+            //Order them by the distance from the center of the screen
+            assistTargets = assistTargets.OrderBy(x =>  Vector2.Distance(player.Camera.WorldToViewportPoint(x.transform.position), Vector2.one * 0.5f)).ToArray();
+
+            //For each object on the list, check occlusion
+            for (int i = 0; i < assistTargets.Length; i++)
+            {
+                //Debug.DrawLine(player.transform.position, assistTargets[i].transform.position, Color.Lerp(Color.red, Color.green, Vector2.Distance(player.Camera.WorldToViewportPoint(assistTargets[i].transform.position), Vector2.one / 2f) * 5));
+            }
+            for (int i = 0; i < assistTargets.Length; i++)
+            {
+                RaycastHit hit;
+                if (Physics.Linecast(player.transform.position, assistTargets[i].transform.position, out hit))
+                {
+                    if (hit.collider == assistTargets[i]) return assistTargets[i].transform;
+                    
+                }
+            }
+            return null;
         }
 
         private void CheckForActivity()
@@ -89,50 +219,26 @@ namespace WanderingCloud.Controller
                         SwitchToWorldBinding();
                     }
                 }
-                   
+
                 else
                 {
                     isActive = false;
                     timeSinceInactivity += Time.deltaTime;
-                }     
+                }
             }
         }
 
-        public void BeginAim()
+        /// <summary>
+        /// Called in unityEvent
+        /// </summary>
+        public void OnLeaveGround()
         {
-            isAiming = true;
-
-            if (player.CinemachineBase.m_BindingMode == CinemachineTransposer.BindingMode.SimpleFollowWithWorldUp)
-            {
-                SwitchToWorldBinding();
-            }
-
-            player.CinemachineAim.m_YAxis = player.CinemachineBase.m_YAxis;
-            player.CinemachineAim.m_XAxis = player.CinemachineBase.m_XAxis;
-
-            //Aim VCam takes priority
-            player.CinemachineAim.Priority = player.CinemachineBase.Priority + 1;
+            canFollow = false;
         }
 
-        public void EndAim()
-        {
-            if (player.CinemachineBase.m_BindingMode == CinemachineTransposer.BindingMode.SimpleFollowWithWorldUp)
-            {
-                timeSinceInactivity = 0f;
-                SwitchToWorldBinding();
-            }
-
-            player.CinemachineBase.m_YAxis = player.CinemachineAim.m_YAxis;
-            player.CinemachineBase.m_XAxis = player.CinemachineAim.m_XAxis;
-
-            //Aim VCam takes priority
-            player.CinemachineAim.Priority = player.CinemachineBase.Priority - 1;
-
-            isAiming = false;
-        }
 
         #region Transposer binding switch
-        
+
         void SwitchToWorldBinding()
         {
             Vector3 offset = player.CinemachineBase.State.RawPosition - player.CinemachineBase.Follow.position;
@@ -160,6 +266,20 @@ namespace WanderingCloud.Controller
 
             blackMagicScript = null;
         }
+
         #endregion
+
+#if UNITY_EDITOR
+        private void OnDrawGizmosSelected()
+        {
+            using (new Handles.DrawingScope(Color.yellow))
+            {
+                var p1 = player.Camera.transform.position;
+                var p2 = player.Camera.transform.position + player.Camera.transform.forward * maxTargetDistance;
+                Extension_Handles.DrawWireCapsule(p1, p2, aimAssistRadius);
+            }
+        }
+
+#endif
     }
 }
