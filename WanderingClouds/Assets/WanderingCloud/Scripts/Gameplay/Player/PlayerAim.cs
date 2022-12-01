@@ -27,7 +27,7 @@ namespace WanderingCloud.Controller
         [field: SerializeField, Foldout("Data")] private float aimAssistRadius;
         [field: SerializeField, Foldout("Data")] private Color detectionColor;
 
-        [field: SerializeField, Foldout("States")] private bool isAiming;
+        [field: SerializeField, Foldout("States")] public bool isAiming { get; private set; }
         [field: SerializeField, Foldout("States")] private float timeSinceInactivity;
         [field: SerializeField, Foldout("States")] private bool isActive;
 
