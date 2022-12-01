@@ -20,6 +20,7 @@ namespace WanderingCloud.Gameplay
         [HideInInspector] public bool canBePouffed;
         public float sizeAugment;
         public new BoxCollider collider;
+        
         void Start()
         {
             if (currentState == CloudState.BABY)
@@ -30,7 +31,7 @@ namespace WanderingCloud.Gameplay
 
             if(currentState != CloudState.SOLID)
             {
-                collider.isTrigger = true;
+                //collider.isTrigger = true;
             }
         }
 
@@ -38,19 +39,24 @@ namespace WanderingCloud.Gameplay
         public void TurnSolid()
         {
             canBePouffed = true;
+            currentState = CloudState.SOLID;
             collider.isTrigger = false;
             transform.localScale = transform.localScale * sizeAugment;
         }
 
         public void TurnDestructor()
         {
+            canBePouffed = true;
+            currentState = CloudState.DESTRUCTOR;
+            transform.localScale = transform.localScale * sizeAugment;
 
         }
 
         public void TurnBaby()
         {
+            currentState = CloudState.BABY;
             canBePouffed = false;
-            collider.isTrigger = true;
+            //collider.isTrigger = true;
             transform.localScale = transform.localScale / sizeAugment;
         }
 
@@ -63,6 +69,10 @@ namespace WanderingCloud.Gameplay
             if (Input.GetKeyDown("z"))
             {
                 TurnBaby();
+            }
+            if (Input.GetKeyDown("e"))
+            {
+                TurnDestructor();
             }
         }
     }
