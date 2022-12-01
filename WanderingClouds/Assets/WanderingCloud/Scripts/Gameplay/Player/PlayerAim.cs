@@ -5,6 +5,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Linq;
 using WanderingCloud.Gameplay;
+using UnityEngine.UI;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -24,6 +25,7 @@ namespace WanderingCloud.Controller
         [Header("Aim Assist")]
         [field: SerializeField, Foldout("Data")] private float maxTargetDistance;
         [field: SerializeField, Foldout("Data")] private float aimAssistRadius;
+        [field: SerializeField, Foldout("Data")] private Color detectionColor;
 
         [field: SerializeField, Foldout("States")] private bool isAiming;
         [field: SerializeField, Foldout("States")] private float timeSinceInactivity;
@@ -32,6 +34,7 @@ namespace WanderingCloud.Controller
         [field: SerializeField, Foldout("References")] public PlayerBrain player;
         [field: SerializeField, Foldout("References")] private Transform followTarget;
         [field: SerializeField, Foldout("References")] private Transform anchor;
+        [field: SerializeField, Foldout("References")] private Image crosshair;
 
         private float ghostPositionY;
         private Vector3 velocity = Vector3.zero;
@@ -66,6 +69,16 @@ namespace WanderingCloud.Controller
                     defaultTargetPosition = hit.point;
                 else
                     defaultTargetPosition = player.Camera.transform.position + player.Camera.transform.forward * maxTargetDistance;
+
+                crosshair.transform.localPosition = Vector3.zero;
+                crosshair.color = Color.white;
+            }
+            else
+            {
+                Vector3 targetViewportPos = player.Camera.WorldToViewportPoint(assistTarget.position);
+
+                crosshair.transform.localPosition = new Vector3((targetViewportPos.x - 0.5f) * 960, (targetViewportPos.y - 0.5f) * 1080, 0f);
+                crosshair.color = detectionColor;
             }
         }
 
@@ -102,10 +115,16 @@ namespace WanderingCloud.Controller
             followTarget.eulerAngles = anchor.eulerAngles;
         }
 
+        private void Initialize()
+        {
+        }
+
 
         public void BeginAim()
         {
             isAiming = true;
+
+            crosshair.enabled = true;
 
             if (player.CinemachineBase.m_BindingMode == CinemachineTransposer.BindingMode.SimpleFollowWithWorldUp)
             {
@@ -132,6 +151,8 @@ namespace WanderingCloud.Controller
             //Aim VCam takes priority
             player.CinemachineAim.Priority = player.CinemachineBase.Priority - 1;
 
+            crosshair.enabled = false;
+
             isAiming = false;
         }
 
@@ -156,13 +177,15 @@ namespace WanderingCloud.Controller
             //Keep only the targetable objects
             var assistTargets = hits.Where(x => x.collider.GetComponent<Target>()).Select(x => x.collider).ToArray();
             //Order them by the distance from the center of the screen
-            assistTargets = assistTargets.OrderBy(x => Vector2.Distance(player.Camera.WorldToViewportPoint(x.transform.position), Vector2.zero)).ToArray();
+            assistTargets = assistTargets.OrderBy(x =>  Vector2.Distance(player.Camera.WorldToViewportPoint(x.transform.position), Vector2.one * 0.5f)).ToArray();
 
             //For each object on the list, check occlusion
             for (int i = 0; i < assistTargets.Length; i++)
             {
-                Debug.DrawLine(player.transform.position, assistTargets[i].transform.position, Color.green);
-
+                //Debug.DrawLine(player.transform.position, assistTargets[i].transform.position, Color.Lerp(Color.red, Color.green, Vector2.Distance(player.Camera.WorldToViewportPoint(assistTargets[i].transform.position), Vector2.one / 2f) * 5));
+            }
+            for (int i = 0; i < assistTargets.Length; i++)
+            {
                 RaycastHit hit;
                 if (Physics.Linecast(player.transform.position, assistTargets[i].transform.position, out hit))
                 {
