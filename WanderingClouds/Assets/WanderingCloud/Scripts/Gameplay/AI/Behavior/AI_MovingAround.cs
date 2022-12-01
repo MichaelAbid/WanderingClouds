@@ -36,6 +36,7 @@ namespace WanderingCloud.Gameplay.AI
             return base.ChangeFromWandering();
         }
 
+
         protected override void WanderingBehavior()
         {
             if (Vector3.Distance(WanderingTarget, transform.position) <= 0.5)
@@ -45,6 +46,24 @@ namespace WanderingCloud.Gameplay.AI
             agent.SetDestination(WanderingTarget);
 
             base.WanderingBehavior();
+        }
+        protected override void TimerUpdate()
+        {
+            base.TimerUpdate();
+            if (currentState == AI_STATE.AI_IDLE)
+            {
+                if (idleTimer < idleTime)
+                {
+                    idleTimer += Time.deltaTime;
+                }
+            }
+            if (currentState == AI_STATE.AI_WANDERING)
+            {
+                if (WanderingTimer < WanderingTime)
+                {
+                    WanderingTimer += Time.deltaTime;
+                }
+            }
         }
     }
 }

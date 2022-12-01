@@ -1,3 +1,4 @@
+﻿
 ﻿using Cinemachine;
 using NaughtyAttributes;
 using UnityEngine;
@@ -14,6 +15,9 @@ namespace WanderingCloud.Controller
         [field: SerializeField, Foldout("References"), Required()] public CapsuleCollider Collider { get; private set; }
         [field: SerializeField, Foldout("References"), Required()] public CinemachineFreeLook CinemachineBase { get; private set; }
         [field: SerializeField, Foldout("References"), Required()] public CinemachineFreeLook CinemachineAim { get; private set; }
+        [field: SerializeField, Foldout("References"), Required()] public AiGraber aiGrabber { get; private set; }
+        [field: SerializeField, Foldout("References"), Required()] public CloudGrabber cloudGrabber { get; private set; }
+        [field: SerializeField, Foldout("References"), Required()] public CloudExploder cloudExploder { get; private set; }
         #endregion
 
         [field: SerializeField, Foldout("Components"), Required()] public PlayerMovement Movement { get; private set; }
@@ -41,6 +45,27 @@ namespace WanderingCloud.Controller
         public override void LeftTriggerInput() => Aim.BeginAim();
         public override void LeftTriggerInputReleased() => Aim.EndAim();
         public override void RightTriggerInput() => Aim.Throw();
+
+        public override void EstButtonInput()
+        {
+            if (aiGrabber.aiGrabed != null)
+            {
+                aiGrabber.UnGrab();
+            }
+            else
+            {
+                if (!aiGrabber.Grab())
+                {
+                    if (!cloudGrabber.GrabNearestPullet())
+                    {
+                        if (!cloudExploder.ExplodeNearest())
+                        {
+
+                        }
+                    }
+                }
+            }
+        }
 
     }
 }

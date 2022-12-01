@@ -33,7 +33,7 @@ namespace WanderingCloud.Gameplay.AI
             CheckForAI();
         }
 
-
+        [Button]
         private void CheckForAI()
         {
             float clostest = -1;
