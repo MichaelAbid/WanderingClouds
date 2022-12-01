@@ -48,13 +48,20 @@ namespace WanderingCloud.Controller
 
         public override void EstButtonInput()
         {
-            if (!aiGrabber.Grab())
+            if (aiGrabber.aiGrabed != null)
             {
-                if (!cloudGrabber.GrabNearestPullet())
+                aiGrabber.UnGrab();
+            }
+            else
+            {
+                if (!aiGrabber.Grab())
                 {
-                    if (!cloudExploder.ExplodeNearest())
+                    if (!cloudGrabber.GrabNearestPullet())
                     {
-                        
+                        if (!cloudExploder.ExplodeNearest())
+                        {
+
+                        }
                     }
                 }
             }

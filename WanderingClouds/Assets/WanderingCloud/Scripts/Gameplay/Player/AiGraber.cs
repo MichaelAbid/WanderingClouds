@@ -24,9 +24,11 @@ namespace WanderingCloud.Gameplay
                 Select(x => x.GetComponent<AI_Base>()).ToArray();
             if (nearTarget.Length == 0) return false;
             var target = nearTarget.OrderBy(x => Vector3.Distance(x.transform.position, playerRef.Avatar.position)).First();
-
+            aiGrabed = target;
             target.isAiActive = false;
             target.isGrabbable = false;
+            target.isGrabbed = true;
+            target.collider.enabled = false;
             target.agent.enabled = false;
             target.rigidBody.useGravity = false;
             return true;
@@ -35,9 +37,12 @@ namespace WanderingCloud.Gameplay
         {
             aiGrabed.isAiActive = true;
             aiGrabed.isGrabbable = true;
+            aiGrabed.isGrabbed = false;
+            aiGrabed.collider.enabled = true;
             aiGrabed.agent.enabled = true;
             aiGrabed.rigidBody.useGravity = true;
-            aiGrabed.agent.Warp(aiGrabed.GetRandomPositionOnNavMesh(0));
+            aiGrabed.currentState = AI_STATE.AI_IDLE;
+            aiGrabed = null;
         }
 
         private void Update()
