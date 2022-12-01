@@ -9,15 +9,8 @@ using WanderingCloud.Controller;
 namespace WanderingCloud.Gameplay
 {
 
-    public enum CloudType
-    {
-        SOFT,
-        THUNDER
-    }
-
     public class CloudBoulette : MonoBehaviour
     {
-
         [Foldout("Ref")][SerializeField] private RawImage GiroImageRef;
         [Foldout("Ref")][SerializeField] private RawImage UrleImageRef;
 
