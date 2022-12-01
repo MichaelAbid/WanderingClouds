@@ -107,10 +107,10 @@ MonoBehaviour:
   active: 1
   quality:
     m_OverrideState: 1
-    m_Value: 2
+    m_Value: 3
   focusMode:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   focusDistance:
     m_OverrideState: 1
     m_Value: 4
@@ -131,16 +131,16 @@ MonoBehaviour:
     m_Value: 20
   m_NearSampleCount:
     m_OverrideState: 1
-    m_Value: 8
+    m_Value: 7
   m_NearMaxBlur:
     m_OverrideState: 1
-    m_Value: 7
+    m_Value: 6.95
   m_FarSampleCount:
     m_OverrideState: 1
-    m_Value: 14
+    m_Value: 13
   m_FarMaxBlur:
     m_OverrideState: 1
-    m_Value: 13
+    m_Value: 12.57
   m_Resolution:
     m_OverrideState: 1
     m_Value: 1
@@ -503,13 +503,13 @@ MonoBehaviour:
   active: 1
   shadows:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 0.6598396, z: 0.7643519, w: 0.105913505}
+    m_Value: {x: 1, y: 0.72022516, z: 0.9389639, w: 0.19572955}
   midtones:
     m_OverrideState: 0
-    m_Value: {x: 1, y: 0.9923801, z: 0.9507874, w: 1}
+    m_Value: {x: 1, y: 0.9923801, z: 0.9507874, w: 0.19928832}
   highlights:
-    m_OverrideState: 0
-    m_Value: {x: 1, y: 1, z: 1, w: 0.49261093}
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 1, z: 1, w: -0.19572951}
   shadowsStart:
     m_OverrideState: 0
     m_Value: 0
