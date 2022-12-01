@@ -236,7 +236,8 @@ namespace WanderingCloud.Controller
             var previousState = moveState;
             moveState = MovementState.Dash;
             var dashDirection = player.Avatar.forward;
-            var aimRot = Quaternion.LookRotation(dashDirection, Vector3.up);
+            var aimRot = Quaternion.LookRotation(dashDirection, Vector3.up);
+
             if (player.moveInput.magnitude > float.Epsilon)
             {
                 dashDirection = movementSurface.normalized;

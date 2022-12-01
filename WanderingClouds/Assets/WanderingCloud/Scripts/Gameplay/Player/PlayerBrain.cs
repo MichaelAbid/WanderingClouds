@@ -1,6 +1,7 @@
 ﻿using Cinemachine;
 using NaughtyAttributes;
 using UnityEngine;
+using WanderingCloud.Gameplay;
 
 namespace WanderingCloud.Controller
 {

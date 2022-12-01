@@ -923,9 +923,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76716e73cb1c4a159a5c51ff0b946435, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waitTimeFollow: 1.2
+  waitTimeFollow: 1
   desiredSmoothTime: 0.05
   followMaxSpeed: 30
+  FollowYThreshold: {x: 0, y: 0}
+  FollowZThreshold: {x: 0, y: 0}
+  maxTargetDistance: 10000
+  aimAssistRadius: 1.85
   isAiming: 0
   timeSinceInactivity: 0
   isActive: 0
