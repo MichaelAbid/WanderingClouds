@@ -9,8 +9,8 @@ namespace WanderingCloud.Gameplay
     public class Inventory :MonoBehaviour
     {
         
-        public int nbPullet { get; private set; }
-        public int maxPullet { get; private set; }
+        [field: SerializeField] public int nbPullet { get; private set; }
+        [field: SerializeField]public int maxPullet { get; private set; }
 
         public bool AddPullet()
         {

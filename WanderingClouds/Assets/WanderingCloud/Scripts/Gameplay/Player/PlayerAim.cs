@@ -39,6 +39,7 @@ namespace WanderingCloud.Controller
         [field: SerializeField, Foldout("References")] private Image crosshair;
         [field: SerializeField, Foldout("References")] private GameObject ProjectilePrefab;
         [field: SerializeField, Foldout("References")] private Transform throwSocket;
+        [field: SerializeField, Foldout("References")] private Inventory inventory;
 
         private float ghostPositionY;
         private Vector3 velocity = Vector3.zero;
@@ -163,7 +164,7 @@ namespace WanderingCloud.Controller
         public void Throw()
         {
             if (!isAiming) return;
-
+            if (!inventory.RemovePullet()) return;
             var projectile = Instantiate(ProjectilePrefab, throwSocket.transform.position, Quaternion.identity);
 
             if (assistTarget is null)
