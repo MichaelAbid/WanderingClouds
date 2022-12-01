@@ -929,7 +929,7 @@ MonoBehaviour:
   FollowYThreshold: {x: 0, y: 0}
   FollowZThreshold: {x: 0, y: 0}
   maxTargetDistance: 10000
-  aimAssistRadius: 1.85
+  aimAssistRadius: 2
   detectionColor: {r: 1, g: 0, b: 0.048927307, a: 1}
   isAiming: 0
   timeSinceInactivity: 0
@@ -940,6 +940,7 @@ MonoBehaviour:
   crosshair: {fileID: 0}
   ProjectilePrefab: {fileID: 1637294510852945872, guid: 3c1de04ae57569944affc2e952a97606,
     type: 3}
+  throwSocket: {fileID: 0}
 --- !u!1 &2728457732791510725
 GameObject:
   m_ObjectHideFlags: 0
