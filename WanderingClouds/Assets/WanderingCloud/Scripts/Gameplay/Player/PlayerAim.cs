@@ -15,6 +15,8 @@ namespace WanderingCloud.Controller
 {
     public class PlayerAim : MonoBehaviour
     {
+
+        #region Variables
         [Header("Follow Cam")]
         [field: SerializeField, Foldout("Data")] private float waitTimeFollow;
         [field: SerializeField, Foldout("Data")] private float desiredSmoothTime;
@@ -35,6 +37,8 @@ namespace WanderingCloud.Controller
         [field: SerializeField, Foldout("References")] private Transform followTarget;
         [field: SerializeField, Foldout("References")] private Transform anchor;
         [field: SerializeField, Foldout("References")] private Image crosshair;
+        [field: SerializeField, Foldout("References")] private GameObject ProjectilePrefab;
+        [field: SerializeField, Foldout("References")] private Transform throwSocket;
 
         private float ghostPositionY;
         private Vector3 velocity = Vector3.zero;
@@ -44,6 +48,7 @@ namespace WanderingCloud.Controller
         private Vector3 defaultTargetPosition;
 
         Coroutine blackMagicScript;
+        #endregion
 
         private void Update()
         {
@@ -119,7 +124,6 @@ namespace WanderingCloud.Controller
         {
         }
 
-
         public void BeginAim()
         {
             isAiming = true;
@@ -159,10 +163,15 @@ namespace WanderingCloud.Controller
         public void Throw()
         {
             if (!isAiming) return;
+
+            var projectile = Instantiate(ProjectilePrefab, throwSocket.transform.position, Quaternion.identity);
+
             if (assistTarget is null)
-                Debug.DrawLine(player.transform.position, defaultTargetPosition, Color.blue, 3f);
+                projectile.GetComponent<Projectile>().targetPosition = defaultTargetPosition;
             else
-                Debug.DrawLine(player.transform.position, assistTarget.position, Color.red, 3f);
+                projectile.GetComponent<Projectile>().targetPosition = assistTarget.position;
+
+            projectile.GetComponent<Projectile>().CanMove = true;
         }
 
         private Transform CheckForAssistTarget()
@@ -195,7 +204,6 @@ namespace WanderingCloud.Controller
             }
             return null;
         }
-
 
         private void CheckForActivity()
         {
