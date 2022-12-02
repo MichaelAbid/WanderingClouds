@@ -307,7 +307,7 @@ namespace WanderingCloud.Controller
         {
             if (currentTarget != null)
             {
-                cloudGrabber.LaunchPullet();
+                //cloudGrabber.LaunchPullet();
             }
         }
 
