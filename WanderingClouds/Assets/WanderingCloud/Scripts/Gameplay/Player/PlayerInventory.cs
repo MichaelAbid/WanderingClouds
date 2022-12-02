@@ -21,7 +21,10 @@ namespace WanderingCloud
 		{
 			if(consuming is null) consuming = StartCoroutine(EatingCloud());
 		}
-
+		public void ReceivedCloud()
+		{
+			pelletStock = Mathf.Clamp(pelletStock + pelletPerConsum, 0, maxPelletStock);
+		}
 		private IEnumerator EatingCloud()
 		{
 			isHoldingCloud = true;
