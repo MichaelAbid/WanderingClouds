@@ -30,7 +30,7 @@ namespace WanderingCloud
         {
             foreach(var playerBrain in playerBrains)
             {
-                playerBrain.Movement += transform.forward * PushForce;
+                playerBrain.Movement.externalForce += transform.forward * PushForce;
             }
         }
 
