@@ -16,7 +16,7 @@ namespace WanderingCloud.Gameplay
 
         [Foldout("Type")][SerializeField] public CloudType cType;
 
-        private Player giro, urle;
+        private PlayerBrain giro, urle;
         public CloudGrabber cgGiro, cgUrle;
 
 

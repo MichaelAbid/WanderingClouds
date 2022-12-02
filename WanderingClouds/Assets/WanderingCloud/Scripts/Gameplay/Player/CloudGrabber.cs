@@ -12,7 +12,8 @@ namespace WanderingCloud.Gameplay
 
         [SerializeField] public List<CloudBoulette> BouletteList = new List<CloudBoulette>();
 
-        [SerializeField] public Player playerComponent;
+        [SerializeField] public PlayerBrain playerComponent ;
+        [SerializeField] public Inventory inventory;
 
         [SerializeField] public int nbOfPullet { get; private set; } = 0;
 
@@ -65,7 +66,7 @@ namespace WanderingCloud.Gameplay
                         }
                     }
                 }
-                nbOfPullet++;
+                inventory.AddPullet();
                 if (nearest.cgUrle != null)
                 {
                     nearest.cgUrle.BouletteList.Remove(nearest);
@@ -110,19 +111,7 @@ namespace WanderingCloud.Gameplay
 
 
 
-        public void LaunchPullet()
-        {
-            if (cooldownTimer >= cooldown)
-            {
-                if (nbOfPullet > 0)
-                {
-                    CloudBoulette cb = ((GameObject)Instantiate(pulletPrefab, launchSocket.position, Quaternion.identity)).GetComponent<CloudBoulette>();
-                    cb.SetDestination(playerComponent.currentTarget);
-                    nbOfPullet--;
-                    cooldownTimer = 0;
-                }
-            }
-        }
+        
 
     }
 }
