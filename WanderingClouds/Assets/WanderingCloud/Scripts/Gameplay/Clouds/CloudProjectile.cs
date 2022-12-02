@@ -42,20 +42,19 @@ namespace WanderingCloud
         }
 
         private void collisionEvent()
-        {
-            if(target is null) Destroy(gameObject);
-            
+        {            
             Component component;
             if (target.parent.TryGetComponent(typeof(PlayerInventory), out component))
             {
                 var otherInventory = (PlayerInventory)component;
                 otherInventory.ReceivedCloud();
             }
-            if (target.parent.TryGetComponent(typeof(Source), out component))
+            if (target.TryGetComponent(typeof(Source), out component))
             {
                 var source = (Source)component;
                 source.Feed(type);
             }
+            Destroy(gameObject);
         }
     }
 }

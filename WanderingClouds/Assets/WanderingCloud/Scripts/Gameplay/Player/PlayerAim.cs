@@ -39,7 +39,7 @@ namespace WanderingCloud.Controller
         [field: SerializeField, Foldout("References")] private Image crosshair;
         [field: SerializeField, Foldout("References")] private GameObject ProjectilePrefab;
         [field: SerializeField, Foldout("References")] private Transform throwSocket;
-        [field: SerializeField, Foldout("References")] private Inventory inventory;
+        [field: SerializeField, Foldout("References")] private PlayerInventory inventory;
 
         private float ghostPositionY;
         private Vector3 velocity = Vector3.zero;

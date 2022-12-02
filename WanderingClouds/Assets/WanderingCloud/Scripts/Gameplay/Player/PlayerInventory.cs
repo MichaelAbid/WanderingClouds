@@ -37,6 +37,24 @@ namespace WanderingCloud
 			consuming = null;
 		}
 		
+		public bool AddPullet()
+		{
+			if (pelletStock < maxPelletStock)
+			{
+				pelletStock++;
+				return true;
+			}
+			return false;
+		}
+		public bool RemovePullet()
+		{
+			if (pelletStock > 0)
+			{
+				maxPelletStock--;
+				return true;
+			}
+			return false;
+		}
 
 	}
 }

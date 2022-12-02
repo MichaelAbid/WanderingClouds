@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Collections;
 using NaughtyAttributes;
 using UnityEngine;
+using System;
 
-namespace WanderingCloud
+namespace WanderingCloud.Controller
 {
 	[ExecuteAlways]
 	public class SplitScreen : MonoBehaviour

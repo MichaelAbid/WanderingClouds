@@ -296,7 +296,7 @@ MonoBehaviour:
   onConsumeCloud:
     m_PersistentCalls:
       m_Calls: []
-  pelletStock: 0
+  pelletStock: 1
   pelletPerConsum: 1
   maxPelletStock: 1
 --- !u!1 &2109373803942961255
@@ -2296,6 +2296,11 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 2109373803074873377}
+    - target: {fileID: 5072380737548456533, guid: 7f5072e85f9a24d43a705c7fc3f5a87e,
+        type: 3}
+      propertyPath: inventory
+      value: 
+      objectReference: {fileID: 8757759834028626867}
     - target: {fileID: 5072380737548456533, guid: 7f5072e85f9a24d43a705c7fc3f5a87e,
         type: 3}
       propertyPath: throwSocket
