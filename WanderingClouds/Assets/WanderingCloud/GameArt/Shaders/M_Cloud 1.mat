@@ -79,6 +79,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: cb0aca858475ada428440a2ab1f40c95, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Colored_Noise:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _DetailMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -340,7 +344,7 @@ Material:
     - _TransparentDepthPrepassEnable: 0
     - _TransparentSortPriority: -14
     - _TransparentWritingMotionVec: 0
-    - _TransparentZWrite: 0
+    - _TransparentZWrite: 1
     - _Trasnparency: 0
     - _UVBase: 0
     - _UVDetail: 0
@@ -350,7 +354,7 @@ Material:
     - _ZTestDepthEqualForOpaque: 4
     - _ZTestGBuffer: 4
     - _ZTestTransparent: 4
-    - _ZWrite: 0
+    - _ZWrite: 1
     m_Colors:
     - Color_2000737E: {r: 3.150091, g: 0.9095334, b: 0.9095334, a: 0}
     - Color_5D9148CF: {r: 0, g: 0.29649496, b: 0.5, a: 0}
@@ -370,7 +374,7 @@ Material:
     - _Emissive_Color: {r: 0, g: 0, b: 0, a: 0}
     - _InvPrimScale: {r: 1, g: 1, b: 0, a: 0}
     - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
-    - _Main_Color: {r: 0.9056604, g: 0.9056604, b: 0.9056604, a: 1}
+    - _Main_Color: {r: 1, g: 1, b: 1, a: 1}
     - _Rotate_Projection: {r: 0, g: 0, b: 0, a: 1}
     - _Smudge_Color: {r: 0.4720919, g: 0.62264144, b: 0.25551796, a: 0}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}

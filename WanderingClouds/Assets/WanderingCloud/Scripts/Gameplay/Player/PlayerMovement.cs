@@ -19,6 +19,7 @@ namespace WanderingCloud.Controller
     public class PlayerMovement : MonoBehaviour
     {
         [HideInInspector] private PlayerBrain player;
+        [HideInInspector] private Transform defaultParent;
         public PlayerState state = new PlayerState();
 
         [field: SerializeField, ReadOnly] public MovementState moveState { get; private set; }
@@ -60,9 +61,26 @@ namespace WanderingCloud.Controller
         private void Awake()
         {
             player = GetComponent<PlayerBrain>();
-            state.onLanding.AddListener(() => Debug.Log("Land"));
             state.onLanding.AddListener(() => canDash = true);
             state.onLanding.AddListener(() => { if (moveState is MovementState.Fall or MovementState.Jump) moveState = MovementState.Idle; });
+
+            defaultParent = transform.parent;
+            state.onLanding.AddListener(() =>
+            {
+                var feetPos = player.Avatar.position + Vector3.down * ((player.Collider.height - 0.05f) / 2);
+                RaycastHit underHit;
+                Ray underRay = new Ray(feetPos, Vector3.down);
+                Physics.Raycast(underRay, out underHit, state.groundCheckDistance);
+                Component rb;
+                if (underHit.collider.TryGetComponent(typeof(Rigidbody), out rb))
+                {
+                    transform.SetParent(rb.transform);
+                }                
+            });
+            state.onQuitGround.AddListener(() =>
+            {
+                transform.SetParent(defaultParent);                
+            });
         }
 
         private void Update()
@@ -291,10 +309,14 @@ namespace WanderingCloud.Controller
             get => grounded;
             private set
             {
-                if (grounded != value && value)
+                if (grounded != value)
                 {
-                    onLanding?.Invoke();
+                    if(value)
+                        onLanding?.Invoke();
+                    else
+                        onQuitGround?.Invoke();
                 }
+                
                 grounded = value;
             }
         }
@@ -306,6 +328,7 @@ namespace WanderingCloud.Controller
         [field: SerializeField, ReadOnly] public Vector3 slopeNormal { get; private set; }
         [SerializeField] public float groundCheckDistance = .5f;
         public UnityEvent onLanding;
+        public UnityEvent onQuitGround;
 
         public void RefreshState()
         {

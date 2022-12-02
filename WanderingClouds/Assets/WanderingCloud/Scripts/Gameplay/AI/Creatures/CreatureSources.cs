@@ -10,69 +10,74 @@ namespace WanderingCloud.Gameplay
 {
     public enum CloudState
     {
-        BABY,
-        SOLID,
-        DESTRUCTOR
+        BABY = 0,
+        SOLID = 1,
+        DESTRUCTOR = 2,
     }
     public class CreatureSources : MonoBehaviour
     {
-        public CloudState currentState;
-        [HideInInspector] public bool canBePouffed;
-        public float sizeAugment;
-        public new BoxCollider collider;
+        public CloudState currentState = CloudState.BABY;
+        public float destructionRange = 5f;
+        [ReadOnly] public bool canBePouffed;
+        [MinMaxSlider(0f, 5f)] public Vector2 scale = Vector2.one;
+        public BoxCollider collider;
+
         
-        void Start()
-        {
-            if (currentState == CloudState.BABY)
-            {
-                canBePouffed = true;
-            } else
-                canBePouffed = false;
 
-            if(currentState != CloudState.SOLID)
+        private void Awake()
+        {
+            SwitchState(currentState);
+        }
+
+        public void SwitchState(int newState) => SwitchState((CloudState)newState);
+        public void SwitchState(CloudState newState)
+        {
+            currentState = newState;
+
+            canBePouffed = true;
+            collider.isTrigger = true;
+            transform.localScale = Vector3.one * scale.y;
+
+            switch (newState)
             {
-                //collider.isTrigger = true;
+                case CloudState.BABY:
+                    canBePouffed = false;
+                    transform.localScale = Vector3.one * scale.x;
+                    break;
+                case CloudState.SOLID:
+                    collider.isTrigger = false;
+                    break;
+                case CloudState.DESTRUCTOR:
+                    break;
+                default:
+                    break;
             }
-        }
-
-
-        public void TurnSolid()
-        {
-            canBePouffed = true;
-            currentState = CloudState.SOLID;
-            collider.isTrigger = false;
-            transform.localScale = transform.localScale * sizeAugment;
-        }
-
-        public void TurnDestructor()
-        {
-            canBePouffed = true;
-            currentState = CloudState.DESTRUCTOR;
-            transform.localScale = transform.localScale * sizeAugment;
-
-        }
-
-        public void TurnBaby()
-        {
-            currentState = CloudState.BABY;
-            canBePouffed = false;
-            //collider.isTrigger = true;
-            transform.localScale = transform.localScale / sizeAugment;
         }
 
         private void Update()
         {
             if(Input.GetKeyDown("a"))
             {
-                TurnSolid();
+                SwitchState(CloudState.SOLID);
             }
             if (Input.GetKeyDown("z"))
             {
-                TurnBaby();
+                SwitchState(CloudState.BABY);
             }
             if (Input.GetKeyDown("e"))
             {
-                TurnDestructor();
+                SwitchState(CloudState.DESTRUCTOR);
+            }
+            if (currentState == CloudState.DESTRUCTOR)
+            {
+                Collider[] hitCollider = Physics.OverlapSphere(transform.position, destructionRange);
+                foreach (Collider collider in hitCollider)
+                {
+                    if (collider.GetComponent<DestructibleBlocks>())
+                    {
+                        Destroy(collider.gameObject);
+                    }
+                }
             }
         }
     }

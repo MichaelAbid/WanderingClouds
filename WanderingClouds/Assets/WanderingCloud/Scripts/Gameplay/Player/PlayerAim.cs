@@ -29,7 +29,7 @@ namespace WanderingCloud.Controller
         [field: SerializeField, Foldout("Data")] private float aimAssistRadius;
         [field: SerializeField, Foldout("Data")] private Color detectionColor;
 
-        [field: SerializeField, Foldout("States")] private bool isAiming;
+        [field: SerializeField, Foldout("States")] public bool isAiming { get; private set; }
         [field: SerializeField, Foldout("States")] private float timeSinceInactivity;
         [field: SerializeField, Foldout("States")] private bool isActive;
 
@@ -167,12 +167,12 @@ namespace WanderingCloud.Controller
             if (!inventory.RemovePullet()) return;
             var projectile = Instantiate(ProjectilePrefab, throwSocket.transform.position, Quaternion.identity);
 
-            if (assistTarget is null)
-                projectile.GetComponent<Projectile>().targetPosition = defaultTargetPosition;
-            else
-                projectile.GetComponent<Projectile>().targetPosition = assistTarget.position;
+            CloudProjectile bullet = projectile.GetComponent<CloudProjectile>();
+            if (assistTarget is not null) bullet.Target = assistTarget;
+            else bullet.targetPosition = defaultTargetPosition;
 
-            projectile.GetComponent<Projectile>().CanMove = true;
+            bullet.CanMove = true;
+            bullet.type = player.isGyro? CloudType.ENERGIZER : CloudType.SOLIDIFIER;
         }
 
         private Transform CheckForAssistTarget()

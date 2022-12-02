@@ -26,11 +26,11 @@ namespace WanderingCloud
         }
 
         // Update is called once per frame
-        void Update()
+        void FixedUpdate()
         {
             foreach(var playerBrain in playerBrains)
             {
-                //playerBrain.Movement.externalForce = transform.forward * PushForce;
+                //playerBrain.Movement.externalForce += transform.forward * PushForce;
             }
         }
 
