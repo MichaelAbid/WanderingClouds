@@ -17,7 +17,7 @@ namespace WanderingCloud
         {
             if (!CanMove) return;
 
-            Vector3 thisToTarget = targetPosition - transform.position;
+            Vector3 thisToTarget = (targetPosition - transform.position).normalized;
 
             if (thisToTarget.magnitude <= collisionThreshold) collisionEvent();
 
