@@ -6,6 +6,7 @@ using System.Collections;
 using System.Linq;
 using WanderingCloud.Gameplay;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -19,17 +20,18 @@ namespace WanderingCloud.Controller
         #region Variables
         [Header("Follow Cam")]
         [field: SerializeField, Foldout("Data")] private float waitTimeFollow;
+        [field: SerializeField, Foldout("Data"), Range(0f, 1f)] private float yThresholdFollow = 0.75f;
         [field: SerializeField, Foldout("Data")] private float desiredSmoothTime;
         [field: SerializeField, Foldout("Data")] private float followMaxSpeed;
-        [field: SerializeField, Foldout("Data"), MinMaxSlider(float.Epsilon, 1)] private Vector2 FollowYThreshold;
-        [field: SerializeField, Foldout("Data"), MinMaxSlider(float.Epsilon, 100)] private Vector2 FollowZThreshold;
+        [field: SerializeField, Foldout("Data"), MinMaxSlider(float.Epsilon, 1)] private Vector2 outOfCenterYThreshold;
+        [field: SerializeField, Foldout("Data"), MinMaxSlider(float.Epsilon, 100)] private Vector2 outOfCenterZThreshold;
 
         [Header("Aim Assist")]
         [field: SerializeField, Foldout("Data")] private float maxTargetDistance;
         [field: SerializeField, Foldout("Data")] private float aimAssistRadius;
         [field: SerializeField, Foldout("Data")] private Color detectionColor;
 
-        [field: SerializeField, Foldout("States")] public bool isAiming { get; private set; }
+        [field: SerializeField, Foldout("States")] public bool isAiming;
         [field: SerializeField, Foldout("States")] private float timeSinceInactivity;
         [field: SerializeField, Foldout("States")] private bool isActive;
 
@@ -40,6 +42,8 @@ namespace WanderingCloud.Controller
         [field: SerializeField, Foldout("References")] private GameObject ProjectilePrefab;
         [field: SerializeField, Foldout("References")] private Transform throwSocket;
         [field: SerializeField, Foldout("References")] private PlayerInventory inventory;
+
+        [field: SerializeField, Foldout("Events")] private UnityEvent onAim;
 
         private float ghostPositionY;
         private Vector3 velocity = Vector3.zero;
@@ -55,11 +59,15 @@ namespace WanderingCloud.Controller
         {
             CheckForActivity();
 
-            if (timeSinceInactivity >= waitTimeFollow && player.CinemachineBase.m_BindingMode == CinemachineTransposer.BindingMode.WorldSpace && !isAiming)
+            if (player.CinemachineBase.m_YAxis.Value > yThresholdFollow) return;
+
+            if (timeSinceInactivity >= waitTimeFollow && player.CinemachineBase.m_BindingMode == CinemachineTransposer.BindingMode.WorldSpace)
             {
                 if (blackMagicScript is not null) StopCoroutine(blackMagicScript);
                 blackMagicScript = StartCoroutine(SwitchToSimpleFollow());
             }
+
+            //if player is rushing, new target fov
 
         }
         private void FixedUpdate()
@@ -103,7 +111,7 @@ namespace WanderingCloud.Controller
             {
                 canFollow = true;
             }
-            else if (characterViewPos.y > FollowYThreshold.y || characterViewPos.y < FollowYThreshold.x || characterViewPos.z > FollowZThreshold.y)
+            else if (characterViewPos.y > outOfCenterYThreshold.y || characterViewPos.y < outOfCenterYThreshold.x || characterViewPos.z > outOfCenterZThreshold.y)
             {
                 canFollow = true;
                 //Ptit coup de tween
@@ -129,6 +137,8 @@ namespace WanderingCloud.Controller
         {
             isAiming = true;
 
+            onAim?.Invoke();
+
             crosshair.enabled = true;
 
             if (player.CinemachineBase.m_BindingMode == CinemachineTransposer.BindingMode.SimpleFollowWithWorldUp)
@@ -149,6 +159,8 @@ namespace WanderingCloud.Controller
                 timeSinceInactivity = 0f;
                 SwitchToWorldBinding();
             }
+
+            onAim?.Invoke();
 
             player.CinemachineBase.m_YAxis = player.CinemachineAim.m_YAxis;
             player.CinemachineBase.m_XAxis = player.CinemachineAim.m_XAxis;
