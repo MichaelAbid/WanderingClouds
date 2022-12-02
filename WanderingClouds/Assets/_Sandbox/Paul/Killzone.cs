@@ -10,7 +10,7 @@ public class Killzone : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         Debug.Log(collision);
-        if (collision.transform.parent.TryGetComponent<PlayerBrain>(out PlayerBrain player))
+        if (collision.transform.TryGetComponent<PlayerBrain>(out PlayerBrain player))
             collision.transform.parent.position = resetTransform.position;
     }
 }
