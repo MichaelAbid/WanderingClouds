@@ -21,6 +21,7 @@ namespace WanderingCloud.Controller
         [HideInInspector] private PlayerBrain player;
         [HideInInspector] private Transform defaultParent;
         public PlayerState state = new PlayerState();
+        public Vector3 externalForce;
 
         [field: SerializeField, ReadOnly] public MovementState moveState { get; private set; }
         
@@ -155,6 +156,8 @@ namespace WanderingCloud.Controller
                     break;
             }
             player.Body.velocity = new Vector3(speed.x,  player.Body.velocity.y, speed.z);
+            player.Body.velocity += externalForce;
+            externalForce = Vector3.zero;
         }
 
         public void Jump()
