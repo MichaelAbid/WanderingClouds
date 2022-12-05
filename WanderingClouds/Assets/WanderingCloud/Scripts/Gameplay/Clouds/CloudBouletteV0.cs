@@ -5,7 +5,7 @@ using NaughtyAttributes;
 
 namespace WanderingCloud
 {
-    public class Projectile : MonoBehaviour
+    public class CloudBouletteV0 : MonoBehaviour
     {
         [field: SerializeField, Foldout("Data")] private float travelSpeed = 1f;
         [field: SerializeField, Foldout("Data")] private float collisionThreshold = 0.2f;

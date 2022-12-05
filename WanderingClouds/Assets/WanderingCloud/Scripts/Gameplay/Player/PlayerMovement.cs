@@ -3,6 +3,7 @@ using UnityEngine.Events;
 using UnityEngine;
 using NaughtyAttributes;
 using DG.Tweening;
+using WanderingCloud.Gameplay;
 
 namespace WanderingCloud.Controller
 {
@@ -58,8 +59,10 @@ namespace WanderingCloud.Controller
         [Foldout("Debug"), SerializeField, ReadOnly()] private float movementStrenght = 0f;
         #endregion
 
-        [Foldout("Fall")] public UnityEvent onFall;
-
+        [Foldout("Fall")] public UnityEvent onFall;
+
+
+
         #region UnityMethods
         private void Awake()
         {
@@ -67,22 +70,25 @@ namespace WanderingCloud.Controller
             state.onLanding.AddListener(() => canDash = true);
             state.onLanding.AddListener(() => { if (moveState is MovementState.Fall or MovementState.Jump) moveState = MovementState.Idle; });
 
-            defaultParent = transform.parent;
             state.onLanding.AddListener(() =>
             {
                 var feetPos = player.Avatar.position + Vector3.down * ((player.Collider.height - 0.05f) / 2);
                 RaycastHit underHit;
                 Ray underRay = new Ray(feetPos, Vector3.down);
                 Physics.Raycast(underRay, out underHit, state.groundCheckDistance);
-                Component rb;
-                if (underHit.collider.TryGetComponent(typeof(Rigidbody), out rb))
+                
+                Component comp;
+                if (underHit.collider.TryGetComponent(typeof(CreatureSources), out comp));
                 {
-                    transform.SetParent(rb.transform);
+                    var creature = (CreatureSources)comp;
+                    if(creature.currentState != CloudState.SOLID)return;
+                    transform.SetParent(comp.transform);
                 }                
             });
             state.onQuitGround.AddListener(() =>
             {
-                transform.SetParent(defaultParent);                
+                transform.SetParent(null);
+                //transform.parent.DetachChildren();                
             });
         }
 
@@ -157,18 +163,25 @@ namespace WanderingCloud.Controller
             player.Body.velocity += externalForce;
             externalForce = Vector3.zero;
         }
-        private void AvatarOrientation()
-        {
+        private void AvatarOrientation()
+
+        {
+
             if (movementStrenght > float.Epsilon && !player.Aim.isAiming)
             {
                 var aimRot = Quaternion.LookRotation(movementXZ, Vector3.up);
                 player.Avatar.transform.rotation = Quaternion.Slerp(player.Avatar.transform.rotation, aimRot, 5 * Time.deltaTime);
             }
-            else if (player.Aim.isAiming)
-            {
-                var aimRot = Quaternion.LookRotation(new Vector3(player.Camera.transform.forward.x, player.transform.rotation.y, player.Camera.transform.forward.z), Vector3.up);
-                player.Avatar.transform.rotation = Quaternion.Slerp(player.Avatar.transform.rotation, aimRot, 5 * Time.deltaTime);
-            }
+            else if (player.Aim.isAiming)
+
+            {
+
+                var aimRot = Quaternion.LookRotation(new Vector3(player.Camera.transform.forward.x, player.transform.rotation.y, player.Camera.transform.forward.z), Vector3.up);
+
+                player.Avatar.transform.rotation = Quaternion.Slerp(player.Avatar.transform.rotation, aimRot, 5 * Time.deltaTime);
+
+            }
+
         }
         public void Jump()
         {
@@ -221,9 +234,12 @@ namespace WanderingCloud.Controller
                 float fallValue = fallFactor - 1.0f;
                 player.Body.AddForce(Physics.gravity * fallValue, ForceMode.Acceleration);
 
-                if (moveState is not MovementState.Fall)
-                {
-                    onFall?.Invoke();
+                if (moveState is not MovementState.Fall)
+
+                {
+
+                    onFall?.Invoke();
+
                     moveState = MovementState.Fall;
                 }
             }
@@ -324,14 +340,11 @@ namespace WanderingCloud.Controller
             get => grounded;
             private set
             {
-                if (grounded != value && value == true)
+                if (grounded != value)
                 {
-                    if(value)
-                        onLanding?.Invoke();
-                    else
-                        onQuitGround?.Invoke();
+                    if(value) onLanding?.Invoke();
+                    else onQuitGround?.Invoke();
                 }
-                
                 grounded = value;
             }
         }

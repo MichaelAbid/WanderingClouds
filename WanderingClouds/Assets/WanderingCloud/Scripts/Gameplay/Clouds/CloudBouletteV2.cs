@@ -11,7 +11,7 @@ namespace WanderingCloud
         ENERGIZER = 1,
         SOLIDIFIER = 2,
     }
-    public class CloudProjectile : MonoBehaviour
+    public class CloudBouletteV2 : MonoBehaviour
     {
         [SerializeField, Foldout("Data")] private float travelSpeed = 1f;
         [SerializeField, Foldout("Data")] private float collisionThreshold = 0.2f;

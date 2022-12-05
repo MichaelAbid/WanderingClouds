@@ -187,7 +187,7 @@ namespace WanderingCloud.Controller
             if (!inventory.RemovePullet()) return;
             var projectile = Instantiate(ProjectilePrefab, throwSocket.transform.position, Quaternion.identity);
 
-            CloudProjectile bullet = projectile.GetComponent<CloudProjectile>();
+            CloudBouletteV2 bullet = projectile.GetComponent<CloudBouletteV2>();
             if (assistTarget is not null) bullet.Target = assistTarget;
             else bullet.targetPosition = defaultTargetPosition;
 
