@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 713970281}
   - component: {fileID: 713970285}
-  - component: {fileID: 713970284}
   - component: {fileID: 713970283}
   - component: {fileID: 713970282}
   m_Layer: 10
@@ -149,22 +148,6 @@ MonoBehaviour:
   - {fileID: 1347276812}
   - {fileID: 1597192026}
   - {fileID: 2093194252}
---- !u!114 &713970284
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 713970280}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb7194dc27b9df64c8beca7482ee8e0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlayerIndex: 0
-  AutoEnableInputs: 0
-  XYAxis: {fileID: 3280154152519738610, guid: 9e5575dfd66cf2747a635d0a943805b3, type: 3}
-  ZAxis: {fileID: 0}
 --- !u!114 &713970283
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -884,7 +867,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7100749805076352082}
   - component: {fileID: 5072380737548456533}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PlayerCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -943,6 +926,7 @@ MonoBehaviour:
   ProjectilePrefab: {fileID: 1637294510852945872, guid: 3c1de04ae57569944affc2e952a97606,
     type: 3}
   throwSocket: {fileID: 0}
+  inventory: {fileID: 0}
   onAim:
     m_PersistentCalls:
       m_Calls: []
@@ -958,7 +942,6 @@ GameObject:
   - component: {fileID: 4202024086626654668}
   - component: {fileID: 5953295705642882595}
   - component: {fileID: 2728457732791510724}
-  - component: {fileID: 5121628161705995563}
   m_Layer: 10
   m_Name: Camera
   m_TagString: MainCamera
@@ -1183,22 +1166,6 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &5121628161705995563
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2728457732791510725}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb7194dc27b9df64c8beca7482ee8e0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlayerIndex: 0
-  AutoEnableInputs: 0
-  XYAxis: {fileID: 3280154152519738610, guid: 9e5575dfd66cf2747a635d0a943805b3, type: 3}
-  ZAxis: {fileID: 0}
 --- !u!1 &3849212713537449527
 GameObject:
   m_ObjectHideFlags: 0

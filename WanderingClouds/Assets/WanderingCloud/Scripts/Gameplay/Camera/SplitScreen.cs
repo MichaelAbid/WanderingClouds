@@ -2,7 +2,7 @@ using NaughtyAttributes;
 using UnityEngine;
 using System;
 
-namespace WanderingCloud.Controller
+namespace WanderingCloud.Gameplay
 {
 	[ExecuteAlways]
 	public class SplitScreen : MonoBehaviour
@@ -10,7 +10,7 @@ namespace WanderingCloud.Controller
 
 		[SerializeField] Camera camLeft;
 		[SerializeField] Camera camRight;
-		[SerializeField, Range(0f,1f)] float splitValue = 0.5f;
+		[SerializeField, Range(0f,1f)] public float splitValue = 0.5f;
 		private float lastValue = 0.5f;
 
 		[Button()] private void Neutral() { splitValue = 0.5f; Update(); }

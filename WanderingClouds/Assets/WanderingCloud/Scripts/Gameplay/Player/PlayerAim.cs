@@ -1,12 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Linq;
+using UnityEngine.Events;
+using UnityEngine.UI;
+using UnityEngine;
 using NaughtyAttributes;
 using Cinemachine;
 using DG.Tweening;
-using System.Collections;
-using System.Linq;
 using WanderingCloud.Gameplay;
-using UnityEngine.UI;
-using UnityEngine.Events;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -42,6 +42,7 @@ namespace WanderingCloud.Controller
         [field: SerializeField, Foldout("References")] private GameObject ProjectilePrefab;
         [field: SerializeField, Foldout("References")] private Transform throwSocket;
         [field: SerializeField, Foldout("References")] private PlayerInventory inventory;
+        [field: SerializeField, Foldout("References")] private AiGraber grabAI;
 
         [field: SerializeField, Foldout("Events")] private UnityEvent onAim;
 
@@ -74,6 +75,12 @@ namespace WanderingCloud.Controller
         {
             if (!isAiming) return;
             assistTarget = CheckForAssistTarget();
+
+            if (grabAI.aiGrabed is not null)
+            {
+                
+                return;
+            }
             
             if(assistTarget is null)
             {
@@ -176,6 +183,7 @@ namespace WanderingCloud.Controller
         public void Throw()
         {
             if (!isAiming) return;
+            if (grabAI.aiGrabed is not null) return;
             if (!inventory.RemovePullet()) return;
             var projectile = Instantiate(ProjectilePrefab, throwSocket.transform.position, Quaternion.identity);
 

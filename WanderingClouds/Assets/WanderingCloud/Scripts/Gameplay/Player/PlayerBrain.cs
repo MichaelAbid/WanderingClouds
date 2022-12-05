@@ -30,17 +30,17 @@ namespace WanderingCloud.Controller
         public override void PlayerConnect(int playerIndex)
         {
             CinemachineBase.gameObject.SetActive(true);
-            CinemachineBase.gameObject.SetActive(true);
-
+            CinemachineAim.gameObject.SetActive(true);
+            provider.enabled = true;
+            
             provider.gameObject.SetActive(false);
             provider.gameObject.SetActive(true);
-
             provider.PlayerIndex = playerIndex;
         }
         public override void PlayerDisconnect(int playerIndex)
         {
             CinemachineBase.gameObject.SetActive(false);
-            CinemachineBase.gameObject.SetActive(false);
+            CinemachineAim.gameObject.SetActive(false);
             provider.enabled = false;
         }
 

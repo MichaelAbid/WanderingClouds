@@ -8,7 +8,7 @@ using WanderingCloud.Controller;
 namespace WanderingCloud
 {
     [RequireComponent(typeof(Collider))]
-    public class Cloud : MonoBehaviour
+    public class CloudSourceV2 : MonoBehaviour
     {
         private void Awake()
         {
@@ -24,7 +24,6 @@ namespace WanderingCloud
             {
                 other.GetComponentInParent<PlayerInventory>().CloudContact();
             }
-
         }
     }
 }
