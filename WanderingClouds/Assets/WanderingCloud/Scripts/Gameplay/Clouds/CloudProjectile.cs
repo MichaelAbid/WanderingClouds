@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using Codice.Client.BaseCommands;
 using UnityEngine;
 using NaughtyAttributes;
+using WanderingCloud.Controller;
+using WanderingCloud.Gameplay;
 
 namespace WanderingCloud
 {
@@ -43,8 +42,18 @@ namespace WanderingCloud
         }
 
         private void collisionEvent()
-        {
-            print("collided");
+        {            
+            Component component;
+            if (target.parent.TryGetComponent(typeof(PlayerInventory), out component))
+            {
+                var otherInventory = (PlayerInventory)component;
+                otherInventory.ReceivedCloud();
+            }
+            if (target.TryGetComponent(typeof(Source), out component))
+            {
+                var source = (Source)component;
+                source.Feed(type);
+            }
             Destroy(gameObject);
         }
     }

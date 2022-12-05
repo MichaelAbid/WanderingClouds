@@ -21,7 +21,6 @@ namespace WanderingCloud.Gameplay
             }
             return false;
         }
-
         public bool RemovePullet()
         {
             if (nbPullet > 0)

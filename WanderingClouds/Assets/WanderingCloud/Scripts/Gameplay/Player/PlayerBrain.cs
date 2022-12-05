@@ -15,6 +15,7 @@ namespace WanderingCloud.Controller
         [field: SerializeField, Foldout("References"), Required()] public CapsuleCollider Collider { get; private set; }
         [field: SerializeField, Foldout("References"), Required()] public CinemachineFreeLook CinemachineBase { get; private set; }
         [field: SerializeField, Foldout("References"), Required()] public CinemachineFreeLook CinemachineAim { get; private set; }
+        [field: SerializeField, Foldout("References"), Required()] public CinemachineInputProvider provider { get; private set; }
         [field: SerializeField, Foldout("References"), Required()] public AiGraber aiGrabber { get; private set; }
         [field: SerializeField, Foldout("References"), Required()] public CloudGrabber cloudGrabber { get; private set; }
         [field: SerializeField, Foldout("References"), Required()] public CloudExploder cloudExploder { get; private set; }
@@ -29,13 +30,18 @@ namespace WanderingCloud.Controller
         public override void PlayerConnect(int playerIndex)
         {
             CinemachineBase.gameObject.SetActive(true);
+            CinemachineBase.gameObject.SetActive(true);
 
-            var inputLink = CinemachineBase.GetComponent<CinemachineInputProvider>();
-            inputLink.PlayerIndex = playerIndex;
+            provider.gameObject.SetActive(false);
+            provider.gameObject.SetActive(true);
+
+            provider.PlayerIndex = playerIndex;
         }
         public override void PlayerDisconnect(int playerIndex)
         {
             CinemachineBase.gameObject.SetActive(false);
+            CinemachineBase.gameObject.SetActive(false);
+            provider.enabled = false;
         }
 
         public override void MovementInput(Vector2 input) => moveInput = input;

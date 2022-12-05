@@ -52,12 +52,14 @@ namespace WanderingCloud.Controller
         public bool isDashing => moveState == MovementState.Dash;
         #endregion
 
-        #region Dash Parameter
+        #region ??? Parameter
         [Foldout("Debug"), SerializeField, ReadOnly()] private Vector3 movementXZ;
         [Foldout("Debug"), SerializeField, ReadOnly()] private Vector3 movementSurface;
         [Foldout("Debug"), SerializeField, ReadOnly()] private float movementStrenght = 0f;
         #endregion
-        
+
+        [Foldout("Fall")] public UnityEvent onFall;
+
         #region UnityMethods
         private void Awake()
         {
@@ -101,11 +103,12 @@ namespace WanderingCloud.Controller
                 //movementSurface = Vector3.ProjectOnPlane(movementXZ, state.slopeNormal).normalized;
             }
             
-            state.RefreshState();
             SnapToGround();
         }
+
         private void FixedUpdate()
         {
+            state.RefreshState();
             Run();
             if (!state.isGrounded) Falling();
         }
@@ -117,12 +120,7 @@ namespace WanderingCloud.Controller
             //if (player.moveInput.magnitude < Mathf.Epsilon) return;
 
             //Turn where you run
-            if (movementStrenght > float.Epsilon)
-            {
-                //if not aiming
-                var aimRot = Quaternion.LookRotation(movementXZ, Vector3.up);
-                player.Avatar.transform.rotation = Quaternion.Slerp(player.Avatar.transform.rotation, aimRot, 5 * Time.deltaTime);
-            }
+            AvatarOrientation();
 
             if (!state.isGrounded)
             {
@@ -159,7 +157,19 @@ namespace WanderingCloud.Controller
             player.Body.velocity += externalForce;
             externalForce = Vector3.zero;
         }
-
+        private void AvatarOrientation()
+        {
+            if (movementStrenght > float.Epsilon && !player.Aim.isAiming)
+            {
+                var aimRot = Quaternion.LookRotation(movementXZ, Vector3.up);
+                player.Avatar.transform.rotation = Quaternion.Slerp(player.Avatar.transform.rotation, aimRot, 5 * Time.deltaTime);
+            }
+            else if (player.Aim.isAiming)
+            {
+                var aimRot = Quaternion.LookRotation(new Vector3(player.Camera.transform.forward.x, player.transform.rotation.y, player.Camera.transform.forward.z), Vector3.up);
+                player.Avatar.transform.rotation = Quaternion.Slerp(player.Avatar.transform.rotation, aimRot, 5 * Time.deltaTime);
+            }
+        }
         public void Jump()
         {
             if (!state.isGrounded || isJumping) return;
@@ -205,13 +215,15 @@ namespace WanderingCloud.Controller
         
         private void Falling()
         {
-            if(!state.isGrounded && !isJumping )
+            if(!state.isGrounded && !isJumping && !isDashing)
             {
                 //Apply Gravity Scale
                 float fallValue = fallFactor - 1.0f;
                 player.Body.AddForce(Physics.gravity * fallValue, ForceMode.Acceleration);
-                if(moveState is MovementState.Jump)
-                {
+
+                if (moveState is not MovementState.Fall)
+                {
+                    onFall?.Invoke();
                     moveState = MovementState.Fall;
                 }
             }
@@ -312,7 +324,7 @@ namespace WanderingCloud.Controller
             get => grounded;
             private set
             {
-                if (grounded != value)
+                if (grounded != value && value == true)
                 {
                     if(value)
                         onLanding?.Invoke();
@@ -324,7 +336,7 @@ namespace WanderingCloud.Controller
             }
         }
 
-        [SerializeField, ReadOnly]private bool grounded;
+        [SerializeField, ReadOnly] private bool grounded;
         [field: SerializeField, ReadOnly] public bool isNearEdge { get; private set; }
         [field: SerializeField, ReadOnly] public float slopeAngle { get; private set; }
         [field: SerializeField, ReadOnly] public Vector3 slopeVector { get; private set; }

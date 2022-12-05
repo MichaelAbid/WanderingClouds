@@ -16,12 +16,19 @@ namespace WanderingCloud
         private void Update()
         {
             var velocity = body.velocity;
+            animator.SetFloat("xVelocity", velocity.normalized.x);
+            animator.SetFloat("zVelocity", velocity.normalized.z);
             animator.SetFloat("speed", new Vector2(velocity.x, velocity.z).magnitude);
-            animator.SetFloat("fall", velocity.y);
+            animator.SetFloat("fallSpeed", velocity.y);
         }
 
+
+        public void Anim_Aim()=>animator.SetBool("aim", !animator.GetBool("aim"));
+        public void Anim_Fall(bool state)=>animator.SetBool("fall", state);
         public void Anim_Jump()=>animator.SetTrigger("jump");
         public void Anim_Dash()=>animator.SetTrigger("dash");
         public void Anim_Land()=>animator.SetTrigger("land");
+
+
     }
 }

@@ -14,11 +14,11 @@ namespace WanderingCloud
             var camDir = player.Camera.transform.forward;
             if (aim.isAiming)
             {
-                transform.position = player.Avatar.position + player.Avatar.forward + Vector3.up * (camDir.y * 5f);
+                transform.position = player.Avatar.position + player.Avatar.forward + Vector3.up * (camDir.y * 2f);
             }
             else
             {
-                transform.position = player.Avatar.position + camDir * 2f;
+                transform.position = player.Avatar.position + camDir * 4f;
             }
         }
     }

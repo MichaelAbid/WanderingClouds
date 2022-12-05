@@ -12,7 +12,7 @@ namespace WanderingCloud
 
 		[SerializeField] Camera camLeft;
 		[SerializeField] Camera camRight;
-		[SerializeField, Range(0f,1f)] float splitValue = 0.5f;
+		[SerializeField, Range(0f,1f)] public float splitValue = 0.5f;
 		private float lastValue = 0.5f;
 
 		[Button()] private void Neutral() { splitValue = 0.5f; Update(); }
