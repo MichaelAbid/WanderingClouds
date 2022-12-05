@@ -122,7 +122,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: 881e54982bc281f4e9cdc4c44aea30fb, type: 2}
 --- !u!1 &9737500
 GameObject:
   m_ObjectHideFlags: 0
@@ -6831,7 +6831,9 @@ MonoBehaviour:
   PushDistance: 41.5
   PushSize: {x: 12.52, y: 10.7}
   isWaterPush: 0
-  collider: {fileID: 454439106}
+  ccollider: {fileID: 0}
+  playerBrains: []
+  pushableObjects: []
 --- !u!33 &454439108
 MeshFilter:
   m_ObjectHideFlags: 10
