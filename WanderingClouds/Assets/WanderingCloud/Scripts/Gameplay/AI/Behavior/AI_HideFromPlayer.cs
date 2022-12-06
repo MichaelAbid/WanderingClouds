@@ -11,6 +11,7 @@ namespace WanderingCloud.Gameplay.AI
 {
     public class AI_HideFromPlayer : AI_Base
     {
+        [Foldout("Ref")][SerializeField] private BumperSource source;
 
         [Foldout("Idle")][SerializeField] private float idleTime;
         [Foldout("Idle")][SerializeField][ReadOnly] private float idleTimer;
@@ -26,6 +27,8 @@ namespace WanderingCloud.Gameplay.AI
         [Foldout("Hide")][SerializeField] private float hideOutMedDist = 40;
         [Foldout("Hide")][SerializeField] private float hideOutMaxDist = 50;
         [Foldout("HideOut")][SerializeField] protected List<HideOut> hideOuts = new List<HideOut>();
+
+        
 
         [Foldout("Debug")] public bool debugHideOut = false;
         [Foldout("Debug")] public bool debugHideOutPlayers = false;
@@ -113,14 +116,20 @@ namespace WanderingCloud.Gameplay.AI
 
         protected override void WanderingBehavior()
         {
-            
-            if (Vector3.Distance(WanderingTarget, transform.position) <= 0.5)
+            if (source.currentPullet / source.maxPullet <= 0.9)
             {
-                WanderingTarget = GetRandomPositionOnNavMesh(WanderingRadius);
-            }
-            agent.SetDestination(WanderingTarget);
+                if (Vector3.Distance(WanderingTarget, transform.position) <= 0.5)
+                {
+                    WanderingTarget = GetRandomPositionOnNavMesh(WanderingRadius);
+                }
+                agent.SetDestination(WanderingTarget);
 
-            base.WanderingBehavior();
+                base.WanderingBehavior();
+            }
+            else
+            {
+                WanderingTarget = transform.position;
+            }
         }
 
         
@@ -208,6 +217,11 @@ namespace WanderingCloud.Gameplay.AI
 
             foreach (HideOut hideOut in hideOuts)
             {
+                if(hideOut == null)
+                {
+                    GetAllRef();
+                    break;
+                }
                 int point = 0;
                 float distanceHideOutFromIA = Vector3.Distance(hideOut.transform.position, transform.position);
                 Gizmos.color = Color.red;
@@ -236,6 +250,11 @@ namespace WanderingCloud.Gameplay.AI
 
                     foreach (Player player in playerList)
                     {
+                        if (player == null)
+                        {
+                            GetAllRef();
+                            break;
+                        }
                         float distanceHideOutFromPlayer = Vector3.Distance(hideOut.transform.position, player.transform.position);
                         float distanceIAFromPlayer = Vector3.Distance(transform.position, player.transform.position);
                         Gizmos.color = Color.red;

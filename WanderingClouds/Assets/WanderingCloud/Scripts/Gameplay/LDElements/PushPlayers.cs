@@ -37,11 +37,13 @@ namespace WanderingCloud
                 if(!Physics.Raycast(ray,Vector3.Distance(transform.position, playerBrain.transform.position)-0.5f))
                 playerBrain.Movement.externalForce += transform.forward * PushForce;
             }
-            foreach(var pushableObject in pushableObjects)
+            foreach (var pushableObject in pushableObjects)
             {
+                if (pushableObject != null) { 
                 Ray ray = new Ray(transform.position, (pushableObject.transform.position - transform.position));
                 if (!Physics.Raycast(ray, Vector3.Distance(transform.position, pushableObject.transform.position) - 0.5f))
-                    if (ccollider.bounds.Contains(pushableObject.transform.position)) pushableObject.externalForce += transform.forward * PushForce;
+                if (ccollider.bounds.Contains(pushableObject.transform.position)) pushableObject.externalForce += transform.forward * PushForce;
+                }
             }
         }
 

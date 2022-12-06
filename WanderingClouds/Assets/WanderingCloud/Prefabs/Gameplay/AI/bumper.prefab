@@ -306,9 +306,9 @@ GameObject:
   - component: {fileID: 7388136042701748520}
   - component: {fileID: 7388136042701748525}
   - component: {fileID: 7388136042701748526}
-  - component: {fileID: 7388136042701748527}
   - component: {fileID: 7388136042410739278}
   - component: {fileID: 7388136042410739277}
+  - component: {fileID: 181404868}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -381,19 +381,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &7388136042701748527
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7388136042701748521}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &7388136042410739278
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -419,7 +406,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74ac0a21d821b6a4e8cb73fb877cd415, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bumpHeight: 50
+  bumpHeight: 10
+--- !u!65 &181404868
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7388136042701748521}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.8, y: 0.57, z: 0.8}
+  m_Center: {x: 0, y: 0.2, z: 0}
 --- !u!1 &7388136043022516055
 GameObject:
   m_ObjectHideFlags: 0
@@ -436,6 +436,7 @@ GameObject:
   - component: {fileID: 1689975077}
   - component: {fileID: 1948397584}
   - component: {fileID: 1948397585}
+  - component: {fileID: 1384820031}
   m_Layer: 0
   m_Name: bumper
   m_TagString: Untagged
@@ -473,7 +474,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 122
   m_CollisionDetection: 0
 --- !u!65 &1689975079
 BoxCollider:
@@ -509,6 +510,7 @@ MonoBehaviour:
   isAiActive: 1
   isGrabbable: 1
   isGrabbed: 0
+  source: {fileID: 1689975077}
   idleTime: 2
   idleTimer: 0
   WanderingTime: 10
@@ -535,8 +537,16 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  debugHideOut: 1
-  debugHideOutPlayers: 1
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  debugHideOut: 0
+  debugHideOutPlayers: 0
 --- !u!195 &1689975074
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -648,3 +658,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dc65716503e3f7468a9ac9665d66631, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &1384820031
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7388136043022516055}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.5, y: 1, z: 1.5}
+  m_Center: {x: 0, y: 0.5, z: 0}
