@@ -33,15 +33,20 @@ namespace WanderingCloud
         {
             foreach(var playerBrain in playerBrains)
             {
-                Ray ray = new Ray(transform.position, (playerBrain.transform.position - transform.position));
-                if(!Physics.Raycast(ray,Vector3.Distance(transform.position, playerBrain.transform.position)-0.5f))
-                playerBrain.Movement.externalForce += transform.forward * PushForce;
+                if (playerBrain != null)
+                {
+                    /*Ray ray = new Ray(transform.position, (playerBrain.transform.position - transform.position));
+                    if(!Physics.Raycast(ray,Vector3.Distance(transform.position, playerBrain.transform.position)-0.5f))*/
+                    playerBrain.Movement.externalForce += transform.forward * PushForce;
+                }
             }
-            foreach(var pushableObject in pushableObjects)
+            foreach (var pushableObject in pushableObjects)
             {
-                Ray ray = new Ray(transform.position, (pushableObject.transform.position - transform.position));
-                if (!Physics.Raycast(ray, Vector3.Distance(transform.position, pushableObject.transform.position) - 0.5f))
+                if (pushableObject != null) { 
+                    Ray ray = new Ray(transform.position, (pushableObject.transform.position - transform.position));
+                    if (!Physics.Raycast(ray, Vector3.Distance(transform.position, pushableObject.transform.position) - 0.5f))
                     if (ccollider.bounds.Contains(pushableObject.transform.position)) pushableObject.externalForce += transform.forward * PushForce;
+                }
             }
         }
 
@@ -49,9 +54,10 @@ namespace WanderingCloud
 
         private void OnTriggerEnter(Collider other)
         {
-            if(other.GetComponent<PlayerBrain>() != null)
+            
+            if(other.GetComponentInParent<PlayerBrain>() != null)
             {
-                playerBrains.Add(other.GetComponent<PlayerBrain>());
+                playerBrains.Add(other.GetComponentInParent<PlayerBrain>());
             }
          
             if (other.GetComponent<PushableObject>() != null)
@@ -64,9 +70,9 @@ namespace WanderingCloud
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.GetComponent<PlayerBrain>() != null)
+            if (other.GetComponentInParent<PlayerBrain>() != null)
             {
-                playerBrains.Remove(other.GetComponent<PlayerBrain>());
+                playerBrains.Remove(other.GetComponentInParent<PlayerBrain>());
             }
             if(other.GetComponent<PushableObject>() != null )
             {
