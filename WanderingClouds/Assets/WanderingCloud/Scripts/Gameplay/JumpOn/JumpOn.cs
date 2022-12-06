@@ -11,12 +11,12 @@ namespace WanderingCloud.Gameplay
 
         private void OnTriggerEnter(Collider other)
         {
-            
-            Player player = other.GetComponentInParent<Player>();
-            if (player != null && !player.isGrounded)
+
+            PlayerMovement player = other.GetComponentInParent<PlayerMovement>();
+            if (player != null && player.isJumping)
             {
                 Debug.Log("Bumped");
-                player.Jump(bumpHeight);
+                player.ForcedJump(bumpHeight);
             }
         }
 
