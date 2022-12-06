@@ -78,11 +78,14 @@ namespace WanderingCloud.Controller
 
             if (grabAI.aiGrabed is not null)
             {
-                
+                Debug.Log(grabAI.aiGrabed.transform.rotation);
+                grabAI.aiGrabed.transform.rotation = Quaternion.LookRotation(player.Camera.transform.position);
                 return;
             }
-            
-            if(assistTarget is null)
+            grabAI.aiGrabed.transform.rotation = Quaternion.identity;
+
+
+            if (assistTarget is null)
             {
                 RaycastHit hit;
 

@@ -15,7 +15,7 @@ namespace WanderingCloud
         [SerializeField] public float PushDistance;
         [SerializeField] public Vector2 PushSize;
         [SerializeField] public bool isWaterPush;
-
+        public float parentRatio = 1;
         public BoxCollider ccollider;
 
         public List<PlayerBrain> playerBrains = new List<PlayerBrain>();
@@ -33,7 +33,7 @@ namespace WanderingCloud
         {
             foreach(var playerBrain in playerBrains)
             {
-                if (playerBrain != null)
+                if (playerBrain != null && playerBrain.aiGrabber.aiGrabed.GetComponentInChildren<PushPlayers>()!=this)
                 {
                     /*Ray ray = new Ray(transform.position, (playerBrain.transform.position - transform.position));
                     if(!Physics.Raycast(ray,Vector3.Distance(transform.position, playerBrain.transform.position)-0.5f))*/
@@ -84,16 +84,18 @@ namespace WanderingCloud
 
         private void OnDrawGizmos()
         {
-            Matrix4x4 rotationMatrix = Matrix4x4.TRS(transform.position + (transform.forward* PushDistance/2), Quaternion.LookRotation(transform.forward,transform.up), Vector3.one);
-            Gizmos.matrix = rotationMatrix;
-            Gizmos.color = new Color(1, 1, 0,0.5f);
-            Gizmos.DrawCube(Vector3.zero, new Vector3(PushSize.x, PushSize.y, PushDistance));
-            Handles.color = new Color(1, 1, 0);
-            Handles.ArrowHandleCap(0, transform.position, Quaternion.LookRotation(transform.forward),PushForce,EventType.Repaint);
+            if (parentRatio > 0)
+            {
+                Matrix4x4 rotationMatrix = Matrix4x4.TRS(transform.position + (transform.forward * PushDistance / 2), Quaternion.LookRotation(transform.forward, transform.up), Vector3.one);
+                Gizmos.matrix = rotationMatrix;
+                Gizmos.color = new Color(1, 1, 0, 0.5f);
+                Gizmos.DrawCube(Vector3.zero, new Vector3(PushSize.x, PushSize.y, PushDistance));
+                Handles.color = new Color(1, 1, 0);
+                Handles.ArrowHandleCap(0, transform.position, Quaternion.LookRotation(transform.forward), PushForce, EventType.Repaint);
 
-            ccollider.center = new Vector3(0,0,(PushDistance / transform.localScale.z) / 2);
-            ccollider.size = new Vector3(PushSize.x/transform.localScale.x, PushSize.y / transform.localScale.y, PushDistance / transform.localScale.z);
-
+                ccollider.center = new Vector3(0, 0, (PushDistance / transform.localScale.z / parentRatio) / 2);
+                ccollider.size = new Vector3(PushSize.x / transform.localScale.x / parentRatio, PushSize.y / transform.localScale.y / parentRatio, PushDistance / transform.localScale.z / parentRatio);
+            }
         }
     }
 }
