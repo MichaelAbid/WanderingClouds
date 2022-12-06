@@ -30,7 +30,6 @@ namespace WanderingCloud
                 UpdateProperty(render, ("_ExitPos",pos));
             }
         }
-
         private void OnTriggerExit(Collider other)
         {
             if (!other.GetComponentInParent<PlayerMovement>()) return;
