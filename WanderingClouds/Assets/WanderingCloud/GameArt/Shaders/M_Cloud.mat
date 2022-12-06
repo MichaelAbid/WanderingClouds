@@ -248,7 +248,7 @@ Material:
     - _CullMode: 2
     - _CullModeForward: 2
     - _Cutoff: 0.5
-    - _DIsplace_Intensity: 0.3
+    - _DIsplace_Intensity: 1
     - _DepthOffsetEnable: 0
     - _DetailAlbedoScale: 1
     - _DetailNormalScale: 1
@@ -393,5 +393,6 @@ Material:
     - _UVMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMaskEmissive: {r: 1, g: 0, b: 0, a: 0}
     - _Vector4: {r: 1, g: 0, b: 0, a: 90}
+    - _fresnel_color: {r: 0, g: 0, b: 0, a: 0}
     - _tiling_Normal: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
