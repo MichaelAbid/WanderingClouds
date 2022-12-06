@@ -78,11 +78,12 @@ namespace WanderingCloud.Controller
                 Physics.Raycast(underRay, out underHit, state.groundCheckDistance);
                 
                 Component comp;
-                if (underHit.collider.TryGetComponent(typeof(CreatureSources), out comp));
+                underHit.collider.TryGetComponent(typeof(CreatureSources), out comp);
+                if (comp is not null);
                 {
                     var creature = (CreatureSources)comp;
-                    if(creature.currentState != CloudState.SOLID)return;
-                    transform.SetParent(comp.transform);
+                    if(creature != null && creature.currentState is CloudState.SOLID)
+                        transform.SetParent(comp.transform);
                 }                
             });
             state.onQuitGround.AddListener(() =>
