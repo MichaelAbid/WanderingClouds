@@ -50,7 +50,7 @@ namespace WanderingCloud
 		{
 			if (pelletStock > 0)
 			{
-				maxPelletStock--;
+				pelletStock--;
 				return true;
 			}
 			return false;

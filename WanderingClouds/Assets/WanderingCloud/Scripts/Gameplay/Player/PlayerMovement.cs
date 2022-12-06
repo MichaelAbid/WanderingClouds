@@ -3,6 +3,7 @@ using UnityEngine.Events;
 using UnityEngine;
 using NaughtyAttributes;
 using DG.Tweening;
+using WanderingCloud.Gameplay;
 
 namespace WanderingCloud.Controller
 {
@@ -24,26 +25,26 @@ namespace WanderingCloud.Controller
         public Vector3 externalForce;
 
         [field: SerializeField, ReadOnly] public MovementState moveState { get; private set; }
-        
+
         #region Run Parameter
-        [Foldout("Run"),SerializeField] private float airSpeed = 10f;
-        [Foldout("Run"),SerializeField] private float walkSpeed = 20f;
-        [Foldout("Run"),SerializeField] private float runSpeed = 40f;
-        [Foldout("Run"),SerializeField] private float maxSlopeAngle = 45f;
-        [Foldout("Run"),SerializeField] private float snapGroundDist = 0.15f;
+        [Foldout("Run"), SerializeField] private float airSpeed = 10f;
+        [Foldout("Run"), SerializeField] private float walkSpeed = 20f;
+        [Foldout("Run"), SerializeField] private float runSpeed = 40f;
+        [Foldout("Run"), SerializeField] private float maxSlopeAngle = 45f;
+        [Foldout("Run"), SerializeField] private float snapGroundDist = 0.15f;
         #endregion
 
         #region Jump Parameter
-        [Foldout("Jump"), SerializeField, Range(0f, 5f)]  private float jumpHeight = 5f;
+        [Foldout("Jump"), SerializeField, Range(0f, 5f)] private float jumpHeight = 5f;
         [Foldout("Jump"), SerializeField, Range(0f, 4f)] private float fallFactor = 1.666f;
         [Foldout("Jump"), SerializeField] private float fallSpeedMax = 10f;
         [Foldout("Jump")] private Coroutine jump = null;
         [Foldout("Jump")] public UnityEvent onJump;
         public bool isJumping => jump is not null;
         #endregion
-        
+
         #region Dash Parameter
-        [Foldout("Dash"), SerializeField, Range(0f, 5f)]  private float dashDistance = 5f;
+        [Foldout("Dash"), SerializeField, Range(0f, 5f)] private float dashDistance = 5f;
         [Foldout("Dash"), SerializeField, Range(0f, 1f)] private float dashDuration = 0.5f;
         [Foldout("Dash"), SerializeField, Range(0f, 1f)] private float dashCD = 0.3f;
         [Foldout("Dash"), SerializeField] private bool canDash = true;
@@ -58,8 +59,10 @@ namespace WanderingCloud.Controller
         [Foldout("Debug"), SerializeField, ReadOnly()] private float movementStrenght = 0f;
         #endregion
 
-        [Foldout("Fall")] public UnityEvent onFall;
-
+        [Foldout("Fall")] public UnityEvent onFall;
+
+
+
         #region UnityMethods
         private void Awake()
         {
@@ -67,22 +70,26 @@ namespace WanderingCloud.Controller
             state.onLanding.AddListener(() => canDash = true);
             state.onLanding.AddListener(() => { if (moveState is MovementState.Fall or MovementState.Jump) moveState = MovementState.Idle; });
 
-            defaultParent = transform.parent;
             state.onLanding.AddListener(() =>
             {
                 var feetPos = player.Avatar.position + Vector3.down * ((player.Collider.height - 0.05f) / 2);
                 RaycastHit underHit;
                 Ray underRay = new Ray(feetPos, Vector3.down);
                 Physics.Raycast(underRay, out underHit, state.groundCheckDistance);
-                Component rb;
-                if (underHit.collider.TryGetComponent(typeof(Rigidbody), out rb))
+
+                Component comp;
+                underHit.collider.TryGetComponent(typeof(CreatureSources), out comp);
+                if (comp is not null)
                 {
-                    transform.SetParent(rb.transform);
-                }                
+                    var creature = (CreatureSources)comp;
+                    if (creature.currentState != CloudState.SOLID) return;
+                    transform.SetParent(comp.transform);
+                }
             });
             state.onQuitGround.AddListener(() =>
             {
-                transform.SetParent(defaultParent);                
+                transform.SetParent(null);
+                //transform.parent.DetachChildren();                
             });
         }
 
@@ -94,15 +101,15 @@ namespace WanderingCloud.Controller
             movementXZ = player.moveInput.y * forward + player.moveInput.x * right;
             movementStrenght = movementXZ.magnitude;
 
-                movementSurface = movementXZ;
-            if (state.slopeAngle > maxSlopeAngle ||  float.IsNaN(state.slopeAngle))
+            movementSurface = movementXZ;
+            if (state.slopeAngle > maxSlopeAngle || float.IsNaN(state.slopeAngle))
             {
             }
             else
             {
                 //movementSurface = Vector3.ProjectOnPlane(movementXZ, state.slopeNormal).normalized;
             }
-            
+
             SnapToGround();
         }
 
@@ -116,7 +123,7 @@ namespace WanderingCloud.Controller
 
         private void Run()
         {
-            if(isDashing)return;
+            if (isDashing) return;
             //if (player.moveInput.magnitude < Mathf.Epsilon) return;
 
             //Turn where you run
@@ -125,22 +132,22 @@ namespace WanderingCloud.Controller
             if (!state.isGrounded)
             {
                 var temp = movementXZ * (movementStrenght * airSpeed);
-                player.Body.velocity = new Vector3(temp.x, player.Body.velocity.y, temp.z) ;
+                player.Body.velocity = new Vector3(temp.x, player.Body.velocity.y, temp.z);
 
                 player.Body.AddForce(movementXZ.normalized * (movementXZ.magnitude * (airSpeed * Time.deltaTime)), ForceMode.VelocityChange);
                 return;
             }
-            
-            Debug.DrawRay(player.Avatar.position,movementSurface.normalized, Color.green, Time.deltaTime, true);
-            Debug.DrawRay(player.Avatar.position + Vector3.up * 0.1f,movementSurface.normalized * movementStrenght, Color.red, Time.deltaTime, true);
+
+            Debug.DrawRay(player.Avatar.position, movementSurface.normalized, Color.green, Time.deltaTime, true);
+            Debug.DrawRay(player.Avatar.position + Vector3.up * 0.1f, movementSurface.normalized * movementStrenght, Color.red, Time.deltaTime, true);
             var speed = movementSurface * (movementStrenght * runSpeed);
             switch (moveState)
             {
                 case MovementState.Idle:
-                    if (movementStrenght > float.Epsilon)  moveState = MovementState.Walk;
-                    break;                
+                    if (movementStrenght > float.Epsilon) moveState = MovementState.Walk;
+                    break;
                 case MovementState.Walk:
-                    if (movementStrenght < float.Epsilon)  moveState = MovementState.Idle;
+                    if (movementStrenght < float.Epsilon) moveState = MovementState.Idle;
                     speed = movementSurface * (movementStrenght * walkSpeed);
                     break;
                 case MovementState.Rush:
@@ -153,29 +160,36 @@ namespace WanderingCloud.Controller
                 default:
                     break;
             }
-            player.Body.velocity = new Vector3(speed.x,  player.Body.velocity.y, speed.z);
+            player.Body.velocity = new Vector3(speed.x, player.Body.velocity.y, speed.z);
             player.Body.velocity += externalForce;
             externalForce = Vector3.zero;
         }
-        private void AvatarOrientation()
-        {
+        private void AvatarOrientation()
+
+        {
+
             if (movementStrenght > float.Epsilon && !player.Aim.isAiming)
             {
                 var aimRot = Quaternion.LookRotation(movementXZ, Vector3.up);
                 player.Avatar.transform.rotation = Quaternion.Slerp(player.Avatar.transform.rotation, aimRot, 5 * Time.deltaTime);
             }
-            else if (player.Aim.isAiming)
-            {
-                var aimRot = Quaternion.LookRotation(new Vector3(player.Camera.transform.forward.x, player.transform.rotation.y, player.Camera.transform.forward.z), Vector3.up);
-                player.Avatar.transform.rotation = Quaternion.Slerp(player.Avatar.transform.rotation, aimRot, 5 * Time.deltaTime);
-            }
+            else if (player.Aim.isAiming)
+
+            {
+
+                var aimRot = Quaternion.LookRotation(new Vector3(player.Camera.transform.forward.x, player.transform.rotation.y, player.Camera.transform.forward.z), Vector3.up);
+
+                player.Avatar.transform.rotation = Quaternion.Slerp(player.Avatar.transform.rotation, aimRot, 5 * Time.deltaTime);
+
+            }
+
         }
         public void Jump()
         {
             if (!state.isGrounded || isJumping) return;
             onJump?.Invoke();
             jump = StartCoroutine(Jumping(jumpHeight));
-            
+
         }
         public void ForcedJump(float height)
         {
@@ -183,7 +197,7 @@ namespace WanderingCloud.Controller
             jump = StartCoroutine(Jumping(jumpHeight));
             onJump?.Invoke();
         }
-        
+
         /// <summary>
         /// Inspired by this
         /// https://answers.unity.com/questions/854006/jumping-a-specific-height-using-velocity-gravity.html
@@ -197,7 +211,7 @@ namespace WanderingCloud.Controller
             moveState = MovementState.Jump;
 
             //player.Body.AddForce(Vector3.up * Mathf.Sqrt(-2.0f * Physics2D.gravity.y * (jumpHeight)), ForceMode.VelocityChange);
-            player.Body.velocity = Vector3.Scale(new Vector3(1,0,1), player.Body.velocity)
+            player.Body.velocity = Vector3.Scale(new Vector3(1, 0, 1), player.Body.velocity)
                                    + state.slopeNormal * Mathf.Sqrt(-2.0f * Physics2D.gravity.y * jumpHeight);
 
             yield return new WaitForFixedUpdate();
@@ -212,39 +226,42 @@ namespace WanderingCloud.Controller
             jump = null;
             moveState = previousState;
         }
-        
+
         private void Falling()
         {
-            if(!state.isGrounded && !isJumping && !isDashing)
+            if (!state.isGrounded && !isJumping && !isDashing)
             {
                 //Apply Gravity Scale
                 float fallValue = fallFactor - 1.0f;
                 player.Body.AddForce(Physics.gravity * fallValue, ForceMode.Acceleration);
 
-                if (moveState is not MovementState.Fall)
-                {
-                    onFall?.Invoke();
+                if (moveState is not MovementState.Fall)
+
+                {
+
+                    onFall?.Invoke();
+
                     moveState = MovementState.Fall;
                 }
             }
-            
+
             if (player.Body.velocity.y < -Mathf.Abs(fallSpeedMax))
             {
-                player.Body.velocity =new Vector3(player.Body.velocity.x,  -fallSpeedMax, player.Body.velocity.z);
+                player.Body.velocity = new Vector3(player.Body.velocity.x, -fallSpeedMax, player.Body.velocity.z);
             }
         }
 
         private void SnapToGround()
         {
             if (state.isNearEdge || isJumping) return;
-            
-            var feetPos = player.Avatar.position - player.Avatar.up * ((player.Collider.height - player.Collider.radius)/ 2);
+
+            var feetPos = player.Avatar.position - player.Avatar.up * ((player.Collider.height - player.Collider.radius) / 2);
             RaycastHit hit;
             Ray groundRay = new Ray(feetPos, -player.Avatar.up);
             if (Physics.Raycast(groundRay, out hit, player.Collider.radius + snapGroundDist))
             {
-                if(hit.distance > player.Collider.radius)
-                transform.position += (hit.distance-player.Collider.radius) * -player.Avatar.up;
+                if (hit.distance > player.Collider.radius)
+                    transform.position += (hit.distance - player.Collider.radius) * -player.Avatar.up;
             }
             Debug.DrawRay(groundRay.origin, groundRay.direction * hit.distance, Color.green);
             Debug.DrawRay(groundRay.origin + groundRay.direction * hit.distance, groundRay.direction * (player.Collider.radius + snapGroundDist - hit.distance), Color.red);
@@ -253,14 +270,14 @@ namespace WanderingCloud.Controller
         public void Dash()
         {
             //Can dash Mid Air
-            if (dash is not null  || !canDash) return;
+            if (dash is not null || !canDash) return;
             if (isJumping)
             {
                 StopCoroutine(jump);
                 jump = null;
             }
             dash = StartCoroutine(Dashing());
-            onDash?.Invoke();        
+            onDash?.Invoke();
         }
         private IEnumerator Dashing()
         {
@@ -279,16 +296,16 @@ namespace WanderingCloud.Controller
 
             //DOTween.To(() => player.Avatar.transform.rotation, x => player.Avatar.transform.rotation = x, aimRot, 0.2f);
             player.Avatar.transform.DORotateQuaternion(aimRot, .3f);
-            
+
             Vector3 startPos = player.Avatar.position;
-            float dashSpeed = (dashDirection.magnitude * dashDistance)/ dashDuration;
+            float dashSpeed = (dashDirection.magnitude * dashDistance) / dashDuration;
             float time = dashDuration;
-            Debug.DrawRay(startPos,dashDirection * dashDistance,Color.blue, dashDuration );
-            
+            Debug.DrawRay(startPos, dashDirection * dashDistance, Color.blue, dashDuration);
+
             while (time > 0)
             {
                 player.Body.velocity = Vector3.ProjectOnPlane(dashDirection, state.slopeNormal).normalized * dashSpeed;
-                
+
                 yield return new WaitForEndOfFrame();
                 time -= Time.deltaTime;
             }
@@ -324,14 +341,17 @@ namespace WanderingCloud.Controller
             get => grounded;
             private set
             {
-                if (grounded != value && value == true)
+                if (grounded != value)
                 {
-                    if(value)
+                    if (value)
+                    {
                         onLanding?.Invoke();
+                    }
                     else
+                    {
                         onQuitGround?.Invoke();
+                    }
                 }
-                
                 grounded = value;
             }
         }
@@ -365,11 +385,11 @@ namespace WanderingCloud.Controller
             //Calcul Slope
             float predictDist = player.Collider.radius;
             slopeNormal = underHit.normal;
-            slopeVector = Vector3.ProjectOnPlane(avatar.forward * predictDist,slopeNormal);
+            slopeVector = Vector3.ProjectOnPlane(avatar.forward * predictDist, slopeNormal);
             slopeAngle = Mathf.Atan2(slopeVector.y, predictDist) * Mathf.Rad2Deg;
             slopeVector = slopeVector.normalized;
-            Debug.DrawLine(feetPos, feetPos+slopeVector, Color.yellow);
-            
+            Debug.DrawLine(feetPos, feetPos + slopeVector, Color.yellow);
+
             //Edge verif
             Ray forwardRay = new Ray(feetPos + Vector3.up + avatar.forward * predictDist, Vector3.down);
             isNearEdge = !Physics.Raycast(forwardRay, height + 1);
