@@ -25,6 +25,8 @@ namespace WanderingCloud.Controller
         [field: SerializeField, Foldout("Data")] private float followMaxSpeed;
         [field: SerializeField, Foldout("Data"), MinMaxSlider(float.Epsilon, 1)] private Vector2 outOfCenterYThreshold;
         [field: SerializeField, Foldout("Data"), MinMaxSlider(float.Epsilon, 100)] private Vector2 outOfCenterZThreshold;
+        [field: SerializeField, Foldout("Data"), Range(0f, 1f)] private float transitionSensitivityScale = 0.35f;
+        [field: SerializeField, Foldout("Data"), Range(0f, 1f)] private float transitionDuration = 0.25f;
 
         [Header("Aim Assist")]
         [field: SerializeField, Foldout("Data")] private float maxTargetDistance;
@@ -53,6 +55,8 @@ namespace WanderingCloud.Controller
 
         private Transform assistTarget;
         private Vector3 defaultTargetPosition;
+
+        private Coroutine transition = null;
         #endregion
 
         private void Start()
@@ -194,11 +198,6 @@ namespace WanderingCloud.Controller
             //Order them by the distance from the center of the screen
             assistTargets = assistTargets.OrderBy(x =>  Vector2.Distance(player.Camera.WorldToViewportPoint(x.transform.position), Vector2.one * 0.5f)).ToArray();
 
-            //For each object on the list, check occlusion
-            for (int i = 0; i < assistTargets.Length; i++)
-            {
-                //Debug.DrawLine(player.transform.position, assistTargets[i].transform.position, Color.Lerp(Color.red, Color.green, Vector2.Distance(player.Camera.WorldToViewportPoint(assistTargets[i].transform.position), Vector2.one / 2f) * 5));
-            }
             for (int i = 0; i < assistTargets.Length; i++)
             {
                 RaycastHit hit;
@@ -232,7 +231,7 @@ namespace WanderingCloud.Controller
         }
 
         /// <summary>
-        /// Called in unityEvent
+        /// Called by unityEvent
         /// </summary>
         public void OnLeaveGround()
         {
@@ -244,10 +243,26 @@ namespace WanderingCloud.Controller
             if (activeVCam is not null)
             {
                 activeVCam.Priority = 9;
+
+                if (activeVCam == player.VCamAuto && desiredCam == player.VCamBase)
+                {
+                    transition = StartCoroutine(EaseVCamTransition(desiredCam));
+                }
             }
 
             desiredCam.Priority = 10;
             activeVCam = desiredCam;
+        }
+
+        IEnumerator EaseVCamTransition(CinemachineFreeLook toVCam)
+        {
+            var originalMaxSpeed = toVCam.m_YAxis.m_MaxSpeed;
+            toVCam.m_YAxis.m_MaxSpeed *= transitionSensitivityScale;
+
+            yield return new WaitForSeconds(transitionDuration);
+
+            toVCam.m_YAxis.m_MaxSpeed = originalMaxSpeed;
+            transition = null;
         }
 
         #if UNITY_EDITOR
