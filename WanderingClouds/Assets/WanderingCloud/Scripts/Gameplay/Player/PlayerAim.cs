@@ -31,9 +31,10 @@ namespace WanderingCloud.Controller
         [field: SerializeField, Foldout("Data")] private float aimAssistRadius;
         [field: SerializeField, Foldout("Data")] private Color detectionColor;
 
-        [field: SerializeField, Foldout("States")] public bool isAiming;
-        [field: SerializeField, Foldout("States")] private float timeSinceInactivity;
-        [field: SerializeField, Foldout("States")] private bool isActive;
+        [field: SerializeField, Foldout("States"), ReadOnly] private CinemachineFreeLook activeVCam;
+        [field: SerializeField, Foldout("States"), ReadOnly] public bool isAiming;
+        [field: SerializeField, Foldout("States"), ReadOnly] private bool isPlayerActive;
+        [field: SerializeField, Foldout("States"), ReadOnly] private float timeSinceInactivity;
 
         [field: SerializeField, Foldout("References")] public PlayerBrain player;
         [field: SerializeField, Foldout("References")] private Transform followTarget;
@@ -52,24 +53,24 @@ namespace WanderingCloud.Controller
 
         private Transform assistTarget;
         private Vector3 defaultTargetPosition;
-
-        Coroutine blackMagicScript;
         #endregion
+
+        private void Start()
+        { 
+            Initialize();
+        }
 
         private void Update()
         {
             CheckForActivity();
 
-            if (player.CinemachineBase.m_YAxis.Value > yThresholdFollow) return;
+            //If camera is bird's eye, prevent changes
+            if (player.VCamBase.m_YAxis.Value > yThresholdFollow) return;
 
-            if (timeSinceInactivity >= waitTimeFollow && player.CinemachineBase.m_BindingMode == CinemachineTransposer.BindingMode.WorldSpace)
+            if (timeSinceInactivity >= waitTimeFollow && activeVCam == player.VCamBase)
             {
-                if (blackMagicScript is not null) StopCoroutine(blackMagicScript);
-                blackMagicScript = StartCoroutine(SwitchToSimpleFollow());
+                SetVCam(player.VCamAuto);
             }
-
-            //if player is rushing, new target fov
-
         }
         private void FixedUpdate()
         {
@@ -138,42 +139,26 @@ namespace WanderingCloud.Controller
 
         private void Initialize()
         {
+            SetVCam(player.VCamBase);
         }
 
         public void BeginAim()
         {
             isAiming = true;
 
+            SetVCam(player.VCamAim);
+
             onAim?.Invoke();
 
             crosshair.enabled = true;
-
-            if (player.CinemachineBase.m_BindingMode == CinemachineTransposer.BindingMode.SimpleFollowWithWorldUp)
-            {
-                SwitchToWorldBinding();
-            }
-
-            player.CinemachineAim.m_YAxis = player.CinemachineBase.m_YAxis;
-            player.CinemachineAim.m_XAxis = player.CinemachineBase.m_XAxis;
-
-            //Aim VCam takes priority
-            player.CinemachineAim.Priority = player.CinemachineBase.Priority + 1;
         }
+
         public void EndAim()
         {
-            if (player.CinemachineBase.m_BindingMode == CinemachineTransposer.BindingMode.SimpleFollowWithWorldUp)
-            {
-                timeSinceInactivity = 0f;
-                SwitchToWorldBinding();
-            }
-
             onAim?.Invoke();
 
-            player.CinemachineBase.m_YAxis = player.CinemachineAim.m_YAxis;
-            player.CinemachineBase.m_XAxis = player.CinemachineAim.m_XAxis;
-
-            //Aim VCam takes priority
-            player.CinemachineAim.Priority = player.CinemachineBase.Priority - 1;
+            timeSinceInactivity = 0f;
+            SetVCam(player.VCamBase);
 
             crosshair.enabled = false;
 
@@ -228,24 +213,21 @@ namespace WanderingCloud.Controller
 
         private void CheckForActivity()
         {
-            if (player.CinemachineBase != null)
+            if (activeVCam.m_XAxis.m_InputAxisValue != 0f && activeVCam.m_YAxis.m_InputAxisValue != 0f)
             {
-                if (player.CinemachineBase.m_XAxis.m_InputAxisValue != 0f && player.CinemachineBase.m_YAxis.m_InputAxisValue != 0f)
-                {
-                    isActive = true;
-                    timeSinceInactivity = 0f;
+                isPlayerActive = true;
+                timeSinceInactivity = 0f;
 
-                    if (player.CinemachineBase.m_BindingMode == CinemachineTransposer.BindingMode.SimpleFollowWithWorldUp)
-                    {
-                        SwitchToWorldBinding();
-                    }
-                }
-
-                else
+                if (activeVCam == player.VCamAuto)
                 {
-                    isActive = false;
-                    timeSinceInactivity += Time.deltaTime;
+                    SetVCam(player.VCamBase);
                 }
+            }
+
+            else
+            {
+                isPlayerActive = false;
+                timeSinceInactivity += Time.deltaTime;
             }
         }
 
@@ -257,40 +239,18 @@ namespace WanderingCloud.Controller
             canFollow = false;
         }
 
-
-        #region Transposer binding switch
-
-        void SwitchToWorldBinding()
+        public void SetVCam(CinemachineFreeLook desiredCam)
         {
-            Vector3 offset = player.CinemachineBase.State.RawPosition - player.CinemachineBase.Follow.position;
-            offset.y = 0; // project onto plane
-            float value = Vector3.SignedAngle(Vector3.back, offset, Vector3.up);
-            player.CinemachineBase.m_BindingMode = CinemachineTransposer.BindingMode.WorldSpace;
-            player.CinemachineBase.InternalUpdateCameraState(Vector3.up, -1);
-            player.CinemachineBase.m_XAxis.Value = value;
-            player.CinemachineBase.PreviousStateIsValid = false;
-        }
-
-        IEnumerator SwitchToSimpleFollow()
-        {
-            while (!player.Movement.state.isGrounded)
+            if (activeVCam is not null)
             {
-                yield return new WaitForEndOfFrame();
+                activeVCam.Priority = 9;
             }
-            Vector3 offset = player.CinemachineBase.State.RawPosition - player.CinemachineBase.Follow.position;
-            offset.y = 0; // project onto plane
-            float value = Vector3.SignedAngle(Vector3.back, offset, Vector3.up);
-            player.CinemachineBase.m_XAxis.Value = value;
-            player.CinemachineBase.m_BindingMode = CinemachineTransposer.BindingMode.SimpleFollowWithWorldUp;
-            player.CinemachineBase.InternalUpdateCameraState(Vector3.up, -1);
-            player.CinemachineBase.PreviousStateIsValid = false;
 
-            blackMagicScript = null;
+            desiredCam.Priority = 10;
+            activeVCam = desiredCam;
         }
 
-        #endregion
-
-#if UNITY_EDITOR
+        #if UNITY_EDITOR
         private void OnDrawGizmosSelected()
         {
             using (new Handles.DrawingScope(Color.yellow))
@@ -301,6 +261,6 @@ namespace WanderingCloud.Controller
             }
         }
 
-#endif
+        #endif
     }
 }
