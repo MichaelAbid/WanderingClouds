@@ -29,23 +29,23 @@ namespace WanderingCloud.Controller
 
         public override void PlayerConnect(int playerIndex)
         {
-            //VCamBase.gameObject.SetActive(true);
-            //VCamAim.gameObject.SetActive(true);
-            //provider.enabled = true;
+            VCamBase.gameObject.SetActive(true);
+            VCamAuto.gameObject.SetActive(true);
+            VCamAim.gameObject.SetActive(true);
 
-            //provider.gameObject.SetActive(false);
-            //provider.gameObject.SetActive(true);
             VCamBase.gameObject.GetComponent<CinemachineInputProvider>().enabled = false;
-            VCamBase.gameObject.GetComponent<CinemachineInputProvider>().enabled = true;
             VCamAuto.gameObject.GetComponent<CinemachineInputProvider>().enabled = false;
-            VCamAuto.gameObject.GetComponent<CinemachineInputProvider>().enabled = true;
             VCamAim.gameObject.GetComponent<CinemachineInputProvider>().enabled = false;
-            VCamAim.gameObject.GetComponent<CinemachineInputProvider>().enabled = true;
-
 
             VCamBase.gameObject.GetComponent<CinemachineInputProvider>().PlayerIndex = playerIndex;
             VCamAuto.gameObject.GetComponent<CinemachineInputProvider>().PlayerIndex = playerIndex;
             VCamAim.gameObject.GetComponent<CinemachineInputProvider>().PlayerIndex = playerIndex;
+
+            VCamBase.gameObject.GetComponent<CinemachineInputProvider>().enabled = true;
+            VCamAuto.gameObject.GetComponent<CinemachineInputProvider>().enabled = true;
+            VCamAim.gameObject.GetComponent<CinemachineInputProvider>().enabled = true;
+
+
         }
         public override void PlayerDisconnect(int playerIndex)
         {
