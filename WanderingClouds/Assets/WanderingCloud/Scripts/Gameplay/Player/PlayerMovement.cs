@@ -151,7 +151,7 @@ namespace WanderingCloud.Controller
                     speed = movementSurface * (movementStrenght * walkSpeed);
                     break;
                 case MovementState.Rush:
-                    if (Vector3.Dot(player.Body.velocity.normalized, movementSurface.normalized) < 0.5f || movementStrenght < 0.5f)
+                    if (Vector3.Dot(player.Body.velocity.normalized, movementSurface.normalized) < 0.5f || movementStrenght < 0.5f || player.Aim.isAiming)
                     {
                         moveState = MovementState.Walk;
                     }
@@ -282,6 +282,7 @@ namespace WanderingCloud.Controller
         private IEnumerator Dashing()
         {
             canDash = false;
+            player.Aim.EndAim();
             var vel = player.Body.velocity;
             var previousState = moveState;
             moveState = MovementState.Dash;
@@ -310,7 +311,7 @@ namespace WanderingCloud.Controller
                 time -= Time.deltaTime;
             }
             player.Body.velocity = vel;
-            if (state.isGrounded)
+            if (state.isGrounded && !player.Aim.isAiming)
             {
                 //moveState = Vector3.Dot(dashDirection, movementXZ.normalized) > 0 ? MovementState.Rush : previousState;
                 moveState = MovementState.Rush;

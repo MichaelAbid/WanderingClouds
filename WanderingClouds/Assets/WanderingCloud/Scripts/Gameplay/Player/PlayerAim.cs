@@ -169,6 +169,8 @@ namespace WanderingCloud.Controller
 
         public void EndAim()
         {
+            if (!isAiming) return;
+
             onAim?.Invoke();
 
             timeSinceInactivity = 0f;
