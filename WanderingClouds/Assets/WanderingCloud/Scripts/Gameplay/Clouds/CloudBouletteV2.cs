@@ -44,7 +44,8 @@ namespace WanderingCloud
         private void collisionEvent()
         {            
             Component component;
-            if (target.parent.TryGetComponent(typeof(PlayerInventory), out component))
+            target.parent.TryGetComponent(typeof(PlayerInventory), out component);
+            if(component is not null)
             {
                 var otherInventory = (PlayerInventory)component;
                 otherInventory.ReceivedCloud();

@@ -33,7 +33,12 @@ namespace WanderingCloud
         {
             foreach(var playerBrain in playerBrains)
             {
-                if (playerBrain != null && playerBrain.aiGrabber.aiGrabed.GetComponentInChildren<PushPlayers>()!=this)
+                PushPlayers pp = null;
+                if (playerBrain.aiGrabber.aiGrabed != null)
+                {
+                    pp = playerBrain.aiGrabber.aiGrabed.GetComponentInChildren<PushPlayers>();
+                }
+                if (playerBrain != null && (pp == null ||  pp != this))
                 {
                     /*Ray ray = new Ray(transform.position, (playerBrain.transform.position - transform.position));
                     if(!Physics.Raycast(ray,Vector3.Distance(transform.position, playerBrain.transform.position)-0.5f))*/

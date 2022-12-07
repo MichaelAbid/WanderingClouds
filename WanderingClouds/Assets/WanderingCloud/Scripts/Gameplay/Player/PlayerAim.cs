@@ -53,7 +53,7 @@ namespace WanderingCloud.Controller
         private Vector3 velocity = Vector3.zero;
         private bool canFollow = true;
 
-        private Transform assistTarget;
+        [SerializeField, ReadOnly] private Transform assistTarget;
         private Vector3 defaultTargetPosition;
 
         private Coroutine transition = null;
@@ -77,17 +77,24 @@ namespace WanderingCloud.Controller
             }
         }
         private void FixedUpdate()
-        {
+        { 
+            if (grabAI.aiGrabed is not null)
+            {
+                if (isAiming)
+                {
+                    Debug.Log(grabAI.aiGrabed.transform.rotation);
+                    grabAI.aiGrabed.transform.rotation = Quaternion.LookRotation(player.Camera.transform.position);
+                    return;
+                }
+                
+                grabAI.aiGrabed.transform.rotation = Quaternion.identity;
+            }
+
+            
             if (!isAiming) return;
             assistTarget = CheckForAssistTarget();
 
-            if (grabAI.aiGrabed is not null)
-            {
-                Debug.Log(grabAI.aiGrabed.transform.rotation);
-                grabAI.aiGrabed.transform.rotation = Quaternion.LookRotation(player.Camera.transform.position);
-                return;
-            }
-            grabAI.aiGrabed.transform.rotation = Quaternion.identity;
+           
 
 
             if (assistTarget is null)
