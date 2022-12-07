@@ -77,13 +77,7 @@ namespace WanderingCloud.Controller
                 Ray underRay = new Ray(feetPos, Vector3.down);
                 Physics.Raycast(underRay, out underHit, state.groundCheckDistance);
                 
-                Component comp;
-                if (underHit.collider.TryGetComponent(typeof(CreatureSources), out comp));
-                {
-                    var creature = (CreatureSources)comp;
-                    if(creature.currentState != CloudState.SOLID)return;
-                    transform.SetParent(comp.transform);
-                }                
+            
             });
             state.onQuitGround.AddListener(() =>
             {

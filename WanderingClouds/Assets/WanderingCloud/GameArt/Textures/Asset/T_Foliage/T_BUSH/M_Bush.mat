@@ -56,7 +56,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BRSA:
-        m_Texture: {fileID: 2800000, guid: 925bc9054add7d74097078c792da86ef, type: 3}
+        m_Texture: {fileID: 2800000, guid: 701515102f000d247b75af87e2dc0ee3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseColor:
@@ -238,8 +238,8 @@ Material:
     - _RefractionModel: 0
     - _RenderQueueType: 1
     - _RequireSplitLighting: 1
-    - _Roughness_Intensity: 7
-    - _SSS_Intensity: 10
+    - _Roughness_Intensity: 200
+    - _SSS_Intensity: 0.8
     - _Saturation: 1
     - _Smoothness: 0.5
     - _SmoothnessRemapMax: 1
@@ -301,7 +301,7 @@ Material:
     - _InvPrimScale: {r: 1, g: 1, b: 0, a: 0}
     - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
     - _Light_Color: {r: 0.41176474, g: 0.8313726, b: 1, a: 0}
-    - _SSS_color: {r: 0.41037738, g: 0.83193064, b: 1, a: 0}
+    - _SSS_color: {r: 0.5990566, g: 0.9192996, b: 1, a: 0}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
     - _ThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
     - _Tiling_of_Texture: {r: 0.2, g: 0.2, b: 0, a: 0}
