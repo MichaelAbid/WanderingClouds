@@ -24,6 +24,7 @@ namespace WanderingCloud.UI
         [Header("Drag UI Element which belong to this menu")]
         public MenuNavigator navigator;
         public List<GameObject> listOfUiElementInMenu;
+        public bool consumeInput;
     }
     public class MenuManager : SingletonMonoBehaviour<MenuManager>
     {
@@ -45,7 +46,7 @@ namespace WanderingCloud.UI
         public string selectedMenuId;
 
         [Foldout("Menu Managing")]
-        private Menu selectedMenu;
+        public Menu selectedMenu;
 
         /// <summary>
         /// The list of all menu
