@@ -193,8 +193,8 @@ namespace WanderingCloud.Controller
         }
         public void ForcedJump(float height)
         {
-            StopCoroutine(jump);
-            jump = StartCoroutine(Jumping(jumpHeight));
+            if(jump != null)StopCoroutine(jump);
+            jump = StartCoroutine(Jumping(height));
             onJump?.Invoke();
         }
 
@@ -212,7 +212,7 @@ namespace WanderingCloud.Controller
 
             //player.Body.AddForce(Vector3.up * Mathf.Sqrt(-2.0f * Physics2D.gravity.y * (jumpHeight)), ForceMode.VelocityChange);
             player.Body.velocity = Vector3.Scale(new Vector3(1, 0, 1), player.Body.velocity)
-                                   + state.slopeNormal * Mathf.Sqrt(-2.0f * Physics2D.gravity.y * jumpHeight);
+                                   + state.slopeNormal * Mathf.Sqrt(-2.0f * Physics2D.gravity.y * height);
 
             yield return new WaitForFixedUpdate();
             while (player.Body.velocity.y > 0)

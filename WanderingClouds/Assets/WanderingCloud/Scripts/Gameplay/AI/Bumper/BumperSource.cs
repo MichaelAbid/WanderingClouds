@@ -55,6 +55,7 @@ namespace WanderingCloud.Gameplay
             agent.height = currentSize + 0.5f;
             debugCurrentSpeed = currentSpeed;
             debugSizeSpeed = currentSize;
+
         }
 
 

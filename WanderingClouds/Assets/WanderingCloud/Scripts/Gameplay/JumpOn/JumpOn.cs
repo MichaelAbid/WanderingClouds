@@ -13,7 +13,7 @@ namespace WanderingCloud.Gameplay
         {
 
             PlayerMovement player = other.GetComponentInParent<PlayerMovement>();
-            if (player != null && player.isJumping)
+            if (player != null)
             {
                 Debug.Log("Bumped");
                 player.ForcedJump(bumpHeight);
