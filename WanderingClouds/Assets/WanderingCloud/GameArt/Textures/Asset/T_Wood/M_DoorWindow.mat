@@ -38,7 +38,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Base_Color_AO:
-        m_Texture: {fileID: 2800000, guid: 1b404590864897f4da57e04ef3ab02b8, type: 3}
+        m_Texture: {fileID: 2800000, guid: 0b82633864e20584d8ecd4b9ac7756f9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BentNormalMap:
@@ -86,7 +86,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Norm_RE:
-        m_Texture: {fileID: 2800000, guid: d733246b702857e43979538b5245943b, type: 3}
+        m_Texture: {fileID: 2800000, guid: 48ed6eecd51fac141ae634f820dc3bd3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
@@ -209,20 +209,20 @@ Material:
     - _HeightPoMAmplitude: 2
     - _HeightTessAmplitude: 2
     - _HeightTessCenter: 0.5
-    - _Hue_Shift: 0
+    - _Hue_Shift: -12.3
     - _InvTilingScale: 1
     - _Ior: 1.5
     - _IridescenceMask: 1
     - _IridescenceThickness: 1
     - _LinkDetailsWithBase: 1
-    - _Luminosity: 2
+    - _Luminosity: 5
     - _MaterialID: 1
     - _Metallic: 0
     - _MetallicRemapMax: 1
     - _MetallicRemapMin: 0
     - _NormalMapSpace: 0
     - _NormalScale: 1
-    - _Normal_Intensity: 1
+    - _Normal_Intensity: 0.5
     - _OpaqueCullMode: 2
     - _PPDLodThreshold: 5
     - _PPDMaxSamples: 15
@@ -235,10 +235,10 @@ Material:
     - _RefractionModel: 0
     - _RenderQueueType: 1
     - _RequireSplitLighting: 0
-    - _Rotation: 89.51
+    - _Rotation: 30
     - _Roughness_Intensity: 1.8
     - _SMUDGE: 0
-    - _Saturation: 1
+    - _Saturation: 0.8
     - _Smoothness: 0.5
     - _SmoothnessRemapMax: 1
     - _SmoothnessRemapMin: 0
@@ -266,7 +266,7 @@ Material:
     - _SurfaceType: 0
     - _TexWorldScale: 1
     - _TexWorldScaleEmissive: 1
-    - _TextureTilling: 1.6
+    - _TextureTilling: 1
     - _Thickness: 1
     - _TransmissionEnable: 1
     - _TransparentBackfaceEnable: 0

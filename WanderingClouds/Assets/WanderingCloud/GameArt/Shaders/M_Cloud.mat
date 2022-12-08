@@ -185,7 +185,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture_normal:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 11f03d9db1a617e40b7ece71f0a84f6f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ThicknessMap:
@@ -229,7 +229,7 @@ Material:
     - _AO_intensity: 1
     - _ATDistance: 1
     - _AddPrecomputedVelocity: 0
-    - _Additional_Coloring: 0.8
+    - _Additional_Coloring: 0
     - _AlbedoAffectEmissive: 0
     - _AlphaCutoff: 0.5
     - _AlphaCutoffEnable: 0
@@ -248,7 +248,7 @@ Material:
     - _CullMode: 2
     - _CullModeForward: 2
     - _Cutoff: 0.5
-    - _DIsplace_Intensity: 1
+    - _DIsplace_Intensity: 0.58
     - _DepthOffsetEnable: 0
     - _DetailAlbedoScale: 1
     - _DetailNormalScale: 1
@@ -272,8 +272,8 @@ Material:
     - _EnableFogOnTransparent: 1
     - _EnableGeometricSpecularAA: 0
     - _EnergyConservingSpecularColor: 1
-    - _Fresnel_Intensity: 1.37
-    - _Fresnel_Sharpness: 3
+    - _Fresnel_Intensity: 0.91
+    - _Fresnel_Sharpness: 5.46
     - _HeightAmplitude: 0.02
     - _HeightCenter: 0.5
     - _HeightMapParametrization: 0
@@ -284,13 +284,13 @@ Material:
     - _HeightTessAmplitude: 2
     - _HeightTessCenter: 0.5
     - _Hue_Shift: 0
-    - _Hue_shift: 14.15
+    - _Hue_shift: 0
     - _InvTilingScale: 1
     - _Ior: 1.5
     - _IridescenceMask: 1
     - _IridescenceThickness: 1
     - _LinkDetailsWithBase: 1
-    - _Luminosity: 1.5
+    - _Luminosity: 3.43
     - _MaterialID: 1
     - _Metallic: 0
     - _MetallicRemapMax: 1
@@ -312,7 +312,7 @@ Material:
     - _RequireSplitLighting: 0
     - _Roughness_Intensity: 0
     - _SMUDGE: 0
-    - _Saturation: 1.5
+    - _Saturation: 1
     - _Smoothness: 0.5
     - _SmoothnessRemapMax: 1
     - _SmoothnessRemapMin: 0
@@ -321,7 +321,7 @@ Material:
     - _SpecularAAScreenSpaceVariance: 0.1
     - _SpecularAAThreshold: 0.2
     - _SpecularOcclusionMode: 1
-    - _Speed: 0.08
+    - _Speed: 0.04
     - _Speed_Normal: 0
     - _SrcBlend: 1
     - _StencilRef: 0
@@ -351,7 +351,7 @@ Material:
     - _TransparentSortPriority: 0
     - _TransparentWritingMotionVec: 0
     - _TransparentZWrite: 0
-    - _Trasnparency: 7.02
+    - _Trasnparency: 7
     - _UVBase: 0
     - _UVDetail: 0
     - _UVEmissive: 0
@@ -361,27 +361,27 @@ Material:
     - _ZTestGBuffer: 4
     - _ZTestTransparent: 4
     - _ZWrite: 0
-    - _intensity_normal: 1
+    - _intensity_normal: 0.82
     m_Colors:
     - Color_2000737E: {r: 3.150091, g: 0.9095334, b: 0.9095334, a: 0}
     - Color_5D9148CF: {r: 0, g: 0.29649496, b: 0.5, a: 0}
     - Vector4_36711509: {r: -1, g: 1, b: 0, a: 1}
     - Vector4_AB39BEF1: {r: 1, g: 0, b: 0, a: 90}
-    - _Additionale_color_tiling: {r: 5, g: 5, b: 0, a: 0}
+    - _Additionale_color_tiling: {r: 10, g: 10, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
-    - _Displace_Tiling: {r: 5, g: 5, b: 0, a: 0}
+    - _Displace_Tiling: {r: 10, g: 10, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Emission_Color: {r: 0, g: 0, b: 0, a: 0}
+    - _Emission_Color: {r: 1, g: 1, b: 1, a: 0}
     - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}
     - _EmissiveColorLDR: {r: 0, g: 0, b: 0, a: 1}
     - _Emissive_Color: {r: 0, g: 0, b: 0, a: 0}
     - _InvPrimScale: {r: 1, g: 1, b: 0, a: 0}
     - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
-    - _Main_Color: {r: 0.77647066, g: 0.854902, b: 0.98823535, a: 1}
+    - _Main_Color: {r: 0.8726415, g: 0.9689768, b: 1, a: 1}
     - _Rotate_Projection: {r: 0, g: 0, b: 0, a: 1}
     - _Smudge_Color: {r: 0.4720919, g: 0.62264144, b: 0.25551796, a: 0}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
@@ -393,6 +393,6 @@ Material:
     - _UVMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMaskEmissive: {r: 1, g: 0, b: 0, a: 0}
     - _Vector4: {r: 1, g: 0, b: 0, a: 90}
-    - _fresnel_color: {r: 0, g: 0, b: 0, a: 0}
-    - _tiling_Normal: {r: 1, g: 1, b: 0, a: 0}
+    - _fresnel_color: {r: 1, g: 1, b: 1, a: 1}
+    - _tiling_Normal: {r: 5, g: 10, b: 0, a: 0}
   m_BuildTextureStacks: []
