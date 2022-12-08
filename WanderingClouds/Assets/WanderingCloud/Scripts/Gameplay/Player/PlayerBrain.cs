@@ -1,4 +1,3 @@
-﻿
 ﻿using Cinemachine;
 using NaughtyAttributes;
 using UnityEngine;
@@ -17,8 +16,7 @@ namespace WanderingCloud.Controller
         [field: SerializeField, Foldout("References"), Required()] public CinemachineFreeLook VCamAuto { get; private set; }
         [field: SerializeField, Foldout("References"), Required()] public CinemachineFreeLook VCamAim { get; private set; }
         [field: SerializeField, Foldout("References"), Required()] public AiGraber aiGrabber { get; private set; }
-        [field: SerializeField, Foldout("References"), Required()] public CloudGrabber cloudGrabber { get; private set; }
-        [field: SerializeField, Foldout("References"), Required()] public CloudExploder cloudExploder { get; private set; }
+        [field: SerializeField, Foldout("References"), Required()] public PlayerInteraction interact { get; private set; }
         #endregion
 
         [field: SerializeField, Foldout("Components"), Required()] public PlayerMovement Movement { get; private set; }
@@ -65,24 +63,16 @@ namespace WanderingCloud.Controller
 
         public override void EstButtonInput()
         {
-            if (aiGrabber.aiGrabed != null)
+            interact.InteractBegin(this);
+            
+            if (aiGrabber is not null && aiGrabber.aiGrabed is not null)
             {
                 aiGrabber.UnGrab();
             }
-            else
-            {
-                if (!aiGrabber.Grab())
-                {
-                    if (!cloudGrabber.GrabNearestPullet())
-                    {
-                        if (!cloudExploder.ExplodeNearest())
-                        {
-
-                        }
-                    }
-                }
-            }
         }
-
+        public override void EstButtonInputReleased()
+        {
+            interact.InteractEnd(this);
+        }
     }
 }

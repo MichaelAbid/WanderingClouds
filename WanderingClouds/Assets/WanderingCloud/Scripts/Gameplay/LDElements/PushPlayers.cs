@@ -1,34 +1,25 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+#if UNITY_EDITOR
 using UnityEditor;
-using UnityEngine;
+#endif
+using System.Collections.Generic;
 using WanderingCloud.Controller;
+using UnityEngine;
 
 namespace WanderingCloud
 {
     public class PushPlayers : MonoBehaviour
     {
 
-        [SerializeField] public float PushForce;
-        [SerializeField] public float PushDistance;
-        [SerializeField] public Vector2 PushSize;
-        [SerializeField] public bool isWaterPush;
+        [SerializeField] public float PushForce = 5f;
+        [SerializeField] public float PushDistance = 15f;
+        [SerializeField] public Vector2 PushSize = Vector2.one * 5f;
         public float parentRatio = 1;
         public BoxCollider ccollider;
 
         public List<PlayerBrain> playerBrains = new List<PlayerBrain>();
         public List<PushableObject> pushableObjects = new List<PushableObject>();
-        // Start is called before the first frame update
-        void Start()
-        {
 
-            
-
-        }
-
-        // Update is called once per frame
+        
         void FixedUpdate()
         {
             foreach(var playerBrain in playerBrains)
@@ -55,24 +46,17 @@ namespace WanderingCloud
             }
         }
 
-
-
         private void OnTriggerEnter(Collider other)
         {
-            
             if(other.GetComponentInParent<PlayerBrain>() != null)
             {
                 playerBrains.Add(other.GetComponentInParent<PlayerBrain>());
             }
-         
             if (other.GetComponent<PushableObject>() != null)
             {
-                
                 pushableObjects.Add(other.GetComponent<PushableObject>());
             }
-
         }
-
         private void OnTriggerExit(Collider other)
         {
             if (other.GetComponentInParent<PlayerBrain>() != null)
@@ -84,8 +68,6 @@ namespace WanderingCloud
                 pushableObjects.Remove(other.GetComponent<PushableObject>());
             }
         }
-
-
 
         private void OnDrawGizmos()
         {

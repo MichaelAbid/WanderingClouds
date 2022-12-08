@@ -137,6 +137,8 @@ namespace WanderingCloud.Controller
                 player.Body.velocity = new Vector3(temp.x, player.Body.velocity.y, temp.z);
 
                 player.Body.AddForce(movementXZ.normalized * (movementXZ.magnitude * (airSpeed * Time.deltaTime)), ForceMode.VelocityChange);
+                player.Body.velocity += externalForce;
+                externalForce = Vector3.zero;
                 return;
             }
 
