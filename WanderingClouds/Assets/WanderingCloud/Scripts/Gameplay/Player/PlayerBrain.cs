@@ -23,6 +23,7 @@ namespace WanderingCloud.Controller
 
         [field: SerializeField, Foldout("Components"), Required()] public PlayerMovement Movement { get; private set; }
         [field: SerializeField, Foldout("Components"), Required()] public PlayerAim Aim { get; private set; }
+        [field: SerializeField, Foldout("Components"), Required()] public PlayerInventory Inventory { get; private set; }
 
         [field: SerializeField, Foldout("Components"), ReadOnly()] public Vector3 moveInput { get; private set; }
         [field: SerializeField, Foldout("Components"), ReadOnly()] public Vector3 throwInput{ get; private set; }

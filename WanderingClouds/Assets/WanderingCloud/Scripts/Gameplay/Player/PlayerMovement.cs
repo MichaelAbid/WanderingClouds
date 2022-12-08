@@ -4,6 +4,7 @@ using UnityEngine;
 using NaughtyAttributes;
 using DG.Tweening;
 using WanderingCloud.Gameplay;
+using UnityEngine.Animations.Rigging;
 
 namespace WanderingCloud.Controller
 {
@@ -61,6 +62,7 @@ namespace WanderingCloud.Controller
 
         [Foldout("Fall")] public UnityEvent onFall;
 
+        [SerializeField] public RigBuilder lookAtRig;
 
 
         #region UnityMethods
@@ -145,9 +147,11 @@ namespace WanderingCloud.Controller
             {
                 case MovementState.Idle:
                     if (movementStrenght > float.Epsilon) moveState = MovementState.Walk;
+                    //if (lookAtRig.enabled is false && player.Inventory.pelletStock <= 0) lookAtRig.enabled = true;
                     break;
                 case MovementState.Walk:
                     if (movementStrenght < float.Epsilon) moveState = MovementState.Idle;
+                    //if (lookAtRig.enabled is false && player.Inventory.pelletStock <= 0) lookAtRig.enabled = true;
                     speed = movementSurface * (movementStrenght * walkSpeed);
                     break;
                 case MovementState.Rush:
@@ -156,6 +160,7 @@ namespace WanderingCloud.Controller
                         moveState = MovementState.Walk;
                     }
                     speed = movementSurface * (movementStrenght * runSpeed);
+                    //if (lookAtRig.enabled is true) lookAtRig.enabled = false;
                     break;
                 default:
                     break;
@@ -165,9 +170,7 @@ namespace WanderingCloud.Controller
             externalForce = Vector3.zero;
         }
         private void AvatarOrientation()
-
         {
-
             if (movementStrenght > float.Epsilon && !player.Aim.isAiming)
             {
                 var aimRot = Quaternion.LookRotation(movementXZ, Vector3.up);
@@ -182,8 +185,8 @@ namespace WanderingCloud.Controller
                 player.Avatar.transform.rotation = Quaternion.Slerp(player.Avatar.transform.rotation, aimRot, 5 * Time.deltaTime);
 
             }
-
         }
+
         public void Jump()
         {
             if (!state.isGrounded || isJumping) return;
@@ -209,6 +212,7 @@ namespace WanderingCloud.Controller
         {
             var previousState = moveState;
             moveState = MovementState.Jump;
+            //if (lookAtRig.enabled is false && player.Inventory.pelletStock <= 0) lookAtRig.enabled = true;
 
             //player.Body.AddForce(Vector3.up * Mathf.Sqrt(-2.0f * Physics2D.gravity.y * (jumpHeight)), ForceMode.VelocityChange);
             player.Body.velocity = Vector3.Scale(new Vector3(1, 0, 1), player.Body.velocity)
@@ -236,12 +240,11 @@ namespace WanderingCloud.Controller
                 player.Body.AddForce(Physics.gravity * fallValue, ForceMode.Acceleration);
 
                 if (moveState is not MovementState.Fall)
-
                 {
-
                     onFall?.Invoke();
 
                     moveState = MovementState.Fall;
+                    //if (lookAtRig.enabled is false && player.Inventory.pelletStock <= 0) lookAtRig.enabled = true;
                 }
             }
 
@@ -288,6 +291,7 @@ namespace WanderingCloud.Controller
             moveState = MovementState.Dash;
             var dashDirection = player.Avatar.forward;
             var aimRot = Quaternion.LookRotation(dashDirection, Vector3.up);
+            //if (lookAtRig.enabled is true) lookAtRig.enabled = false;
 
             if (player.moveInput.magnitude > float.Epsilon)
             {

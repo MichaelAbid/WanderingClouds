@@ -258,15 +258,21 @@ namespace WanderingCloud.Controller
 
                 if (activeVCam == player.VCamAuto && desiredCam == player.VCamBase)
                 {
-                    transition = StartCoroutine(EaseVCamTransition(desiredCam));
+                    transition = StartCoroutine(EaseVCamTransition(desiredCam, transitionDuration));
                 }
             }
+
+            if (desiredCam == player.VCamBase && player.Inventory.pelletStock <= 0)
+            {
+                player.Movement.lookAtRig.enabled = true;
+            }
+            else player.Movement.lookAtRig.enabled = false;
 
             desiredCam.Priority = 10;
             activeVCam = desiredCam;
         }
 
-        IEnumerator EaseVCamTransition(CinemachineFreeLook toVCam)
+        IEnumerator EaseVCamTransition(CinemachineFreeLook toVCam, float transitionDuration)
         {
             var originalMaxSpeed = toVCam.m_YAxis.m_MaxSpeed;
             toVCam.m_YAxis.m_MaxSpeed *= transitionSensitivityScale;
