@@ -83,14 +83,19 @@ namespace WanderingCloud.Controller
                 if (isAiming)
                 {
                     Debug.Log(grabAI.aiGrabed.transform.rotation);
-                    grabAI.aiGrabed.transform.rotation = Quaternion.LookRotation(player.Camera.transform.position);
+                    
+                    grabAI.aiGrabed.visual.transform.rotation = Quaternion.LookRotation(player.Avatar.up*-1,player.Avatar.forward);
+                    grabAI.aiGrabed.socket.transform.rotation = Quaternion.LookRotation(player.Avatar.forward, player.Avatar.up);
+
                     return;
                 }
-                
-                grabAI.aiGrabed.transform.rotation = Quaternion.identity;
+
+                grabAI.aiGrabed.visual.transform.rotation = Quaternion.LookRotation(player.Avatar.forward, player.Avatar.up);
+                grabAI.aiGrabed.socket.transform.rotation = Quaternion.LookRotation(player.Avatar.up, player.Avatar.forward);
+
             }
 
-            
+
             if (!isAiming) return;
             assistTarget = CheckForAssistTarget();
 
