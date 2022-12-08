@@ -22,7 +22,8 @@ namespace WanderingCloud.Gameplay.AI
         [Foldout("Ref")][SerializeField] public NavMeshAgent agent;
         [Foldout("Ref")][SerializeField] public Rigidbody rigidBody;
         [Foldout("Ref")][SerializeField] public Collider collider;
-
+        [Foldout("Ref")][SerializeField] public Transform socket;
+        [Foldout("Ref")][SerializeField] public Transform visual;
         [Foldout("State")][SerializeField] public AI_STATE currentState;
         [Foldout("State")][SerializeField] public bool isAiActive = true;
         [Foldout("State")][SerializeField] public bool isGrabbable = true;

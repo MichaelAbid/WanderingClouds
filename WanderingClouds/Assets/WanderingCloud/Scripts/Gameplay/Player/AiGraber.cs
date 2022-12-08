@@ -15,6 +15,8 @@ namespace WanderingCloud.Gameplay
         public AI_Base aiGrabed;
         public Transform grabSocketPosition;
 
+        
+
         public bool Grab()
         {
             var nearObject = Physics.OverlapSphere(playerRef.Avatar.position, 3f);
