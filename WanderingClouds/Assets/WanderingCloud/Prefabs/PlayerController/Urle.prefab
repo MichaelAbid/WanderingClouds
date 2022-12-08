@@ -203,8 +203,8 @@ MonoBehaviour:
   externalForce: {x: 0, y: 0, z: 0}
   <moveState>k__BackingField: 0
   airSpeed: 5.85
-  walkSpeed: 9.75
-  runSpeed: 15
+  walkSpeed: 8
+  runSpeed: 13.2
   maxSlopeAngle: 45
   snapGroundDist: 0.15
   jumpHeight: 2.35
@@ -288,6 +288,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <isHoldingCloud>k__BackingField: 0
   holdDuration: 2
+  onLootCloud:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4802743543904624736}
+        m_TargetAssemblyTypeName: WanderingCloud.AnimLinker, WanderingCloud
+        m_MethodName: SetUpperBodyLayerWeight
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0.79
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onLoseCloud:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4802743543904624736}
+        m_TargetAssemblyTypeName: WanderingCloud.AnimLinker, WanderingCloud
+        m_MethodName: SetUpperBodyLayerWeight
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onConsumeCloud:
     m_PersistentCalls:
       m_Calls: []
