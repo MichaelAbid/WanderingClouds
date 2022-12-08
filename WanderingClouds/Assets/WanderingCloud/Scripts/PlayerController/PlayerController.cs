@@ -25,8 +25,14 @@ namespace WanderingCloud.Controller
             ChangePawn();
         }
 
+        private void Update()
+        {
+            inMenu = MenuManager.Instance.selectedMenu.consumeInput;
+        }
+
         public void ChangePawn()
         {
+            listOfAllPawn = FindObjectsOfType<Pawn>().ToList();
             pawnIndex = pawnIndex + 1 < listOfAllPawn.Count ? pawnIndex + 1 : 0;
             int i = 0;
             foreach (Pawn pawn in listOfAllPawn)
