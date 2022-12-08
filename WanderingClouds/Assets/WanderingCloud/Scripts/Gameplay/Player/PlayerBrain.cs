@@ -28,10 +28,6 @@ namespace WanderingCloud.Controller
 
         public override void PlayerConnect(int playerIndex)
         {
-            VCamBase.gameObject.SetActive(true);
-            VCamAuto.gameObject.SetActive(true);
-            VCamAim.gameObject.SetActive(true);
-
             VCamBase.gameObject.GetComponent<CinemachineInputProvider>().enabled = false;
             VCamAuto.gameObject.GetComponent<CinemachineInputProvider>().enabled = false;
             VCamAim.gameObject.GetComponent<CinemachineInputProvider>().enabled = false;
@@ -44,6 +40,13 @@ namespace WanderingCloud.Controller
             VCamAuto.gameObject.GetComponent<CinemachineInputProvider>().enabled = true;
             VCamAim.gameObject.GetComponent<CinemachineInputProvider>().enabled = true;
 
+            VCamBase.gameObject.SetActive(false);
+            VCamAuto.gameObject.SetActive(false);
+            VCamAim.gameObject.SetActive(false);
+
+            VCamBase.gameObject.SetActive(true);
+            VCamAuto.gameObject.SetActive(true);
+            VCamAim.gameObject.SetActive(true);
 
         }
         public override void PlayerDisconnect(int playerIndex)

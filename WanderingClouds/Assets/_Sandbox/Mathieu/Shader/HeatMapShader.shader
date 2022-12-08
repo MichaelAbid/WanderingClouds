@@ -1,4 +1,4 @@
-Shader "Unlit/NewUnlitShader"
+Shader "Unlit/HeatMapShader"
 {
     Properties
     {
@@ -44,12 +44,27 @@ Shader "Unlit/NewUnlitShader"
                 return o;
             }
 
+
+            float4 colors[5];
+            float pointranges[5];
+
+            float _Hits[3 * 32];
+            int _HitCount = 0;
+
+            void init() 
+            {
+                colors[0] = float4(0, 0, 0, 0);
+                colors[1] = float4(0, .9, .2, 1);
+                colors[2] = float4()
+            }
+
             fixed4 frag (v2f i) : SV_Target
             {
-                // sample the texture
                 fixed4 col = tex2D(_MainTex, i.uv);
-                // apply fog
-                UNITY_APPLY_FOG(i.fogCoord, col);
+                
+                float2 uv = i.uv;
+                uv = uv * 4.0 - float2(2.0, 2.0); //change uv coordinate range to -2 - 2
+
                 return col;
             }
             ENDCG
