@@ -79,12 +79,12 @@ namespace WanderingCloud.Controller
 
                 Component comp;
                 underHit.collider.TryGetComponent(typeof(CreatureSources), out comp);
-                if (comp is not null)
+                if (comp is not null);
                 {
                     var creature = (CreatureSources)comp;
-                    if (creature.currentState != CloudState.SOLID) return;
-                    transform.SetParent(comp.transform);
-                }
+                    if(creature != null && creature.currentState is CloudState.SOLID)
+                        transform.SetParent(comp.transform);
+                }                
             });
             state.onQuitGround.AddListener(() =>
             {
