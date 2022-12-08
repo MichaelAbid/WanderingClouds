@@ -262,6 +262,12 @@ namespace WanderingCloud.Controller
                 }
             }
 
+            if (desiredCam == player.VCamBase && player.Inventory.pelletStock <= 0)
+            {
+                player.Movement.lookAtRig.enabled = true;
+            }
+            else player.Movement.lookAtRig.enabled = false;
+
             desiredCam.Priority = 10;
             activeVCam = desiredCam;
         }

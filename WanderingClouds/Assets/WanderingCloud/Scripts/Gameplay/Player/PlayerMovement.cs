@@ -62,7 +62,7 @@ namespace WanderingCloud.Controller
 
         [Foldout("Fall")] public UnityEvent onFall;
 
-        [SerializeField] private RigBuilder lookAtRig;
+        [SerializeField] public RigBuilder lookAtRig;
 
 
         #region UnityMethods
@@ -147,11 +147,11 @@ namespace WanderingCloud.Controller
             {
                 case MovementState.Idle:
                     if (movementStrenght > float.Epsilon) moveState = MovementState.Walk;
-                    if (lookAtRig.enabled is false && player.Inventory.pelletStock <= 0) lookAtRig.enabled = true;
+                    //if (lookAtRig.enabled is false && player.Inventory.pelletStock <= 0) lookAtRig.enabled = true;
                     break;
                 case MovementState.Walk:
                     if (movementStrenght < float.Epsilon) moveState = MovementState.Idle;
-                    if (lookAtRig.enabled is false && player.Inventory.pelletStock <= 0) lookAtRig.enabled = true;
+                    //if (lookAtRig.enabled is false && player.Inventory.pelletStock <= 0) lookAtRig.enabled = true;
                     speed = movementSurface * (movementStrenght * walkSpeed);
                     break;
                 case MovementState.Rush:
@@ -160,7 +160,7 @@ namespace WanderingCloud.Controller
                         moveState = MovementState.Walk;
                     }
                     speed = movementSurface * (movementStrenght * runSpeed);
-                    if (lookAtRig.enabled is true) lookAtRig.enabled = false;
+                    //if (lookAtRig.enabled is true) lookAtRig.enabled = false;
                     break;
                 default:
                     break;
@@ -212,7 +212,7 @@ namespace WanderingCloud.Controller
         {
             var previousState = moveState;
             moveState = MovementState.Jump;
-            if (lookAtRig.enabled is false && player.Inventory.pelletStock <= 0) lookAtRig.enabled = true;
+            //if (lookAtRig.enabled is false && player.Inventory.pelletStock <= 0) lookAtRig.enabled = true;
 
             //player.Body.AddForce(Vector3.up * Mathf.Sqrt(-2.0f * Physics2D.gravity.y * (jumpHeight)), ForceMode.VelocityChange);
             player.Body.velocity = Vector3.Scale(new Vector3(1, 0, 1), player.Body.velocity)
@@ -244,7 +244,7 @@ namespace WanderingCloud.Controller
                     onFall?.Invoke();
 
                     moveState = MovementState.Fall;
-                    if (lookAtRig.enabled is false && player.Inventory.pelletStock <= 0) lookAtRig.enabled = true;
+                    //if (lookAtRig.enabled is false && player.Inventory.pelletStock <= 0) lookAtRig.enabled = true;
                 }
             }
 
@@ -291,7 +291,7 @@ namespace WanderingCloud.Controller
             moveState = MovementState.Dash;
             var dashDirection = player.Avatar.forward;
             var aimRot = Quaternion.LookRotation(dashDirection, Vector3.up);
-            if (lookAtRig.enabled is true) lookAtRig.enabled = false;
+            //if (lookAtRig.enabled is true) lookAtRig.enabled = false;
 
             if (player.moveInput.magnitude > float.Epsilon)
             {
