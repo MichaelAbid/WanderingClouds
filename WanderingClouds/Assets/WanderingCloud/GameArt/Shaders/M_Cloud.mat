@@ -27,10 +27,10 @@ Material:
   m_Shader: {fileID: -6465566751694194690, guid: 40ffaded92afcc942945a5bbd6e0a7d6,
     type: 3}
   m_ValidKeywords:
+  - _DISABLE_SSR_TRANSPARENT
   - _ENABLE_FOG_ON_TRANSPARENT
   - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords:
-  - _DISABLE_SSR_TRANSPARENT
   - _NORMALMAP_TANGENT_SPACE
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -184,6 +184,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 56b179cf02a222f46bf69555415adf0d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Texture_normal:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _ThicknessMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -244,7 +248,7 @@ Material:
     - _CullMode: 2
     - _CullModeForward: 2
     - _Cutoff: 0.5
-    - _DIsplace_Intensity: 0.3
+    - _DIsplace_Intensity: 1
     - _DepthOffsetEnable: 0
     - _DetailAlbedoScale: 1
     - _DetailNormalScale: 1
@@ -318,6 +322,7 @@ Material:
     - _SpecularAAThreshold: 0.2
     - _SpecularOcclusionMode: 1
     - _Speed: 0.08
+    - _Speed_Normal: 0
     - _SrcBlend: 1
     - _StencilRef: 0
     - _StencilRefDepth: 0
@@ -356,6 +361,7 @@ Material:
     - _ZTestGBuffer: 4
     - _ZTestTransparent: 4
     - _ZWrite: 0
+    - _intensity_normal: 1
     m_Colors:
     - Color_2000737E: {r: 3.150091, g: 0.9095334, b: 0.9095334, a: 0}
     - Color_5D9148CF: {r: 0, g: 0.29649496, b: 0.5, a: 0}
@@ -387,4 +393,6 @@ Material:
     - _UVMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMaskEmissive: {r: 1, g: 0, b: 0, a: 0}
     - _Vector4: {r: 1, g: 0, b: 0, a: 90}
+    - _fresnel_color: {r: 0, g: 0, b: 0, a: 0}
+    - _tiling_Normal: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []

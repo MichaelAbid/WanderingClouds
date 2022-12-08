@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UI;
 using WanderingCloud.Controller;
 
@@ -14,60 +15,29 @@ namespace WanderingCloud.Gameplay
         SOLID = 1,
         DESTRUCTOR = 2,
     }
-    public class CreatureSources : MonoBehaviour
+    public class CreatureSources : Source
     {
+        public NavMeshAgent agent;
         public CloudState currentState = CloudState.BABY;
         public float destructionRange = 5f;
         [ReadOnly] public bool canBePouffed;
-        [MinMaxSlider(0f, 5f)] public Vector2 scale = Vector2.one;
+        [MinMaxSlider(1f, 4f)] public Vector2 scale = Vector2.one;
+        [MinMaxSlider(1f, 5f)] public Vector2 speed = Vector2.one;
         public BoxCollider collider;
 
-        
+        [SerializeField, ReadOnly] private float debugCurrentSpeed;
+        [SerializeField, ReadOnly] private float debugSizeSpeed;
 
         private void Awake()
         {
             SwitchState(currentState);
         }
-
-        public void SwitchState(int newState) => SwitchState((CloudState)newState);
-        public void SwitchState(CloudState newState)
+        void Update()
         {
-            currentState = newState;
+            if(Input.GetKeyDown("a"))SwitchState(CloudState.SOLID);
+            if (Input.GetKeyDown("z"))SwitchState(CloudState.BABY);
+            if (Input.GetKeyDown("e"))SwitchState(CloudState.DESTRUCTOR);
 
-            canBePouffed = true;
-            collider.isTrigger = true;
-            transform.localScale = Vector3.one * scale.y;
-
-            switch (newState)
-            {
-                case CloudState.BABY:
-                    canBePouffed = false;
-                    transform.localScale = Vector3.one * scale.x;
-                    break;
-                case CloudState.SOLID:
-                    collider.isTrigger = false;
-                    break;
-                case CloudState.DESTRUCTOR:
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        private void Update()
-        {
-            if(Input.GetKeyDown("a"))
-            {
-                SwitchState(CloudState.SOLID);
-            }
-            if (Input.GetKeyDown("z"))
-            {
-                SwitchState(CloudState.BABY);
-            }
-            if (Input.GetKeyDown("e"))
-            {
-                SwitchState(CloudState.DESTRUCTOR);
-            }
             if (currentState == CloudState.DESTRUCTOR)
             {
                 Collider[] hitCollider = Physics.OverlapSphere(transform.position, destructionRange);
@@ -80,5 +50,55 @@ namespace WanderingCloud.Gameplay
                 }
             }
         }
+        
+        public override bool Feed(CloudType cType)
+        {
+            if (canBePouffed) return false;
+            
+            switch (cType)
+            {
+                case CloudType.ENERGIZER:
+                    SwitchState(CloudState.DESTRUCTOR);
+                    break;                
+                case CloudType.SOLIDIFIER:
+                    SwitchState(CloudState.SOLID);
+                    break; 
+            }
+            return true;
+        }
+        
+        public void SwitchState(int newState) => SwitchState((CloudState)newState);
+        public void SwitchState(CloudState newState)
+        {
+            currentState = newState;
+
+            canBePouffed = true;
+            collider.isTrigger = true;
+            var currentSpeed = speed.x;
+            float currentSize = scale.y;
+            
+            switch (newState)
+            {
+                case CloudState.BABY:
+                    canBePouffed = false;
+                    currentSpeed = speed.y;
+                    currentSize = scale.x;
+                    break;
+                case CloudState.SOLID:
+                    collider.isTrigger = false;
+                    break;
+            }
+            
+            agent.speed = currentSpeed;
+            agent.acceleration = (currentSpeed *  currentSpeed)/2;
+            
+            agent.radius = currentSize;
+            agent.height = currentSize + 0.5f;
+            transform.localScale = Vector3.one * currentSize;
+            
+            debugCurrentSpeed = currentSpeed;
+            debugSizeSpeed = currentSize;
+        }
+        
     }
 }

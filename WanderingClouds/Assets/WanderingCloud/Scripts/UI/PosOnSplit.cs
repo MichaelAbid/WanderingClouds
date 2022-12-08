@@ -2,7 +2,8 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace WanderingCloud
+
+namespace WanderingCloud.Gameplay
 {
     [ExecuteAlways]
     public class PosOnSplit : MonoBehaviour

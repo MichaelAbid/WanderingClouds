@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using WanderingCloud.UI;
 
 namespace WanderingCloud.Controller
 {
@@ -13,6 +14,8 @@ namespace WanderingCloud.Controller
         private int pawnIndex = 0;
         public List<Pawn> listOfAllPawn;
 
+        public bool inMenu;
+
         private void Start()
         {
             ControllerNumber = FindObjectsOfType<PlayerController>().Length - 1;
@@ -22,15 +25,21 @@ namespace WanderingCloud.Controller
             ChangePawn();
         }
 
+        private void Update()
+        {
+            inMenu = MenuManager.Instance.selectedMenu.consumeInput;
+        }
+
         public void ChangePawn()
         {
+            listOfAllPawn = FindObjectsOfType<Pawn>().ToList();
             pawnIndex = pawnIndex + 1 < listOfAllPawn.Count ? pawnIndex + 1 : 0;
             int i = 0;
             foreach (Pawn pawn in listOfAllPawn)
             {
                 if (!pawn.controlled && i >= pawnIndex)
                 {
-                    if (cPawn != null)
+                    if (cPawn != null && !inMenu)
                     {
                         cPawn.controlled = false;
                         cPawn.PlayerDisconnect(ControllerNumber);
@@ -54,15 +63,19 @@ namespace WanderingCloud.Controller
 
         public void LeftJoyStick(InputAction.CallbackContext callback)
         {
-            if (cPawn != null)
+            if (cPawn != null && !inMenu)
             {
                 cPawn.MovementInput(callback.ReadValue<Vector2>());
+            }
+            if (inMenu)
+            {
+                MenuManager.Instance.Navigate(callback.ReadValue<Vector2>());
             }
         }
 
         public void RightJoyStick(InputAction.CallbackContext callback)
         {
-            if (cPawn != null)
+            if (cPawn != null && !inMenu)
             {
                 cPawn.CameraMovementInput(callback.ReadValue<Vector2>());
             }
@@ -71,7 +84,7 @@ namespace WanderingCloud.Controller
 
         public void ButtonEst(InputAction.CallbackContext callback)
         {
-            if (cPawn != null)
+            if (cPawn != null && !inMenu)
             {
                 if (callback.performed)
                 {
@@ -87,7 +100,7 @@ namespace WanderingCloud.Controller
 
         public void ButtonWest(InputAction.CallbackContext callback)
         {
-            if (cPawn != null)
+            if (cPawn != null && !inMenu)
             {
                 if (callback.performed)
                 {
@@ -103,7 +116,7 @@ namespace WanderingCloud.Controller
 
         public void ButtonSouth(InputAction.CallbackContext callback)
         {
-            if (cPawn != null)
+            if (cPawn != null && !inMenu)
             {
                 if (callback.performed)
                 {
@@ -115,11 +128,15 @@ namespace WanderingCloud.Controller
                     cPawn.SouthButtonInputReleased();
                 }
             }
+            if( inMenu)
+            {
+                MenuManager.Instance.Press();
+            }
         }
 
         public void ButtonNorth(InputAction.CallbackContext callback)
         {
-            if (cPawn != null)
+            if (cPawn != null && !inMenu)
             {
                 if (callback.performed)
                 {
@@ -144,7 +161,7 @@ namespace WanderingCloud.Controller
 
         public void RightTrigger(InputAction.CallbackContext callback)
         {
-            if (cPawn != null)
+            if (cPawn != null && !inMenu)
             {
                 if (callback.performed)
                 {
@@ -160,7 +177,7 @@ namespace WanderingCloud.Controller
 
         public void LeftTrigger(InputAction.CallbackContext callback)
         {
-            if (cPawn != null)
+            if (cPawn != null && !inMenu)
             {
                 if (callback.performed)
                 {
@@ -176,7 +193,7 @@ namespace WanderingCloud.Controller
 
         public void RightBumper(InputAction.CallbackContext callback)
         {
-            if (cPawn != null)
+            if (cPawn != null && !inMenu)
             {
                 if (callback.performed)
                 {
@@ -192,7 +209,7 @@ namespace WanderingCloud.Controller
 
         public void LeftBumper(InputAction.CallbackContext callback)
         {
-            if (cPawn != null)
+            if (cPawn != null && !inMenu)
             {
                 if (callback.performed)
                 {
