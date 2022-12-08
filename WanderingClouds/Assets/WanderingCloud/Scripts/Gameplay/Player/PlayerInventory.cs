@@ -13,7 +13,7 @@ namespace WanderingCloud
 		public UnityEvent onLootCloud;
 		public UnityEvent onLoseCloud;
 		public UnityEvent onConsumeCloud;
-		[SerializeField] private int pelletStock = 0;
+		[SerializeField] public int pelletStock = 0;
 		[SerializeField] private int pelletPerConsum = 3;
 		[SerializeField] private int maxPelletStock = 5;
 		private Coroutine consuming = null;
@@ -23,7 +23,7 @@ namespace WanderingCloud
 		[Button()]
 		public void CloudContact()
 		{
-			if(consuming is null) consuming = StartCoroutine(EatingCloud());
+			if (consuming is null) consuming = StartCoroutine(EatingCloud());
 		}
 		public void ReceivedCloud()
 		{

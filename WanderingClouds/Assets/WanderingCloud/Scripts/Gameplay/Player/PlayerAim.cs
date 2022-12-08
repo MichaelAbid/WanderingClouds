@@ -258,7 +258,7 @@ namespace WanderingCloud.Controller
 
                 if (activeVCam == player.VCamAuto && desiredCam == player.VCamBase)
                 {
-                    transition = StartCoroutine(EaseVCamTransition(desiredCam));
+                    transition = StartCoroutine(EaseVCamTransition(desiredCam, transitionDuration));
                 }
             }
 
@@ -266,7 +266,7 @@ namespace WanderingCloud.Controller
             activeVCam = desiredCam;
         }
 
-        IEnumerator EaseVCamTransition(CinemachineFreeLook toVCam)
+        IEnumerator EaseVCamTransition(CinemachineFreeLook toVCam, float transitionDuration)
         {
             var originalMaxSpeed = toVCam.m_YAxis.m_MaxSpeed;
             toVCam.m_YAxis.m_MaxSpeed *= transitionSensitivityScale;
