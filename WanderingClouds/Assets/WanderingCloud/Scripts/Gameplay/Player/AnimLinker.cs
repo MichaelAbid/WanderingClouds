@@ -29,11 +29,6 @@ namespace WanderingCloud
             animator.SetFloat("fallSpeed", worldVelocity.y);
         }
 
-        public void SetUpperBodyLayerWeight(float weight)
-        {
-            animator.SetLayerWeight(animator.GetLayerIndex("UpperBodyOverride"), weight);
-        }
-
 
         public void Anim_Aim()=>animator.SetBool("aim", !animator.GetBool("aim"));
         public void Anim_Fall(bool state)=>animator.SetBool("fall", state);
