@@ -50,19 +50,20 @@ namespace WanderingCloud
         {
             Vector3 windVector = new Vector3(windSize.x, windSize.y, windDistance);
             Matrix4x4 rotationMatrix = Matrix4x4.TRS(transform.position + (transform.forward * windDistance / 2),Quaternion.LookRotation(transform.forward, transform.up), Vector3.one);
-            
+
             using (new Handles.DrawingScope(Color.yellow, rotationMatrix))
             {
                 Handles.DrawWireCube(Vector3.zero, windVector);
-                Handles.color = Color.yellow;
-                Handles.ArrowHandleCap(0, -(transform.forward * windDistance / 2),
-                    Quaternion.LookRotation(transform.forward), windForce, EventType.Repaint);
+            }
+            using (new Handles.DrawingScope(Color.yellow))
+            {
+                Handles.ArrowHandleCap(0, transform.position, Quaternion.LookRotation(transform.forward), windForce, EventType.Repaint);
             }
 
             coll.center = new Vector3(0, 0, (windDistance / transform.localScale.z) / 2);
             coll.size = new Vector3(windVector.x / transform.localScale.x, windVector.y / transform.localScale.y, windVector.z / transform.localScale.z);
 
-            visual.position = transform.position + coll.center;
+            visual.position = transform.position + (transform.forward * windDistance / 2);
             visual.localScale = windVector;
         }
     }
