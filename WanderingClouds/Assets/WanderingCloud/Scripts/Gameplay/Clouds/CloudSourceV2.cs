@@ -38,6 +38,22 @@ namespace WanderingCloud
                 UpdateProperty("_ExitPos", pos);
             }
         }
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (!collision.collider.GetComponentInParent<PlayerMovement>()) return;
+            if (!collision.collider.GetComponentInParent<PlayerInventory>()) return;
+
+            if (collision.collider.GetComponentInParent<PlayerMovement>().moveState is MovementState.Rush or MovementState.Dash)
+            {
+                GetComponent<Collider>().isTrigger = true;
+                collision.collider.GetComponentInParent<PlayerInventory>().CloudContact();
+                pushed = true;
+                onPushed?.Invoke();
+                var pos = collision.transform.position - transform.position;
+                UpdateProperty("_EntryPos", pos);
+                UpdateProperty("_ExitPos", pos);
+            }
+        }
 
         private void OnTriggerStay(Collider other)
         {

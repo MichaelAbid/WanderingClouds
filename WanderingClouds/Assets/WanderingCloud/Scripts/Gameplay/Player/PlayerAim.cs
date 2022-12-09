@@ -198,7 +198,7 @@ namespace WanderingCloud.Controller
             else bullet.targetPosition = defaultTargetPosition;
 
             bullet.CanMove = true;
-            bullet.type = player.isGyro? CloudType.ENERGIZER : CloudType.SOLIDIFIER;
+            bullet.type = player.isGyro? CloudType.SOLIDIFIER : CloudType.ENERGIZER;
         }
 
         private Transform CheckForAssistTarget()

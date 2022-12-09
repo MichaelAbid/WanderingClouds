@@ -20,13 +20,16 @@ namespace WanderingCloud.Gameplay
     {
         public bool isAgent;
         public NavMeshAgent agent;
+        public ShaderLink shaderLink;
         public Transform self;
         public GameObject destructorArea;
 
         public CloudState currentState = CloudState.BABY;
         public float destructionRange = 5f;
         [ReadOnly] public bool canBePouffed;
-        [MinMaxSlider(1f, 4f)] public Vector2 scale = Vector2.one;
+        [MinMaxSlider(0f, 4f)] public Vector2 scaleX = Vector2.one;
+        [MinMaxSlider(0f, 4f)] public Vector2 scaleY = Vector2.one;
+        [MinMaxSlider(0f, 4f)] public Vector2 scaleZ  = Vector2.one;
         [MinMaxSlider(1f, 15f)] public Vector2 speed = Vector2.one;
         public Collider collider;
 
@@ -85,14 +88,14 @@ namespace WanderingCloud.Gameplay
             }
 
             var currentSpeed = speed.x;
-            float currentSize = scale.y;
+            Vector3 currentSize = new Vector3( scaleX.y, scaleY.y, scaleZ.y);
 
             switch (newState)
             {
                 case CloudState.BABY:
                     canBePouffed = false;
                     currentSpeed = speed.y;
-                    currentSize = scale.x;
+                    currentSize = new Vector3(scaleX.x, scaleY.x, scaleZ.x); ;
                     onBaby?.Invoke();
                     break;
                 case CloudState.SOLID:
@@ -107,18 +110,17 @@ namespace WanderingCloud.Gameplay
             }
 
             debugCurrentSpeed = currentSpeed;
-            debugSizeSpeed = currentSize;
 
             if (isAgent)
             {
                 agent.speed = currentSpeed;
                 agent.acceleration = (currentSpeed * currentSpeed) / 2;
 
-                agent.radius = currentSize;
-                agent.height = currentSize + 0.5f;
+                agent.radius = currentSize.x;
+                agent.height = currentSize.x + 0.5f;
             }
             
-            self.localScale = Vector3.one * currentSize;
+            self.localScale = currentSize;
 
         }
 
