@@ -40,7 +40,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Base_Color_AO:
-        m_Texture: {fileID: 2800000, guid: b038ed57d601c9449bb1dd51bfbef468, type: 3}
+        m_Texture: {fileID: 2800000, guid: a92e538229b81534aa99082d631dac94, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BentNormalMap:
@@ -88,7 +88,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Norm_RE:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: a92e538229b81534aa99082d631dac94, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
@@ -221,7 +221,7 @@ Material:
     - _IridescenceMask: 1
     - _IridescenceThickness: 1
     - _LinkDetailsWithBase: 1
-    - _Luminosity: 1
+    - _Luminosity: 1.68
     - _MaterialID: 1
     - _Metallic: 0
     - _MetallicRemapMax: 1
@@ -244,7 +244,7 @@ Material:
     - _Rotation: 0
     - _Roughness_Intensity: 10
     - _SMUDGE: 1
-    - _Saturation: 1
+    - _Saturation: 0
     - _Smoothness: 0.5
     - _SmoothnessRemapMax: 1
     - _SmoothnessRemapMin: 0
@@ -272,7 +272,7 @@ Material:
     - _SurfaceType: 0
     - _TexWorldScale: 1
     - _TexWorldScaleEmissive: 1
-    - _TextureTilling: 1
+    - _TextureTilling: 0.4
     - _Thickness: 1
     - _TransmissionEnable: 1
     - _TransparentBackfaceEnable: 0
@@ -303,7 +303,7 @@ Material:
     - _Emissive_Color: {r: 0, g: 0, b: 0, a: 0}
     - _InvPrimScale: {r: 1, g: 1, b: 0, a: 0}
     - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
-    - _Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Offset: {r: 0.43, g: -0.26, b: 0, a: 0}
     - _Smudge_Color: {r: 0.6792453, g: 0.36330277, b: 0.23389105, a: 0}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
     - _SubSmudge_Color: {r: 1, g: 0.18396229, b: 0.18396229, a: 0}

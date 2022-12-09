@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-3949627661789530459
+--- !u!114 &-3731509296932098406
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -23,7 +23,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_Gray
+  m_Name: M_GiantRock 1
   m_Shader: {fileID: -6465566751694194690, guid: c7ff6db5d5f453c47b1bf9fd647f4a4a,
     type: 3}
   m_ValidKeywords:
@@ -54,7 +54,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Base_Color_AO:
-        m_Texture: {fileID: 2800000, guid: b3fd87e2e956e41b0b43f76bb50a4934, type: 3}
+        m_Texture: {fileID: 2800000, guid: 63f457da6c96c024db4e43d9ddcf7778, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BentNormalMap:
@@ -102,7 +102,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Norm_RE:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 673c7b53b1167e5448296733357102fa, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
@@ -221,13 +221,13 @@ Material:
     - _HeightPoMAmplitude: 2
     - _HeightTessAmplitude: 2
     - _HeightTessCenter: 0.5
-    - _Hue_Shift: 0
+    - _Hue_Shift: -0.67
     - _InvTilingScale: 1
     - _Ior: 1.5
     - _IridescenceMask: 1
     - _IridescenceThickness: 1
     - _LinkDetailsWithBase: 1
-    - _Luminosity: 4.52
+    - _Luminosity: 4
     - _MaterialID: 1
     - _Metallic: 0
     - _MetallicRemapMax: 1
@@ -247,10 +247,10 @@ Material:
     - _RefractionModel: 0
     - _RenderQueueType: 1
     - _RequireSplitLighting: 0
-    - _Rotation: 0
+    - _Rotation: 1.94
     - _Roughness_Intensity: 1
     - _SMUDGE: 0
-    - _Saturation: 0
+    - _Saturation: 0.04
     - _Smoothness: 0.5
     - _SmoothnessRemapMax: 1
     - _SmoothnessRemapMin: 0
@@ -278,7 +278,7 @@ Material:
     - _SurfaceType: 0
     - _TexWorldScale: 1
     - _TexWorldScaleEmissive: 1
-    - _TextureTilling: 0
+    - _TextureTilling: 1
     - _Thickness: 1
     - _TransmissionEnable: 1
     - _TransparentBackfaceEnable: 0
@@ -309,7 +309,7 @@ Material:
     - _Emissive_Color: {r: 0, g: 0, b: 0, a: 0}
     - _InvPrimScale: {r: 1, g: 1, b: 0, a: 0}
     - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
-    - _Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Offset: {r: 5, g: 0, b: 0, a: 0}
     - _Smudge_Color: {r: 0.4720919, g: 0.62264144, b: 0.25551796, a: 0}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
     - _SubSmudge_Color: {r: 0, g: 0, b: 0, a: 0}
