@@ -77,7 +77,19 @@ MonoBehaviour:
     m_ActionId: 99f6ed0c-0d67-44aa-8755-ee9c8646dd96
     m_ActionName: GamePad/LeftJoyStick[/XInputControllerWindows/leftStick]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4570782806165880005}
+        m_TargetAssemblyTypeName: WanderingCloud.Controller.PlayerController, WanderingCloud
+        m_MethodName: ButtonStart
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: be879479-9b2b-4386-b433-c5695d48915b
     m_ActionName: GamePad/StartButton[/XInputControllerWindows/start]
   - m_PersistentCalls:

@@ -13,13 +13,16 @@ namespace WanderingCloud
     {
 
 
+        #region Loading Level
+
+        List<string> loadedScene = new List<string>();
 
         public void LoadScene(MenuItem menu)
         {
             
             MenuManager.Instance.ShowMenu("LOADING_SCENE");
             SceneManager.LoadScene(menu.GetProperties<string>("level_name"));
-
+            loadedScene.Add(menu.GetProperties<string>("level_name"));
             var async = SceneManager.LoadSceneAsync(menu.GetProperties<string>("level_name"));
             StartCoroutine(WaitForSceneLoad(async));
             
@@ -77,6 +80,7 @@ namespace WanderingCloud
             bool i = true;
             foreach (var item in menu.GetProperties<List<string>>("levels_name"))
             {
+                loadedScene.Add(item);
                 if (i)
                 {
                     var async = SceneManager.LoadSceneAsync(item, LoadSceneMode.Additive);
@@ -92,7 +96,46 @@ namespace WanderingCloud
             }
             StartCoroutine(WaitForSceneLoad(asyncs));
         }
+        #endregion
 
+
+        #region Pause Game
+        public bool paused;
+        public void Pause()
+        {
+            paused = true;
+            MenuManager.Instance.ShowMenu("PAUSE_MENU");
+        }
+
+        public void Resume()
+        {
+            paused = false;
+            MenuManager.Instance.ShowMenu("IN_GAME");
+        }
+
+        #endregion
+
+
+
+        #region Return to Menu
+
+        public void ReturnToMainMenu()
+        {
+            paused = false;
+            var async = SceneManager.LoadSceneAsync("MainMenu");
+            StartCoroutine(WaitForReturnToMainMenuLoad(async));
+
+        }
+        IEnumerator WaitForReturnToMainMenuLoad(AsyncOperation async)
+        {
+            while (!async.isDone)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+            MenuManager.Instance.ShowMenu("START_MENU");
+        }
+
+        #endregion
 
 
         public void QuitApp()
