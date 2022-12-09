@@ -20,9 +20,10 @@ namespace WanderingCloud
             render.SetPropertyBlock(propBlock, 0);
         }
 
-        public void UpdateProperty(Renderer render, (string key, float value) shaderData) => UpdateProperty(render, new (string, float)[1] { shaderData });    
-        public void UpdateProperty(Renderer render, (string key, Vector3 value) shaderData) => UpdateProperty(render, new (string, Vector3)[1] { shaderData });    
-        public void UpdateProperty(Renderer render, (string key, int value) shaderData) => UpdateProperty(render, new (string, int)[1] { shaderData });    
+        public void UpdateProperty(string key, float value) => UpdateProperty(render, new (string, float)[1] { new(key, value) });    
+        public void UpdateProperty(string key, Vector3 value) => UpdateProperty(render, new (string, Vector3)[1] { new(key, value) });    
+        public void UpdateProperty(string key, int value) => UpdateProperty(render, new (string, int)[1] { new(key, value) });    
+        public void UpdateProperty(string key, float[] value) => UpdateProperty(render, new (string, float[])[1] {new (key, value)});    
         public void UpdateProperty(Renderer render, (string key, int value)[] shadersData)
         {
             GetData(render, ref propBlock);
@@ -38,6 +39,15 @@ namespace WanderingCloud
             foreach (var shaderData in shadersData)
             {
                 propBlock.SetFloat(shaderData.key, shaderData.value);
+            }
+            SendData(render, propBlock);
+        }
+        public void UpdateProperty(Renderer render, (string key, float[] value)[] shadersData)
+        {
+            GetData(render, ref propBlock);
+            foreach (var shaderData in shadersData)
+            {
+                propBlock.SetFloatArray(shaderData.key, shaderData.value);
             }
             SendData(render, propBlock);
         }

@@ -18,8 +18,8 @@ namespace WanderingCloud
         }
         public void Refill()
         {
-            UpdateProperty(render, ("_EntryPos", Vector3.up *10));
-            UpdateProperty(render, ("_ExitPos", Vector3.up * 10));
+            UpdateProperty("_EntryPos", Vector3.up *10);
+            UpdateProperty("_ExitPos", Vector3.up * 10);
             onRefill?.Invoke();
         }
 
@@ -34,8 +34,8 @@ namespace WanderingCloud
                 pushed = true;
                 onPushed?.Invoke();
                 var pos = other.transform.position - transform.position;
-                UpdateProperty(render, ("_EntryPos", pos));
-                UpdateProperty(render, ("_ExitPos", pos));
+                UpdateProperty("_EntryPos", pos);
+                UpdateProperty("_ExitPos", pos);
             }
         }
 
@@ -46,7 +46,7 @@ namespace WanderingCloud
 
             if (pushed)
             {
-                UpdateProperty(render, ("_ExitPos", other.transform.position - transform.position));
+                UpdateProperty("_ExitPos", other.transform.position - transform.position);
             }
         }
 
@@ -58,7 +58,7 @@ namespace WanderingCloud
             if (pushed)
             {
                 pushed = false;
-                UpdateProperty(render, ("_ExitPos", other.transform.position - transform.position));
+                UpdateProperty("_ExitPos", other.transform.position - transform.position);
             }
         }
     }
