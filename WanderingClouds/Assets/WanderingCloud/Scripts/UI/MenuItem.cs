@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,18 +15,22 @@ namespace WanderingCloud
         FLOAT,
         STRING,
         INTEGER,
-        BOOLEAN
+        BOOLEAN,
+        LIST
     }
 
     [Serializable]
     public class MenuItemData
     {
+
+
         public string name;
         public PropertiesType type;
-        public string StringValue;
-        public bool BoolValue;
-        public int IntegerValue;
-        public float FloatValue;
+        [ShowIf("type", PropertiesType.STRING)][AllowNesting] public string StringValue;
+        [ShowIf("type", PropertiesType.BOOLEAN)][AllowNesting] public bool BoolValue;
+        [ShowIf("type", PropertiesType.INTEGER)][AllowNesting] public int IntegerValue;
+        [ShowIf("type", PropertiesType.FLOAT)][AllowNesting] public float FloatValue;
+        [ShowIf("type", PropertiesType.LIST)][AllowNesting] public List<string> ListValue;
 
         public string GetStringValue()
         {
@@ -43,6 +48,12 @@ namespace WanderingCloud
         {
             return FloatValue;
         }
+        public List<string> GetListValue()
+        {
+            return ListValue;
+        }
+
+
     }
 
     [System.Serializable]
@@ -109,6 +120,8 @@ namespace WanderingCloud
                             return (T)Convert.ChangeType(item.IntegerValue, typeof(T));
                         case PropertiesType.FLOAT:
                             return (T)Convert.ChangeType(item.FloatValue, typeof(T));
+                        case PropertiesType.LIST:
+                            return (T)Convert.ChangeType(item.ListValue, typeof(T));
                         default:
                             break;
                     }
