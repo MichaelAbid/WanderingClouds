@@ -29,43 +29,47 @@ namespace WanderingCloud
 
         void FixedUpdate()
         {
-            foreach(var playerBrain in playerBrains)
+            if (shouldPush)
             {
-                PushPlayers pp = null;
-                if (playerBrain.aiGrabber.aiGrabed != null)
+                foreach (var playerBrain in playerBrains)
                 {
-                    pp = playerBrain.aiGrabber.aiGrabed.GetComponentInChildren<PushPlayers>();
-                }
-                bool canPush = true;
-                Tuple<PlayerBrain, bool> push = null;
-                foreach (var item in canPushs)
-                {
-                    if(item.Item1 == playerBrain)
+                    PushPlayers pp = null;
+                    if (playerBrain.aiGrabber.aiGrabed != null)
                     {
-                        canPush = item.Item2;
-                        push = item;
+                        pp = playerBrain.aiGrabber.aiGrabed.GetComponentInChildren<PushPlayers>();
+                    }
+                    bool canPush = true;
+                    Tuple<PlayerBrain, bool> push = null;
+                    foreach (var item in canPushs)
+                    {
+                        if (item.Item1 == playerBrain)
+                        {
+                            canPush = item.Item2;
+                            push = item;
+                        }
+                    }
+
+                    if (playerBrain != null && (pp == null || pp != this) && canPush)
+                    {
+                        /*Ray ray = new Ray(transform.position, (playerBrain.transform.position - transform.position));
+                        if(!Physics.Raycast(ray,Vector3.Distance(transform.position, playerBrain.transform.position)-0.5f))*/
+
+                        playerBrain.Movement.externalForce += transform.forward * PushForce;
+                        if (push == null)
+                        {
+                            canPushs.Add(new Tuple<PlayerBrain, bool>(playerBrain, false));
+                        }
+                        StartCoroutine(timerPush(playerBrain, secondsBeforeNextPush));
                     }
                 }
-
-                if (playerBrain != null && (pp == null ||  pp != this) && canPush)
+                foreach (var pushableObject in pushableObjects)
                 {
-                    /*Ray ray = new Ray(transform.position, (playerBrain.transform.position - transform.position));
-                    if(!Physics.Raycast(ray,Vector3.Distance(transform.position, playerBrain.transform.position)-0.5f))*/
-
-                    playerBrain.Movement.externalForce += transform.forward * PushForce;
-                    if(push == null)
+                    if (pushableObject != null)
                     {
-                        canPushs.Add(new Tuple<PlayerBrain, bool>(playerBrain, false));
+                        /*Ray ray = new Ray(transform.position, (pushableObject.transform.position - transform.position));
+                        if (!Physics.Raycast(ray, Vector3.Distance(transform.position, pushableObject.transform.position) - 0.5f))*/
+                        pushableObject.externalForce += transform.forward * PushForce;
                     }
-                    StartCoroutine(timerPush(playerBrain, secondsBeforeNextPush));
-                }
-            }
-            foreach (var pushableObject in pushableObjects)
-            {
-                if (pushableObject != null) { 
-                    Ray ray = new Ray(transform.position, (pushableObject.transform.position - transform.position));
-                    if (!Physics.Raycast(ray, Vector3.Distance(transform.position, pushableObject.transform.position) - 0.5f))
-                    if (ccollider.bounds.Contains(pushableObject.transform.position)) pushableObject.externalForce += transform.forward * PushForce;
                 }
             }
         }
@@ -98,6 +102,7 @@ namespace WanderingCloud
             }
             if (other.GetComponent<PushableObject>() != null)
             {
+                if(!pushableObjects.Contains(other.GetComponent<PushableObject>()))
                 pushableObjects.Add(other.GetComponent<PushableObject>());
             }
         }
