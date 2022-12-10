@@ -19,6 +19,7 @@ namespace WanderingCloud
         [SerializeField] public Vector2 PushSize = Vector2.one * 5f;
         public float parentRatio = 1;
         public BoxCollider ccollider;
+        public bool shouldPush = true;
 
         public List<PlayerBrain> playerBrains = new List<PlayerBrain>();
         public List<PushableObject> pushableObjects = new List<PushableObject>();

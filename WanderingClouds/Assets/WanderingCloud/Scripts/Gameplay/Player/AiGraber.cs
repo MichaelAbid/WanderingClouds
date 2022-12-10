@@ -33,6 +33,13 @@ namespace WanderingCloud.Gameplay
             target.collider.enabled = false;
             target.agent.enabled = false;
             target.rigidBody.useGravity = false;
+
+            PushPlayers pushPlayers = target.GetComponentInChildren<PushPlayers>();
+            if (pushPlayers != null)
+            {
+                pushPlayers.shouldPush = true;
+            }
+
             return true;
         }
         public void UnGrab()
@@ -44,6 +51,11 @@ namespace WanderingCloud.Gameplay
             aiGrabed.agent.enabled = true;
             aiGrabed.rigidBody.useGravity = true;
             aiGrabed.currentState = AI_STATE.AI_IDLE;
+            PushPlayers pushPlayers = aiGrabed.GetComponentInChildren<PushPlayers>();
+            if (pushPlayers != null)
+            {
+                pushPlayers.shouldPush = false;
+            }
             aiGrabed = null;
         }
 
