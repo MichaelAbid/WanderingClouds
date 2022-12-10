@@ -243,7 +243,7 @@ namespace WanderingCloud.Gameplay.AI
                 if (debugHideOut) { 
                     Gizmos.DrawLine(transform.position, hideOut.transform.position);
                     Handles.Label(transform.position + ((hideOut.transform.position - transform.position).normalized * distanceHideOutFromIA / 2) + Vector3.up, $"Distance : {distanceHideOutFromIA}");
-                }
+                
 
                 if (point != 0)
                 {
@@ -295,6 +295,7 @@ namespace WanderingCloud.Gameplay.AI
                     }
                 }
                 Handles.Label(hideOut.transform.position + Vector3.up, $"Point : {point}");
+                }
             }
 
 
