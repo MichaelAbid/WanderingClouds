@@ -17,6 +17,7 @@ public class pathMarker : MonoBehaviour
         if(Vector3.Distance(lastPos, transform.position) > threhold)
         {
             Instantiate(gameObject, transform.position, transform.rotation, null);
+            lastPos = transform.position;
         }
     }
 }

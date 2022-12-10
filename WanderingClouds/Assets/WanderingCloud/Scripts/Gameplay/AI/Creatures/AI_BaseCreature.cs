@@ -64,5 +64,13 @@ namespace WanderingCloud.Gameplay.AI
 
             return AI_STATE.AI_WANDERING;
         }
+        private void OnDrawGizmosSelected()
+        {
+            for (int i = 0; i < wanderingPoints.Count; i++)
+            {
+                Debug.DrawLine(wanderingPoints[i].transform.position, wanderingPoints[(i + 1) % wanderingPoints.Count].transform.position, Color.red);
+            }
+        }
+
     }
 }

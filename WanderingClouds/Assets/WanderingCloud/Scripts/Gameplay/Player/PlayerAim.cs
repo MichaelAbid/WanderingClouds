@@ -59,7 +59,7 @@ namespace WanderingCloud.Controller
         private Coroutine transition = null;
         #endregion
 
-        private void Start()
+        private void Awake()
         { 
             Initialize();
         }
@@ -188,15 +188,15 @@ namespace WanderingCloud.Controller
 
         public void Throw()
         {
+            if (assistTarget is null) return;
             if (!isAiming) return;
             if (grabAI.aiGrabed is not null) return;
             if (!inventory.RemovePullet()) return;
+
             var projectile = Instantiate(ProjectilePrefab, throwSocket.transform.position, Quaternion.identity);
 
             CloudBouletteV2 bullet = projectile.GetComponent<CloudBouletteV2>();
-            if (assistTarget is not null) bullet.Target = assistTarget;
-            else bullet.targetPosition = defaultTargetPosition;
-
+            bullet.Target = assistTarget;
             bullet.CanMove = true;
             bullet.type = player.isGyro? CloudType.SOLIDIFIER : CloudType.ENERGIZER;
         }
@@ -239,7 +239,6 @@ namespace WanderingCloud.Controller
                     SetVCam(player.VCamBase);
                 }
             }
-
             else
             {
                 isPlayerActive = false;
@@ -267,11 +266,7 @@ namespace WanderingCloud.Controller
                 }
             }
 
-            if (desiredCam == player.VCamBase && player.Inventory.pelletStock <= 0)
-            {
-                player.Movement.lookAtRig.enabled = true;
-            }
-            else player.Movement.lookAtRig.enabled = false;
+            player.Movement.lookAtRig.enabled = (desiredCam == player.VCamBase && player.Inventory.pelletStock <= 0);
 
             desiredCam.Priority = 10;
             activeVCam = desiredCam;

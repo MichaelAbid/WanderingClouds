@@ -1,12 +1,14 @@
 using UnityEngine;
 using UnityEngine.Events;
 using WanderingCloud.Controller;
+using WanderingCloud.Gameplay;
 
 namespace WanderingCloud
 {
     [RequireComponent(typeof(Collider))]
     public class CloudSourceV2 : ShaderLink
     {
+        public bool isGD2 = false;
         public UnityEvent onPushed;
         public UnityEvent onRefill;
 
@@ -30,6 +32,12 @@ namespace WanderingCloud
 
             if (other.GetComponentInParent<PlayerMovement>().moveState is MovementState.Rush or MovementState.Dash)
             {
+                if (other.GetComponentInParent<PlayerInventory>().pelletStock > 0) return;
+                if (isGD2)
+                {
+                    if (GetComponent<CreatureSources>().currentState is CloudState.BABY) return;
+                }
+
                 other.GetComponentInParent<PlayerInventory>().CloudContact();
                 pushed = true;
                 onPushed?.Invoke();

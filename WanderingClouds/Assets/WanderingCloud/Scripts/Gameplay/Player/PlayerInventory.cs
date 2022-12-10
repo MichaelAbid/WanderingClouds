@@ -46,6 +46,7 @@ namespace WanderingCloud
 		{
 			if (pelletStock < maxPelletStock)
 			{
+				if (pelletStock <= 0) onLootCloud?.Invoke();
 				pelletStock++;
 				return true;
 			}
@@ -57,7 +58,6 @@ namespace WanderingCloud
 			{
 				pelletStock--;
 				if (pelletStock <= 0) onLoseCloud?.Invoke();
-
 				return true;
 			}
 			return false;

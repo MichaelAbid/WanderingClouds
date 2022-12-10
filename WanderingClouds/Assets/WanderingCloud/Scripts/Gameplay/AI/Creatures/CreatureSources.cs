@@ -97,15 +97,21 @@ namespace WanderingCloud.Gameplay
                     currentSpeed = speed.y;
                     currentSize = new Vector3(scaleX.x, scaleY.x, scaleZ.x); ;
                     onBaby?.Invoke();
+                    shaderLink.UpdateProperty("_Color", Color.gray);
+
                     break;
                 case CloudState.SOLID:
                     collider.isTrigger = false;
                     onSolidy?.Invoke();
+                    shaderLink.UpdateProperty("_Color", Color.cyan);
+
                     break;
                 case CloudState.DESTRUCTOR:
                     if (destructorArea is not null)
                         destructorArea.SetActive(true);
                     onDestructor?.Invoke();
+                    shaderLink.UpdateProperty("_Color", Color.red);
+
                     break;
             }
 

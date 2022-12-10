@@ -10,6 +10,9 @@ namespace WanderingCloud
     [RequireComponent(typeof(BoxCollider))]
     public class WindElement : MonoBehaviour
     {
+        public bool isNegative = false;
+        public WindElement negateZone;
+
         [SerializeField] public float windForce = 5f;
         [SerializeField] public Vector2 windSize = Vector2.one * 5f;
         [SerializeField] public float windDistance = 15f;
@@ -25,9 +28,19 @@ namespace WanderingCloud
         }
         void FixedUpdate()
         {
+
             foreach (var playerBrain in playerBrains)
             {
-                playerBrain.Movement.externalForce += transform.forward * windForce;
+                if (!isNegative)
+                {
+                    playerBrain.Movement.externalForce += transform.forward * windForce;
+                    return;
+                }
+
+                if (negateZone.coll.bounds.Contains(playerBrain.Movement.transform.position))
+                {
+                    playerBrain.Movement.externalForce -= transform.forward * negateZone.windForce;
+                }
             }
         }
 
