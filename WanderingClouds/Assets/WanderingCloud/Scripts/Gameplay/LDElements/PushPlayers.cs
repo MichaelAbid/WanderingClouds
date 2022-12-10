@@ -25,6 +25,8 @@ namespace WanderingCloud
         public List<PushableObject> pushableObjects = new List<PushableObject>();
 
         List<Tuple<PlayerBrain, bool>> canPushs = new List<Tuple<PlayerBrain, bool>>();
+        public bool isIA;
+
         void FixedUpdate()
         {
             foreach(var playerBrain in playerBrains)
