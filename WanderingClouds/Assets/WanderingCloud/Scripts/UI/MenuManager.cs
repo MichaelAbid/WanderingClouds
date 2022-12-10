@@ -12,7 +12,7 @@ using WanderingCloud.Controller;
 namespace WanderingCloud.UI
 {
     [System.Serializable]
-    public struct Menu
+    public class Menu
     {
         /// <summary>
         /// The menu identifier
@@ -25,6 +25,8 @@ namespace WanderingCloud.UI
         public MenuNavigator navigator;
         public List<GameObject> listOfUiElementInMenu;
         public bool consumeInput;
+
+        
     }
     public class MenuManager : SingletonMonoBehaviour<MenuManager>
     {

@@ -130,7 +130,10 @@ namespace WanderingCloud.Controller
             }
             if( inMenu)
             {
-                MenuManager.Instance.Press();
+                if (callback.performed)
+                {
+                    MenuManager.Instance.Press();
+                }
             }
         }
 
@@ -157,7 +160,24 @@ namespace WanderingCloud.Controller
                 ChangePawn();
             }
         }
+        public void ButtonStart(InputAction.CallbackContext callback)
+        {
 
+            if (callback.performed)
+            {
+                if (!inMenu)
+                {
+                    MenuManager.Instance.GetComponent<MenuAction>().Pause();
+                }
+                else
+                {
+                    MenuManager.Instance.GetComponent<MenuAction>().Resume();
+                }
+            }
+
+
+
+        }
 
         public void RightTrigger(InputAction.CallbackContext callback)
         {

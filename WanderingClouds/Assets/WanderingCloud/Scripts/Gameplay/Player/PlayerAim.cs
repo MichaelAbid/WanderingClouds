@@ -84,8 +84,8 @@ namespace WanderingCloud.Controller
                 {
                     Debug.Log(grabAI.aiGrabed.transform.rotation);
                     
-                    grabAI.aiGrabed.visual.transform.rotation = Quaternion.LookRotation(player.Avatar.up*-1,player.Avatar.forward);
-                    grabAI.aiGrabed.socket.transform.rotation = Quaternion.LookRotation(player.Avatar.forward, player.Avatar.up);
+                    grabAI.aiGrabed.visual.transform.rotation = Quaternion.LookRotation(player.Camera.transform.up*-1, player.Camera.transform.forward);
+                    grabAI.aiGrabed.socket.transform.rotation = Quaternion.LookRotation(player.Camera.transform.forward, player.Camera.transform.up);
 
                     return;
                 }

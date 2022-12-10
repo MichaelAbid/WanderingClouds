@@ -25,6 +25,11 @@ namespace WanderingCloud.Controller
         {
         }
 
+        public virtual void StartButton()
+        {
+
+        }
+
         #region FaceButton
 
         public virtual void SouthButtonInput()

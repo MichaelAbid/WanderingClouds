@@ -72,10 +72,16 @@ namespace WanderingCloud.Controller
             {
                 aiGrabber.UnGrab();
             }
+            else
+            {
+                aiGrabber.Grab();
+            }
         }
         public override void EstButtonInputReleased()
         {
             interact.InteractEnd(this);
         }
+
+        
     }
 }

@@ -4,6 +4,8 @@ using UnityEditor;
 using System.Collections.Generic;
 using WanderingCloud.Controller;
 using UnityEngine;
+using System.Collections;
+using System;
 
 namespace WanderingCloud
 {
@@ -12,38 +14,84 @@ namespace WanderingCloud
 
         [SerializeField] public float PushForce = 5f;
         [SerializeField] public float PushDistance = 15f;
+        [SerializeField] public float secondsBeforeNextPush = 2;
+        
         [SerializeField] public Vector2 PushSize = Vector2.one * 5f;
         public float parentRatio = 1;
         public BoxCollider ccollider;
+        public bool shouldPush = true;
 
         public List<PlayerBrain> playerBrains = new List<PlayerBrain>();
         public List<PushableObject> pushableObjects = new List<PushableObject>();
 
-        
+        List<Tuple<PlayerBrain, bool>> canPushs = new List<Tuple<PlayerBrain, bool>>();
+        public bool isIA;
+
         void FixedUpdate()
         {
-            foreach(var playerBrain in playerBrains)
+            if (shouldPush)
             {
-                PushPlayers pp = null;
-                if (playerBrain.aiGrabber.aiGrabed != null)
+                foreach (var playerBrain in playerBrains)
                 {
-                    pp = playerBrain.aiGrabber.aiGrabed.GetComponentInChildren<PushPlayers>();
+                    PushPlayers pp = null;
+                    if (playerBrain.aiGrabber.aiGrabed != null)
+                    {
+                        pp = playerBrain.aiGrabber.aiGrabed.GetComponentInChildren<PushPlayers>();
+                    }
+                    bool canPush = true;
+                    Tuple<PlayerBrain, bool> push = null;
+                    foreach (var item in canPushs)
+                    {
+                        if (item.Item1 == playerBrain)
+                        {
+                            canPush = item.Item2;
+                            push = item;
+                        }
+                    }
+
+                    if (playerBrain != null && (pp == null || pp != this) && canPush)
+                    {
+                        /*Ray ray = new Ray(transform.position, (playerBrain.transform.position - transform.position));
+                        if(!Physics.Raycast(ray,Vector3.Distance(transform.position, playerBrain.transform.position)-0.5f))*/
+
+                        playerBrain.Movement.externalForce += transform.forward * PushForce;
+                        if (push == null)
+                        {
+                            canPushs.Add(new Tuple<PlayerBrain, bool>(playerBrain, false));
+                        }
+                        StartCoroutine(timerPush(playerBrain, secondsBeforeNextPush));
+                    }
                 }
-                if (playerBrain != null && (pp == null ||  pp != this))
+                foreach (var pushableObject in pushableObjects)
                 {
-                    /*Ray ray = new Ray(transform.position, (playerBrain.transform.position - transform.position));
-                    if(!Physics.Raycast(ray,Vector3.Distance(transform.position, playerBrain.transform.position)-0.5f))*/
-                    playerBrain.Movement.externalForce += transform.forward * PushForce;
+                    if (pushableObject != null)
+                    {
+                        /*Ray ray = new Ray(transform.position, (pushableObject.transform.position - transform.position));
+                        if (!Physics.Raycast(ray, Vector3.Distance(transform.position, pushableObject.transform.position) - 0.5f))*/
+                        pushableObject.externalForce += transform.forward * PushForce;
+                    }
                 }
             }
-            foreach (var pushableObject in pushableObjects)
+        }
+
+        IEnumerator timerPush(PlayerBrain brain,float seconds)
+        {
+            yield return new WaitForSeconds(seconds);
+            Tuple<PlayerBrain, bool> ll = null;
+            foreach (var item in canPushs)
             {
-                if (pushableObject != null) { 
-                    Ray ray = new Ray(transform.position, (pushableObject.transform.position - transform.position));
-                    if (!Physics.Raycast(ray, Vector3.Distance(transform.position, pushableObject.transform.position) - 0.5f))
-                    if (ccollider.bounds.Contains(pushableObject.transform.position)) pushableObject.externalForce += transform.forward * PushForce;
+                if (item.Item1 == brain)
+                {
+                    ll = item;
                 }
             }
+            if (ll != null)
+            {
+                canPushs.Remove(ll);
+            }
+            canPushs.Add(new Tuple<PlayerBrain, bool>(brain, true));
+                
+
         }
 
         private void OnTriggerEnter(Collider other)
@@ -54,6 +102,7 @@ namespace WanderingCloud
             }
             if (other.GetComponent<PushableObject>() != null)
             {
+                if(!pushableObjects.Contains(other.GetComponent<PushableObject>()))
                 pushableObjects.Add(other.GetComponent<PushableObject>());
             }
         }

@@ -767,12 +767,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PushForce: 1.26
   PushDistance: 3.7
+  secondsBeforeNextPush: 2
   PushSize: {x: 0.5, y: 0.5}
-  isWaterPush: 0
   parentRatio: 0.5
   ccollider: {fileID: 99478169}
+  shouldPush: 0
   playerBrains: []
   pushableObjects: []
+  isIA: 1
 --- !u!65 &99478169
 BoxCollider:
   m_ObjectHideFlags: 0
