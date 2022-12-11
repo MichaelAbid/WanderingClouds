@@ -53,6 +53,8 @@ namespace WanderingCloud
 
             if (collision.collider.GetComponentInParent<PlayerMovement>().moveState is MovementState.Rush or MovementState.Dash)
             {
+                if (collision.collider.GetComponentInParent<PlayerInventory>().pelletStock > 0) return;
+
                 GetComponent<Collider>().isTrigger = true;
                 collision.collider.GetComponentInParent<PlayerInventory>().CloudContact();
                 pushed = true;

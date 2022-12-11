@@ -7,5 +7,6 @@ namespace WanderingCloud.Gameplay
      public abstract class  Source : MonoBehaviour
     {
         public abstract bool Feed(CloudType cType);
+        public abstract bool isFeed { get; }
     }
 }

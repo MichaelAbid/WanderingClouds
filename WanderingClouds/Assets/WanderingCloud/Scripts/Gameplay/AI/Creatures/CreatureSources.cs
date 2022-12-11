@@ -1,11 +1,7 @@
 using NaughtyAttributes;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
-using UnityEngine.UI;
 using WanderingCloud.Controller;
 
 namespace WanderingCloud.Gameplay
@@ -74,6 +70,8 @@ namespace WanderingCloud.Gameplay
             }
             return true;
         }
+
+        public override bool isFeed => currentState is not CloudState.BABY;
 
         public void SwitchState(int newState) => SwitchState((CloudState)newState);
         public void SwitchState(CloudState newState)

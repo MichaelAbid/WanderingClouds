@@ -2,7 +2,9 @@ using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.AI;
 using WanderingCloud.Controller;
@@ -209,6 +211,8 @@ namespace WanderingCloud.Gameplay.AI
             return transform.position;
         }
 
+#if UNITY_EDITOR
+
         private void OnDrawGizmos()
         {
 
@@ -319,9 +323,7 @@ namespace WanderingCloud.Gameplay.AI
                 }
             }
 
-
         }
+#endif
     }
-
-
 }

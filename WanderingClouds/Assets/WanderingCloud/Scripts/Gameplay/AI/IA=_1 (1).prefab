@@ -183,7 +183,7 @@ MonoBehaviour:
   visual: {fileID: 878146057189224620}
   currentState: 1
   isAiActive: 1
-  isGrabbable: 1
+  isGrabbable: 0
   isGrabbed: 0
   isAgent: 0
   wanderingPoints:
@@ -227,6 +227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   render: {fileID: 878146057189224628}
+  isGD2: 0
   onPushed:
     m_PersistentCalls:
       m_Calls:

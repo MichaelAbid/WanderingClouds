@@ -189,6 +189,19 @@ namespace WanderingCloud.Controller
         public void Throw()
         {
             if (assistTarget is null) return;
+            Component component;
+            assistTarget.parent.TryGetComponent(typeof(PlayerInventory), out component);
+            if (component is not null)
+            {
+                var otherInventory = (PlayerInventory)component;
+                if (otherInventory.haveCloud) return;
+            }
+            assistTarget.TryGetComponent(typeof(Source), out component);
+            if (component is not null)
+            { 
+                var source = (Source)component;
+                if (source.isFeed) return;
+            }
             if (!isAiming) return;
             if (grabAI.aiGrabed is not null) return;
             if (!inventory.RemovePullet()) return;

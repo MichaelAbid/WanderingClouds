@@ -45,7 +45,9 @@ namespace WanderingCloud.Gameplay
                 return false;
             }
         }
-        
+
+        public override bool isFeed => currentPullet > 0;
+
         void Update()
         {
             agent.speed = currentSpeed;
