@@ -132,7 +132,7 @@ namespace WanderingCloud
             {
                 yield return new WaitForEndOfFrame();
             }
-            MenuManager.Instance.ShowMenu("START_MENU");
+            MenuManager.Instance.ShowMenu("MAIN_MENU");
         }
 
         #endregion
