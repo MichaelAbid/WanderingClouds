@@ -10,32 +10,67 @@ namespace WanderingCloud.Gameplay.AI
 {
     public class AI_BaseCreature : AI_Base
     {
-        public List<GameObject> wanderingPoints = new List<GameObject>();
-        int wanderingPointCount = 0;
+        public bool isAgent = true;
 
-        protected override void WanderingBehavior()
+        [Header("ListPoint"), SerializeField] private List<WaitPoint> wanderingPoints = new List<WaitPoint>();
+        [SerializeField, ReadOnly] private int wanderingPointsIndex = 0;
+        [SerializeField, ReadOnly] private float waitingTime = 0;
+
+
+        private void Awake()
         {
-            agent.SetDestination(wanderingPoints[wanderingPointCount].transform.position);
-
-            currentState = AI_STATE.AI_IDLE;
+            agent.transform.position = wanderingPoints[wanderingPointsIndex].transform.position;
         }
 
-        protected override AI_STATE ChangeFromIdle()
+        override protected void IdleBehavior()
         {
-            if (Vector3.Distance(wanderingPoints[wanderingPointCount].transform.position, transform.position) <= 2 )
+            if (isAgent) return;
+
+            transform.Translate((wanderingPoints[wanderingPointsIndex].transform.position - transform.position).normalized * agent.speed * Time.deltaTime);
+        }
+        override protected void WanderingBehavior()
+        {
+            waitingTime -= Time.deltaTime;
+        }
+
+        override protected AI_STATE ChangeFromIdle()
+        {
+            if (Vector3.Distance(wanderingPoints[wanderingPointsIndex].transform.position, transform.position) <= agent.radius + 0.5f)
             {
-                wanderingPointCount++;
-                if (wanderingPointCount == wanderingPoints.Count)
-                {
-                    wanderingPointCount = 0;
-                }
+                waitingTime = wanderingPoints[wanderingPointsIndex].waitTime;
                 return AI_STATE.AI_WANDERING;
             }
             else
             {
-                return base.ChangeFromIdle();
+                return AI_STATE.AI_IDLE;
             }
 
         }
+
+        override protected AI_STATE ChangeFromWandering()
+        {
+            if(waitingTime < 0)
+            {
+                do
+                {
+                    wanderingPointsIndex++;
+                    wanderingPointsIndex %= wanderingPoints.Count;
+                }
+                while (!wanderingPoints[wanderingPointsIndex].isAvailable);
+
+                if(isAgent) agent.SetDestination(wanderingPoints[wanderingPointsIndex].transform.position);
+                return AI_STATE.AI_IDLE;
+            }
+
+            return AI_STATE.AI_WANDERING;
+        }
+        private void OnDrawGizmosSelected()
+        {
+            for (int i = 0; i < wanderingPoints.Count; i++)
+            {
+                Debug.DrawLine(wanderingPoints[i].transform.position, wanderingPoints[(i + 1) % wanderingPoints.Count].transform.position, Color.red);
+            }
+        }
+
     }
 }
