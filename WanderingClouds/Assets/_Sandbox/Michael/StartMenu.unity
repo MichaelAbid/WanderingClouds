@@ -173,6 +173,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &282776646 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4067031061845550552, guid: 150725af183ddb646b293aa44556f050,
+    type: 3}
+  m_PrefabInstance: {fileID: 4067031061663829505}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cfbeb7a498b39e4a8a6e33b2ae33239, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1581656556 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4067031060885433087, guid: 150725af183ddb646b293aa44556f050,
+    type: 3}
+  m_PrefabInstance: {fileID: 4067031061663829505}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cfbeb7a498b39e4a8a6e33b2ae33239, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4067031061663829505
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -180,6 +204,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1102904975, guid: 150725af183ddb646b293aa44556f050, type: 3}
+      propertyPath: delayBeforeNextNavigate
+      value: 0.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 1350001773, guid: 150725af183ddb646b293aa44556f050, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4067031060263769574, guid: 150725af183ddb646b293aa44556f050,
         type: 3}
       propertyPath: m_RootOrder
@@ -244,6 +276,61 @@ PrefabInstance:
         type: 3}
       propertyPath: listProperties.Array.data[0].StringValue
       value: Scn_ClementTest
+      objectReference: {fileID: 0}
+    - target: {fileID: 4067031062093100087, guid: 150725af183ddb646b293aa44556f050,
+        type: 3}
+      propertyPath: actualItem.id
+      value: diorama
+      objectReference: {fileID: 0}
+    - target: {fileID: 4067031062093100087, guid: 150725af183ddb646b293aa44556f050,
+        type: 3}
+      propertyPath: actualItem.item
+      value: 
+      objectReference: {fileID: 1581656556}
+    - target: {fileID: 4067031062093100087, guid: 150725af183ddb646b293aa44556f050,
+        type: 3}
+      propertyPath: actualItem.upItem
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4067031062093100087, guid: 150725af183ddb646b293aa44556f050,
+        type: 3}
+      propertyPath: actualItem.downItem
+      value: level design
+      objectReference: {fileID: 0}
+    - target: {fileID: 4067031062093100087, guid: 150725af183ddb646b293aa44556f050,
+        type: 3}
+      propertyPath: delayBeforeNextNavigate
+      value: 0.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 4067031062093100087, guid: 150725af183ddb646b293aa44556f050,
+        type: 3}
+      propertyPath: listOfMenuItem.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4067031062093100087, guid: 150725af183ddb646b293aa44556f050,
+        type: 3}
+      propertyPath: listOfMenuItem.Array.data[3].id
+      value: quit
+      objectReference: {fileID: 0}
+    - target: {fileID: 4067031062093100087, guid: 150725af183ddb646b293aa44556f050,
+        type: 3}
+      propertyPath: listOfMenuItem.Array.data[3].item
+      value: 
+      objectReference: {fileID: 282776646}
+    - target: {fileID: 4067031062093100087, guid: 150725af183ddb646b293aa44556f050,
+        type: 3}
+      propertyPath: listOfMenuItem.Array.data[3].upItem
+      value: gym room
+      objectReference: {fileID: 0}
+    - target: {fileID: 4067031062093100087, guid: 150725af183ddb646b293aa44556f050,
+        type: 3}
+      propertyPath: listOfMenuItem.Array.data[2].downItem
+      value: quit
+      objectReference: {fileID: 0}
+    - target: {fileID: 4067031062093100087, guid: 150725af183ddb646b293aa44556f050,
+        type: 3}
+      propertyPath: listOfMenuItem.Array.data[3].downItem
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 150725af183ddb646b293aa44556f050, type: 3}

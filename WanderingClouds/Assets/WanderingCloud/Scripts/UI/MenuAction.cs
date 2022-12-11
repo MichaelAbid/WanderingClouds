@@ -105,14 +105,20 @@ namespace WanderingCloud
         public bool paused;
         public void Pause()
         {
-            paused = true;
-            MenuManager.Instance.ShowMenu("PAUSE_MENU");
+            if (MenuManager.Instance.selectedMenuId == "IN_GAME")
+            {
+                paused = true;
+                MenuManager.Instance.ShowMenu("PAUSE_MENU");
+            }
         }
 
         public void Resume()
         {
-            paused = false;
-            MenuManager.Instance.ShowMenu("IN_GAME");
+            if (MenuManager.Instance.selectedMenuId == "PAUSE_MENU")
+            {
+                paused = false;
+                MenuManager.Instance.ShowMenu("IN_GAME");
+            }
         }
 
         #endregion
