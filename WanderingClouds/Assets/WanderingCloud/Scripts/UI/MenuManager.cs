@@ -7,6 +7,7 @@ using System.Linq;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 using WanderingCloud.Controller;
 
 namespace WanderingCloud.UI
@@ -25,8 +26,10 @@ namespace WanderingCloud.UI
         public MenuNavigator navigator;
         public List<GameObject> listOfUiElementInMenu;
         public bool consumeInput;
+        public bool isShow = false;
+        public UnityEvent onShowEvents;
+        public UnityEvent onHideEvents;
 
-        
     }
     public class MenuManager : SingletonMonoBehaviour<MenuManager>
     {
@@ -87,23 +90,36 @@ namespace WanderingCloud.UI
         /// Hides all menu.
         /// </summary>
         [Button]
-        public void HideAllMenu()
+        public void HideAllMenu(string id ="")
         {
             foreach (Menu item in listOfAllMenu)
             {
-                if (item.listOfUiElementInMenu.Count > 0)
+                if ( item.isShow && item.listOfUiElementInMenu.Count > 0 && id!=item.menuID)
                 {
+                    item.isShow = false;
                     foreach (GameObject obj in item.listOfUiElementInMenu)
                     {
                         obj.SetActive(false);
                     }
+                    item.onHideEvents.Invoke();
                 }
+
             }
         }
 
 
 
-
+        public Menu GetMenu(string id)
+        {
+            foreach (Menu item in listOfAllMenu)
+            {
+                if(item.menuID == id)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
 
 
 
@@ -128,17 +144,19 @@ namespace WanderingCloud.UI
         /// <param name="id">The identifier.</param>
         public void ShowMenu(string id)
         {
-            HideAllMenu();
+            HideAllMenu(id);
 
             foreach (Menu item in listOfAllMenu)
             {
-                if (item.menuID == id)
+                if (item.menuID == id && !item.isShow)
                 {
+                    item.isShow = true;
                     selectedMenu = item;
                     foreach (GameObject obj in item.listOfUiElementInMenu)
                     {
                         obj.SetActive(true);
                     }
+                    item.onShowEvents.Invoke();
                 }
             }
             selectedMenuId = id;
