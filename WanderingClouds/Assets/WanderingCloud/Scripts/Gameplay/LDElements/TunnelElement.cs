@@ -20,7 +20,7 @@ namespace WanderingCloud
         {
             if (isForGiro != player.isGyro)
             {
-                player.Movement.externalForce += Vector3.ProjectOnPlane(player.transform.position - transform.position,Vector3.up).normalized * repulseForce;
+                player.Movement.externalForce += transform.forward * Mathf.Sign(Vector3.Dot(player.transform.position - transform.position,transform.forward)) * repulseForce;
             }
         }
 

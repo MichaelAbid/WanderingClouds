@@ -162,15 +162,18 @@ namespace WanderingCloud.Controller
         }
         public void ButtonStart(InputAction.CallbackContext callback)
         {
-
+            Debug.Log("Start");
             if (callback.performed)
             {
+                Debug.Log("Start Performed");
                 if (!inMenu)
                 {
+                    Debug.Log("Pause");
                     MenuManager.Instance.GetComponent<MenuAction>().Pause();
                 }
                 else
                 {
+                    Debug.Log("Resume");
                     MenuManager.Instance.GetComponent<MenuAction>().Resume();
                 }
             }

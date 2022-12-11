@@ -36,15 +36,12 @@ namespace WanderingCloud
             {
                 yield return new WaitForEndOfFrame();
             }
+            
             foreach (var item in FindObjectsOfType<PlayerController>())
             {
                 item.ChangePawn();
             }
-            var syncmenu = SceneManager.UnloadSceneAsync("MainMenu");
-            while (!syncmenu.isDone)
-            {
-                yield return new WaitForEndOfFrame();
-            }
+            
             MenuManager.Instance.ShowMenu("IN_GAME");
         }
 
@@ -67,11 +64,7 @@ namespace WanderingCloud
             {
                 item.ChangePawn();
             }
-            var syncmenu =SceneManager.UnloadSceneAsync("MainMenu");
-            while (!syncmenu.isDone)
-            {
-                yield return new WaitForEndOfFrame();
-            }
+            
             MenuManager.Instance.ShowMenu("IN_GAME");
         }
 
@@ -85,7 +78,7 @@ namespace WanderingCloud
                 loadedScene.Add(item);
                 if (i)
                 {
-                    var async = SceneManager.LoadSceneAsync(item, LoadSceneMode.Additive);
+                    var async = SceneManager.LoadSceneAsync(item, LoadSceneMode.Single);
                     asyncs.Add(async);
                     i = false;
                 }
@@ -105,14 +98,20 @@ namespace WanderingCloud
         public bool paused;
         public void Pause()
         {
-            paused = true;
-            MenuManager.Instance.ShowMenu("PAUSE_MENU");
+            if (MenuManager.Instance.selectedMenuId != "MAIN_MENU")
+            {
+                paused = true;
+                MenuManager.Instance.ShowMenu("PAUSE_MENU");
+            }
         }
 
         public void Resume()
         {
-            paused = false;
-            MenuManager.Instance.ShowMenu("IN_GAME");
+            if (MenuManager.Instance.selectedMenuId != "MAIN_MENU")
+            {
+                paused = false;
+                MenuManager.Instance.ShowMenu("IN_GAME");
+            }
         }
 
         #endregion
@@ -196,7 +195,11 @@ namespace WanderingCloud
                 yield return new WaitForEndOfFrame();
                 t += Time.deltaTime;
             }
+            foreach (var item in MenuManager.Instance.GetMenu(id).listOfUiElementInMenu)
+            {
+                item.SetActive(false);
+            }
 
-        }
+            }
     }
 }

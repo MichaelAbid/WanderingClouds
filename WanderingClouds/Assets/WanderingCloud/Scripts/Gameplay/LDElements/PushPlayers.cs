@@ -117,7 +117,7 @@ namespace WanderingCloud
                 pushableObjects.Remove(other.GetComponent<PushableObject>());
             }
         }
-
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
             if (parentRatio > 0)
@@ -133,5 +133,6 @@ namespace WanderingCloud
                 ccollider.size = new Vector3(PushSize.x / transform.localScale.x / parentRatio, PushSize.y / transform.localScale.y / parentRatio, PushDistance / transform.localScale.z / parentRatio);
             }
         }
+#endif
     }
 }

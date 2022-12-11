@@ -1,5 +1,7 @@
 using System;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using WanderingCloud.Controller;
 using DG.Tweening;
@@ -43,10 +45,11 @@ namespace WanderingCloud
 				interact.onInteractBegin.RemoveListener(Climb);
 			}
 		}
-
+#if UNITY_EDITOR
 		private void OnDrawGizmosSelected()
 		{
 			endPos = Handles.DoPositionHandle(endPos, Quaternion.identity);
 		}
+#endif
 	}
 }

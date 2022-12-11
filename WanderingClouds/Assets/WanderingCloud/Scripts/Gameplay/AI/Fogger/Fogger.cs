@@ -49,6 +49,9 @@ namespace WanderingCloud
                 return false;
             }
         }
+
+        public override bool isFeed => currentPullet > 0;
+
         [Button]
         // Start is called before the first frame update
         void Start()

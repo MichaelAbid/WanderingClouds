@@ -27,7 +27,9 @@ namespace WanderingCloud
 		}
 		public void ReceivedCloud()
 		{
+			if (pelletStock <= 0) onLootCloud?.Invoke();
 			pelletStock = Mathf.Clamp(pelletStock + pelletPerConsum, 0, maxPelletStock);
+			onConsumeCloud?.Invoke();
 		}
 		private IEnumerator EatingCloud()
 		{
@@ -36,7 +38,6 @@ namespace WanderingCloud
 			yield return new WaitForSeconds(holdDuration);
 
 			ReceivedCloud();
-			onConsumeCloud?.Invoke();
 			
 			isHoldingCloud = false;
 			consuming = null;
