@@ -18,6 +18,8 @@ namespace WanderingCloud.Controller
     {
 
         #region Variables
+        public bool isGDV2 = false;
+
         [Header("Follow Cam")]
         [field: SerializeField, Foldout("Data")] private float waitTimeFollow;
         [field: SerializeField, Foldout("Data"), Range(0f, 1f)] private float yThresholdFollow = 0.75f;
@@ -200,7 +202,7 @@ namespace WanderingCloud.Controller
             if (component is not null)
             { 
                 var source = (Source)component;
-                if (source.isFeed) return;
+                if (source.isFeed && isGDV2) return;
             }
             if (!isAiming) return;
             if (grabAI.aiGrabed is not null) return;
