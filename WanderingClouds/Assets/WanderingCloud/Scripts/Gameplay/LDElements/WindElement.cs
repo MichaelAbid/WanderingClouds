@@ -64,7 +64,7 @@ namespace WanderingCloud
                 //playerBrains.Remove(other.GetComponentInParent<PlayerBrain>());
             }
         }
-        
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
             Vector3 windVector = new Vector3(windSize.x, windSize.y, windDistance);
@@ -86,5 +86,6 @@ namespace WanderingCloud
             visual.localScale = windVector;
             
         }
+#endif
     }
 }

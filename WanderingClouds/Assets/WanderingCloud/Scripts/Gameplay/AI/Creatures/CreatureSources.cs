@@ -1,11 +1,7 @@
 using NaughtyAttributes;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
-using UnityEngine.UI;
 using WanderingCloud.Controller;
 
 namespace WanderingCloud.Gameplay
