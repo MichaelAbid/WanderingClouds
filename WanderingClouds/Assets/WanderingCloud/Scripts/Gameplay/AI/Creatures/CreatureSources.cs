@@ -75,6 +75,8 @@ namespace WanderingCloud.Gameplay
             return true;
         }
 
+        public override bool isFeed => currentState is not CloudState.BABY;
+
         public void SwitchState(int newState) => SwitchState((CloudState)newState);
         public void SwitchState(CloudState newState)
         {

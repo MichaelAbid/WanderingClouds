@@ -220,6 +220,8 @@ namespace WanderingCloud.Gameplay
             return false;
         }
 
+        public override bool isFeed  => boulettes.Count > 0;
+
         private void OnTriggerEnter(Collider other)
         {
             CloudExploder cg = other.GetComponentInParent<CloudExploder>();

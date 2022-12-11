@@ -33,13 +33,19 @@ namespace WanderingCloud
             {
                 if (!isNegative)
                 {
-                    playerBrain.Movement.externalForce += transform.forward * windForce;
-                    return;
+                    if (Vector3.Distance(coll.ClosestPoint(playerBrain.transform.position),playerBrain.transform.position ) <= 0 )
+                    {
+                        playerBrain.Movement.externalForce += transform.forward * windForce;
+                    }
+                    continue;
                 }
 
-                if (negateZone.coll.bounds.Contains(playerBrain.Movement.transform.position))
+                if (Vector3.Distance(negateZone.coll.ClosestPoint(playerBrain.transform.position),playerBrain.transform.position ) <= 0 )
                 {
-                    playerBrain.Movement.externalForce -= transform.forward * negateZone.windForce;
+                    if (Vector3.Distance(coll.ClosestPoint(playerBrain.transform.position),playerBrain.transform.position ) <= 0 )
+                    {
+                        playerBrain.Movement.externalForce -= transform.forward * negateZone.windForce;
+                    }
                 }
             }
         }
@@ -48,14 +54,14 @@ namespace WanderingCloud
         {
             if (other.GetComponentInParent<PlayerBrain>() != null)
             {
-                playerBrains.Add(other.GetComponentInParent<PlayerBrain>());
+                //playerBrains.Add(other.GetComponentInParent<PlayerBrain>());
             }
         }
         private void OnTriggerExit(Collider other)
         {
             if (other.GetComponentInParent<PlayerBrain>() != null)
             {
-                playerBrains.Remove(other.GetComponentInParent<PlayerBrain>());
+                //playerBrains.Remove(other.GetComponentInParent<PlayerBrain>());
             }
         }
         
@@ -72,12 +78,13 @@ namespace WanderingCloud
             {
                 Handles.ArrowHandleCap(0, transform.position, Quaternion.LookRotation(transform.forward), windForce, EventType.Repaint);
             }
-
+            
             coll.center = new Vector3(0, 0, (windDistance / transform.localScale.z) / 2);
             coll.size = new Vector3(windVector.x / transform.localScale.x, windVector.y / transform.localScale.y, windVector.z / transform.localScale.z);
 
             visual.position = transform.position + (transform.forward * windDistance / 2);
             visual.localScale = windVector;
+            
         }
     }
 }

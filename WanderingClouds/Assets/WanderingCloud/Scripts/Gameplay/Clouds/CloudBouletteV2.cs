@@ -55,8 +55,8 @@ namespace WanderingCloud
 
             target.TryGetComponent(typeof(Source), out component);
             if (component is not null)
-            {
-                    var source = (Source)component;
+            { 
+                var source = (Source)component;
                 source.Feed(type);
             }
             Destroy(gameObject);
