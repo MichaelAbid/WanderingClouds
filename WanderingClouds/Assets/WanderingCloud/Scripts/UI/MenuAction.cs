@@ -1,9 +1,11 @@
 using Mono.Cecil;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using WanderingCloud.Controller;
 using WanderingCloud.UI;
 
@@ -132,7 +134,7 @@ namespace WanderingCloud
             {
                 yield return new WaitForEndOfFrame();
             }
-            MenuManager.Instance.ShowMenu("START_MENU");
+            MenuManager.Instance.ShowMenu("MAIN_MENU");
         }
 
         #endregion
@@ -144,5 +146,57 @@ namespace WanderingCloud
         }
 
 
+        public void ShowMainMenuAfterStart(float time)
+        {
+            StartCoroutine(WaitShowMainMenuLoad(time));
+        }
+
+        IEnumerator WaitShowMainMenuLoad(float time)
+        {
+            float t = 0;
+            while (t<time)
+            {
+                yield return new WaitForEndOfFrame();
+                t += Time.deltaTime;
+            }
+            MenuManager.Instance.ShowMenu("MAIN_MENU");
+        }
+
+
+        public void FadeOutStartMenu(string id)
+        {
+            StartCoroutine(FadeOutStartMenuCoroutine(id,2));
+        }
+
+        IEnumerator FadeOutStartMenuCoroutine(string id,float time)
+        {
+            float t = 0;
+            while (t < time)
+            {
+                
+                float ratio = (1 - (t/time));
+                foreach (var item in MenuManager.Instance.GetMenu(id).listOfUiElementInMenu)
+                {
+                    if (!item.activeSelf)
+                    {
+                        item.SetActive(true);
+                    }
+                    Image img = item.GetComponent<Image>();
+                    if(img!=null) img.color = new Color(img.color.r, img.color.g, img.color.b, ratio);
+                    TextMeshProUGUI text = item.GetComponent<TextMeshProUGUI>();
+                    if(text!=null) text.color = new Color(text.color.r, text.color.g, text.color.b, ratio);
+                    
+                    if(t >= time)
+                    {
+                        item.SetActive(false);
+                    }
+                    
+
+                }
+                yield return new WaitForEndOfFrame();
+                t += Time.deltaTime;
+            }
+
+        }
     }
 }

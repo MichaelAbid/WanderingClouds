@@ -180,38 +180,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2023846243, guid: 150725af183ddb646b293aa44556f050, type: 3}
-      propertyPath: listProperties.Array.data[0].name
-      value: level_name
-      objectReference: {fileID: 0}
-    - target: {fileID: 2023846243, guid: 150725af183ddb646b293aa44556f050, type: 3}
-      propertyPath: listProperties.Array.data[0].type
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2023846243, guid: 150725af183ddb646b293aa44556f050, type: 3}
-      propertyPath: listProperties.Array.data[0].StringValue
-      value: MainMenu
-      objectReference: {fileID: 0}
-    - target: {fileID: 2023846243, guid: 150725af183ddb646b293aa44556f050, type: 3}
-      propertyPath: listProperties.Array.data[0].ListValue.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2023846243, guid: 150725af183ddb646b293aa44556f050, type: 3}
-      propertyPath: listProperties.Array.data[0].ListValue.Array.data[0]
-      value: Proto_LD_03 copie
-      objectReference: {fileID: 0}
-    - target: {fileID: 2023846243, guid: 150725af183ddb646b293aa44556f050, type: 3}
-      propertyPath: listProperties.Array.data[0].ListValue.Array.data[1]
-      value: Proto_LD04
-      objectReference: {fileID: 0}
-    - target: {fileID: 2023846243, guid: 150725af183ddb646b293aa44556f050, type: 3}
-      propertyPath: listProperties.Array.data[0].ListValue.Array.data[2]
-      value: Proto_LD05
-      objectReference: {fileID: 0}
-    - target: {fileID: 2023846243, guid: 150725af183ddb646b293aa44556f050, type: 3}
-      propertyPath: listProperties.Array.data[0].ListValue.Array.data[3]
-      value: Proto_LD05
-      objectReference: {fileID: 0}
     - target: {fileID: 4067031060263769574, guid: 150725af183ddb646b293aa44556f050,
         type: 3}
       propertyPath: m_RootOrder
@@ -272,29 +240,5 @@ PrefabInstance:
       propertyPath: m_Name
       value: StartingAsset
       objectReference: {fileID: 0}
-    - target: {fileID: 4067031061131837869, guid: 150725af183ddb646b293aa44556f050,
-        type: 3}
-      propertyPath: listOfAllMenu.Array.data[3].consumeInput
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 150725af183ddb646b293aa44556f050, type: 3}
---- !u!1 &4067031061663829506 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4067031060263769575, guid: 150725af183ddb646b293aa44556f050,
-    type: 3}
-  m_PrefabInstance: {fileID: 4067031061663829505}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &4067031061663829507
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4067031061663829506}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 887fe3a8b33b5fd41ab43ba78a3faae3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MainMenu: MainMenu
