@@ -1,6 +1,7 @@
 using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
@@ -24,9 +25,7 @@ namespace WanderingCloud.Gameplay.AI
 
         override protected void IdleBehavior()
         {
-            if (isAgent) return;
-
-            transform.Translate((wanderingPoints[wanderingPointsIndex].transform.position - transform.position).normalized * agent.speed * Time.deltaTime);
+            
         }
         override protected void WanderingBehavior()
         {
@@ -35,7 +34,7 @@ namespace WanderingCloud.Gameplay.AI
 
         override protected AI_STATE ChangeFromIdle()
         {
-            if (Vector3.Distance(wanderingPoints[wanderingPointsIndex].transform.position, transform.position) <= agent.radius + 0.5f)
+            if (Vector3.Distance(wanderingPoints[wanderingPointsIndex].transform.position, transform.position) <= agent.radius + 2f)
             {
                 waitingTime = wanderingPoints[wanderingPointsIndex].waitTime;
                 return AI_STATE.AI_WANDERING;
@@ -59,6 +58,11 @@ namespace WanderingCloud.Gameplay.AI
                 while (!wanderingPoints[wanderingPointsIndex].isAvailable);
 
                 if(isAgent) agent.SetDestination(wanderingPoints[wanderingPointsIndex].transform.position);
+                else
+                {
+                    var distance = (wanderingPoints[wanderingPointsIndex].transform.position - transform.position).magnitude;
+                    transform.DOMove(wanderingPoints[wanderingPointsIndex].transform.position,distance/agent.speed).SetEase(Ease.Linear);
+                }
                 return AI_STATE.AI_IDLE;
             }
 
