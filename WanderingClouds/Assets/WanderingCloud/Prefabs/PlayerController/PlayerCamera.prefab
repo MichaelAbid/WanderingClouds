@@ -925,6 +925,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76716e73cb1c4a159a5c51ff0b946435, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isGDV2: 0
   waitTimeFollow: 1
   yThresholdFollow: 0.7
   desiredSmoothTime: 0.1
@@ -1191,7 +1192,7 @@ MonoBehaviour:
   antialiasing: 0
   SMAAQuality: 2
   dithering: 0
-  stopNaNs: 0
+  stopNaNs: 1
   taaSharpenStrength: 0.5
   TAAQuality: 1
   taaHistorySharpening: 0.35
